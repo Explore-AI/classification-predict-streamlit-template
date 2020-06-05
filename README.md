@@ -20,7 +20,7 @@ In its own words:
 
 > It’s a simple and powerful app model that lets you build rich UIs incredibly quickly.
 
-Streamlit takes away much of the background work needed in order to get a platform which can deploy your models to clients and end users. Meaning you get to focus on the important stuff (related to the data), and can largely ignore the rest. This will allow you to become a lot more productive.  
+Streamlit takes away much of the background work needed in order to get a platform which can deploy your models to clients and end users. Meaning that you get to focus on the important stuff (related to the data), and can largely ignore the rest. This will allow you to become a lot more productive.  
 
 ##### Description of files
 
@@ -44,9 +44,9 @@ As described within the Predict instructions for the Classification Sprint, this
 
 To fork the repo, simply ensure that you are logged into your GitHub account, and then click on the 'fork' button at the top of this page as indicated within the figure above.
 
-#### 2.2) Running the Streamlit webapp on your local machine
+#### 2.2) Running the Streamlit web app on your local machine
 
-As a first step to becoming familiar with our Streamlit's functioning, we recommend setting up a running instance on your own local machine.
+As a first step to becoming familiar with our web app's functioning, we recommend setting up a running instance on your own local machine.
 
 To do this, follow the steps below by running the given commands within a Git bash (Windows), or terminal (Mac/Linux):
 
@@ -84,40 +84,45 @@ You should also be automatically directed to the base page of your web app. This
 
 Congratulations! You've now officially deployed your first web application!
 
-With these steps completed, you're now ready to both modify the template code, and to host this API within an AWS EC2 instance.
-
 While we leave the modification of your web app up to you, the latter process of cloud deployment is outlined within the next section.  
 
-#### 2.4) Running the API on a remote AWS EC2 instance
+#### 2.4) Running Streamlit on a remote AWS EC2 instance
 
 
-The following steps will enable you to run your web server API on a remote EC2 instance, allowing it to the accessed by any device/application which has internet access.
+The following steps will enable you to run your web app on a remote EC2 instance, allowing it to the accessed by any device/application which has internet access.
 
 Within these setup steps, we will be using a remote EC2 instance, which we will refer to as the ***Host***, in addition to our local machine, which we will call the ***Client***. We use these designations for convenience, and to align our terminology with that of common web server practices. In cases where commands are provided, use Git bash (Windows) or Terminal (Mac/Linux) to enter these.
 
-1. Ensure that you have access to a running AWS EC2 instance with an assigned public IP address. Instructions for this process are found within the *'Introduction to Amazon AWS - Part I'* train on Athena.
+1. Ensure that you have access to a running AWS EC2 instance with an assigned public IP address.
 
-2. Install the prerequisite python libraries on both the Host (EC2 instance), and Client (local machine):
-
-```bash
-pip install -U flask numpy pandas scikit-learn
-```
-
-3. Clone your copy of the API repo onto both the Host and Client machines, then navigate to the base of the cloned repo:
-
-```bash
-git clone https://github.com/{your-account-name}/regression-predict-api-template.git
-cd regression-predict-api-template/
-```
 **[On the Host]:**
 
-4.  Run the API web-server initialisation script.
+2. Install the prerequisite python libraries:
 
 ```bash
-python api.py
+pip install -U streamlit numpy pandas scikit-learn
 ```
 
-If this command ran successfully, the following output should be observed on the Host:
+3. Clone your copy of the API repo, and navigate to its root directory:
+
+```bash
+git clone https://github.com/{your-account-name}/classification-predict-streamlit-template.git
+cd classification-predict-streamlit-template/
+```
+
+| :information_source: NOTE :information_source:                                                                                                    |
+| :--------------------                                                                                                                             |
+| In the following steps we make use of the `tmux` command. This programme has many powerful functions, but for our purposes, we use it to gracefully keep our web app running in the background - even when we end our `ssh` session. |
+
+4. Enter into a Tmux window within the current directory. To do this, simply type `tmux`.  
+
+5. Start the Streamlit web app on port `5000` of the host
+
+```bash
+streamlit run --server.port 5000 base_app.py
+```
+
+If this command ran successfully, output similar to the following should be observed on the Host:
 
 ```
 You can now view your Streamlit app in your browser.
@@ -127,62 +132,33 @@ You can now view your Streamlit app in your browser.
 
 ```
 
+Where the specific `Network` and `External` URLs correspond to those assigned to your own EC2 instance. Copy the value of the external URL.  
+
 **[On the Client]:**
 
-5.  Navigate to the `utils` subdirectory within the repo.
+6.  Within your favourite web browser (we hope this isn't Internet Explorer 9), navigate to external URL you just copied from the Host. This should correspond to the following form:
 
-```bash
-cd utils/
-```
+    `http://{public-ip-address-of-remote-machine}:5000`   
 
-6. Open the `request.py` file using your favourite text editor.
+    Where the above public IP address corresponds to the one given to your AWS EC2 instance.
 
-    Change the value of the `url` variable to reflect the ***public IP address*** of the Host. (Instructions for getting the public IP address are provided within the *‘Introduction to Amazon AWS - Part I’* train on Athena.)
+    If successful, you should see the landing page of your streamlit web app:
 
-```bash
-url = 'http://{public-ip-address-of-remote-machine}:5000/api_v0.1'
-```   
+![Streamlit base page](resources/imgs/streamlit-base-splash-screen.png)
 
-7. Once the editing is completed, close the file and run it:
+**[On the Host]:**
 
-```bash
-python request.py
-```
+7. To keep your web app running continuously in the background, detach from the Tmux window by pressing `ctrl + b` and then `d`. This should return you to the view of your terminal before you opened the Tmux window.
 
- If the command ran successfully, you should see output similar to the following:
+    To go back to your Tmux window at any time (even if you've left your `ssh` session and then return), simply type `tmux attach-session`.
 
-```
-Sending POST request to web server API at: http://54.229.152.221:5000/api_v0.1
+    To see more functionality of the Tmux command, type `man tmux`.
 
-Querying API with the following data:
- ['Order_No_21660', 'User_Id_1329', 'Bike', 3, 'Business', 31, 5, '12:16:49 PM', 31, 5, '12:22:48 PM', 31, 5, '12:23:47 PM', 31, 5, '12:38:24 PM', 4, 21.8, nan, -1.2795183, 36.8238089, -1.273056, 36.811298, 'Rider_Id_812', 4402, 1090, 14.3, 1301]
-
-Received POST response:
-**************************************************
-API prediction result: 1547.3014476106036
-The response took: 0.406473 seconds
-**************************************************
-```
-
-If you have completed the steps in 2.3), then the prediction result should differ from the one given above.
-
-**[On the Host]**
-
-You should also see an update to the web server output, indicating that it was contacted by the Client (the values of this string will differ for your output):
-
-```
-102.165.194.240 - - [08/May/2020 07:31:31] "POST /api_v0.1 HTTP/1.1" 200 -
-```
-
-If you are able to see these messages on both the Host and Client, then your API has succesfully been deployed to the Web. Snap :zap:!
+Having run your web app within Tmux, you should be now free to end your ssh session while your webserver carries on purring along. Well done :zap:!
 
 ## 3) FAQ
 
 This section of the repo will be periodically updated to represent common questions which may arise around its use. If you detect any problems/bugs, please [create an issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue) and we will do our best to resolve it as quickly as possible.
-
-| :information_source: NOTE :information_source: |
-|:--------------------|
-|You will only be able to work on this section of the API setup once you've completed the *'Introduction to Amazon AWS - Part I'* train on Athena.|
 
 We wish you all the best in your learning experience :rocket:
 
