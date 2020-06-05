@@ -1,24 +1,5 @@
 # Streamlit-based Web Application
-Template repository used for creating a simple Streamlit web server for hosting classification models.
-
 #### EXPLORE Data Science Academy Classification Predict
-
-### Table of Contents
-
-- [Flask-based Model API](#flask-based-model-api)
-      - [EXPLORE Data Science Academy Regression Predict](#explore-data-science-academy-regression-predict)
-  * [1) Overview](#1-overview)
-      - [1.1) Wait, what is an API again?](#11-wait-what-is-an-api-again)
-      - [1.2) How our API will work](#12-how-our-api-will-work)
-        * [Description of files](#description-of-files)
-  * [2) Usage Instructions](#2-usage-instructions)
-      - [2.1) Creating a copy of this repo](#21-creating-a-copy-of-this-repo)
-      - [2.2) Running the API on your local machine](#22-running-the-api-on-your-local-machine)
-      - [2.3) Updating the API to use your own model](#23-updating-the-api-to-use-your-own-model)
-        * [Prerequisites](#prerequisites)
-        * [Making the changes](#making-the-changes)
-      - [2.4) Running the API on a remote AWS EC2 instance](#24-running-the-api-on-a-remote-aws-ec2-instance)
-  * [3) FAQ](#3-faq)
 
 ## 1) Overview
 
@@ -59,7 +40,7 @@ For this repository, we are only concerned with a single file:
 
 As described within the Predict instructions for the Classification Sprint, this code represents a *template* from which to extend your own work. As such, in order to modify the template, you will need to **[fork](https://help.github.com/en/github/getting-started-with-github/fork-a-repo)** this repository. Failing to do this will lead to complications when trying to work on the web application remotely.
 
-![Fork Repo](assets/imgs/fork_repo.png)  
+![Fork Repo](resources/imgs/fork-repo.png)  
 
 To fork the repo, simply ensure that you are logged into your GitHub account, and then click on the 'fork' button at the top of this page as indicated within the figure above.
 
@@ -139,15 +120,11 @@ python api.py
 If this command ran successfully, the following output should be observed on the Host:
 
 ```
-----------------------------------------
-Model succesfully loaded
-----------------------------------------
- * Serving Flask app "api" (lazy loading)
- * Environment: production
-   WARNING: This is a development server. Do not use it in a production deployment.
-   Use a production WSGI server instead.
- * Debug mode: off
- * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
+You can now view your Streamlit app in your browser.
+
+  Network URL: http://172.31.47.109:5000
+  External URL: http://3.250.50.104:5000
+
 ```
 
 **[On the Client]:**
