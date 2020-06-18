@@ -1,4 +1,4 @@
-###  How it works
+###  🧰 How it works
 
 This process requires the user to input text
 (ideally a tweet relating to climate change), and will
@@ -8,7 +8,7 @@ and a brief data description. You can have a look at word clouds and
 other general EDA on the EDA page, and make your predictions on the
 prediction page that you can navigate to in the sidebar.
 
-###  Data description as per source
+###  🎓 Data description as per source
 
 The collection of this data was funded by a Canada Foundation for Innovation JELF Grant to Chris Bauch, University of Waterloo.
 
