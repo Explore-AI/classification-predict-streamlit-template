@@ -75,10 +75,9 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer/ better model")
+	st.title("Tweet Classifer")
 	st.subheader("Climate change tweet classification")
-	st.subheader("Does this streamlit thing really work though?")
-	st.text('yes it works now i need a proper model, a really working model')
+
 
 	
 	# Creating sidebar with selection box -
