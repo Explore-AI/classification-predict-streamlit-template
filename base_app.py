@@ -21,7 +21,7 @@
 	https://docs.streamlit.io/en/latest/
 
 """
-# Streamlit 
+# Streamlit dependencies
 import streamlit as st
 import joblib,os
 
