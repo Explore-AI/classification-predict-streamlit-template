@@ -1,0 +1,1 @@
+ssh user@server-name-here streamlit run base_app.py
