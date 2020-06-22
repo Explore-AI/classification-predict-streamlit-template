@@ -133,30 +133,6 @@ def main():
 					st.success('Provides link to factual news source')
 				if prediction == 1:
 					st.success('Climate change believer')
-		
-		# REMOVING KNN BECAUSE OF LACK OF MEMORY
-		# Classify using K-nearest Neighbours
-		# if algorithm=='K-nearest Neighbours':
-		# 	if st.button("Predict using k-nearest neighbours"):
-		# 		# Transforming user input with vectorizer
-		# 		vect_text = tweet_cv.transform([tweet_text]).toarray()
-		# 		# Load your .pkl file with the model of your choice + make predictions
-		# 		# Try loading in multiple models to give the user a choice
-		# 		predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-		# 		prediction = predictor.predict(vect_text)
-
-		# 		# When model has successfully run, will print prediction
-		# 		# You can use a dictionary or similar structure to make this output
-		# 		# more human interpretable.
-		# 		if prediction == 0:
-		# 			st.success('Neutral')
-		# 			#st.success("Text Categorized as: {}".format(prediction))
-		# 		if prediction == -1:
-		# 			st.success('Climate change denier')
-		# 		if prediction == 2:
-		# 			st.success('Provides link to factual news source')
-		# 		if prediction == 1:
-		# 			st.success('Climate change believer')
 
 		# Classify using Logistic Regression
 		if algorithm=='Logistic Regression':
