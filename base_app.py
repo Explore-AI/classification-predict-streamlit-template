@@ -87,11 +87,12 @@ def main():
 		if algorithm=='Support Vector Classifier':
 			if st.button("Predict using Support Vector Classifier"):
 				# Transforming user input with vectorizer
-				vect_text = tweet_cv.transform([tweet_text]).toarray()
+				#vect_text = tweet_cv.transform([tweet_text]).toarray()
 				# Load your .pkl file with the model of your choice + make predictions
 				# Try loading in multiple models to give the user a choice
-				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction = predictor.predict(vect_text)
+				predictor = joblib.load(open(os.path.join("resources/support_vector.pkl"),"rb"))
+				tweet_text = [tweet_text]
+				prediction = predictor.predict(tweet_text)
 
 				# When model has successfully run, will print prediction
 				# You can use a dictionary or similar structure to make this output
@@ -124,7 +125,7 @@ def main():
 					st.success('Neutral')
 					#st.success("Text Categorized as: {}".format(prediction))
 				if prediction == -1:
-					st.success('Climate change denier')
+					st.success('Climate change denier.')
 				if prediction == 2:
 					st.success('Provides link to factual news source')
 				if prediction == 1:
