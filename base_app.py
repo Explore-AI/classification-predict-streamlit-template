@@ -156,11 +156,12 @@ def main():
 		if algorithm=='Logistic Regression':
 			if st.button("Predict using Logistic Regression"):
 				# Transforming user input with vectorizer
-				vect_text = tweet_cv.transform([tweet_text]).toarray()
+				#vect_text = tweet_cv.transform([tweet_text]).toarray()
 				# Load your .pkl file with the model of your choice + make predictions
 				# Try loading in multiple models to give the user a choice
-				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction = predictor.predict(vect_text)
+				predictor = joblib.load(open(os.path.join("resources/log_model.pkl"),"rb"))
+				tweet_text = [tweet_text]
+				prediction = predictor.predict(tweet_text)
 
 				# When model has successfully run, will print prediction
 				# You can use a dictionary or similar structure to make this output
