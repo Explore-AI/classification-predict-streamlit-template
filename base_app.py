@@ -28,6 +28,9 @@ import joblib,os
 # Data dependencies
 import pandas as pd
 
+import seaborn as sns
+import matplotlib.pyplot as plt
+
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
@@ -41,8 +44,7 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
-	st.subheader("Climate change tweet classification")
+	st.write("# Tweet Classifer")
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
@@ -53,17 +55,19 @@ def main():
 	if selection == "Information":
 		st.info("General Information")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+		st.markdown("info")
+		st.write(sns.countplot(x='sentiment', data = raw))
 
 		st.subheader("Raw Twitter data and label")
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+		
 
 	# Building out the predication page
 	if selection == "Prediction":
 		st.info("Prediction with ML Models")
 		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
+		tweet_text = st.text_area("Enter sample text of your audience","Type Here")
 
 		if st.button("Classify"):
 			# Transforming user input with vectorizer
@@ -76,7 +80,15 @@ def main():
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
+			if prediction == 0:
+				st.success('Neutral')
+				#st.success("Text Categorized as: {}".format(prediction))
+			if prediction == -1:
+				st.success('Climate change denier')
+			if prediction == 2:
+				st.success('Provides link to factual news source')
+			if prediction == 1:
+				st.success('Climate change believer')
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
