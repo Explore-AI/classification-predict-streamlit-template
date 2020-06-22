@@ -65,7 +65,7 @@ def main():
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
 
-		if st.button("Classify"):
+		if st.button("Classify Text"):
 			# Transforming user input with vectorizer
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
