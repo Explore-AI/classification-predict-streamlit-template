@@ -1,25 +1,18 @@
 """
-
     Simple Streamlit webserver application for serving developed classification
 	models.
-
     Author: Explore Data Science Academy.
-
     Note:
     ---------------------------------------------------------------------
     Plase follow the instructions provided within the README.md file
     located within this directory for guidance on how to use this script
     correctly.
     ---------------------------------------------------------------------
-
     Description: This file is used to launch a minimal streamlit web
 	application. You are expected to extend the functionality of this script
 	as part of your predict project.
-
 	For further help with the Streamlit framework, see:
-
 	https://docs.streamlit.io/en/latest/
-
 """
 # Streamlit dependencies
 import streamlit as st
@@ -85,26 +78,104 @@ def main():
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter sample text of your audience","Type Here")
 
-		if st.button("Classify"):
-			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-			prediction = predictor.predict(vect_text)
+		# Allow user to select algorithm
+		algorithm = st.selectbox("Select an algorithm to make the prediction",
+							['Support Vector Classifier', 'Random Forest',
+							'K-nearest Neighbours', 'Logistic Regression'])
+		
+		# Classify using SVC
+		if algorithm=='Support Vector Classifier':
+			if st.button("Predict using Support Vector Classifier"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
+				# Load your .pkl file with the model of your choice + make predictions
+				# Try loading in multiple models to give the user a choice
+				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+				prediction = predictor.predict(vect_text)
 
-			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			if prediction == 0:
-				st.success('Neutral')
-				#st.success("Text Categorized as: {}".format(prediction))
-			if prediction == -1:
-				st.success('Climate change denier')
-			if prediction == 2:
-				st.success('Provides link to factual news source')
-			if prediction == 1:
-				st.success('Climate change believer')
+				# When model has successfully run, will print prediction
+				# You can use a dictionary or similar structure to make this output
+				# more human interpretable.
+				if prediction == 0:
+					st.success('Neutral')
+					#st.success("Text Categorized as: {}".format(prediction))
+				if prediction == -1:
+					st.success('Climate change denier')
+				if prediction == 2:
+					st.success('Provides link to factual news source')
+				if prediction == 1:
+					st.success('Climate change believer')
+
+		# Classify using Random Forest
+		if algorithm=='Random Forest':
+			if st.button("Predict using Random Forest"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
+				# Load your .pkl file with the model of your choice + make predictions
+				# Try loading in multiple models to give the user a choice
+				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+				prediction = predictor.predict(vect_text)
+
+				# When model has successfully run, will print prediction
+				# You can use a dictionary or similar structure to make this output
+				# more human interpretable.
+				if prediction == 0:
+					st.success('Neutral')
+					#st.success("Text Categorized as: {}".format(prediction))
+				if prediction == -1:
+					st.success('Climate change denier')
+				if prediction == 2:
+					st.success('Provides link to factual news source')
+				if prediction == 1:
+					st.success('Climate change believer')
+		
+		# Classify using K-nearest Neighbours
+		if algorithm=='K-nearest Neighbours':
+			if st.button("Predict using k-nearest neighbours"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
+				# Load your .pkl file with the model of your choice + make predictions
+				# Try loading in multiple models to give the user a choice
+				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+				prediction = predictor.predict(vect_text)
+
+				# When model has successfully run, will print prediction
+				# You can use a dictionary or similar structure to make this output
+				# more human interpretable.
+				if prediction == 0:
+					st.success('Neutral')
+					#st.success("Text Categorized as: {}".format(prediction))
+				if prediction == -1:
+					st.success('Climate change denier')
+				if prediction == 2:
+					st.success('Provides link to factual news source')
+				if prediction == 1:
+					st.success('Climate change believer')
+
+		# Classify using Logistic Regression
+		if algorithm=='Logistic Regression':
+			if st.button("Predict using Logistic Regression"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
+				# Load your .pkl file with the model of your choice + make predictions
+				# Try loading in multiple models to give the user a choice
+				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+				prediction = predictor.predict(vect_text)
+
+				# When model has successfully run, will print prediction
+				# You can use a dictionary or similar structure to make this output
+				# more human interpretable.
+				if prediction == 0:
+					st.success('Neutral')
+					#st.success("Text Categorized as: {}".format(prediction))
+				if prediction == -1:
+					st.success('Climate change denier')
+				if prediction == 2:
+					st.success('Provides link to factual news source')
+				if prediction == 1:
+					st.success('Climate change believer')
+		
+		
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
