@@ -44,15 +44,31 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.write("# Tweet Classifer")
+	st.write("# Climate Change Tweet Classifer")
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
+	options = ["Home page", "Prediction", "Overview", "Deniers", "Neutrals", "Believers", "Factuals"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 
+	# Building out the Home page
+	if selection == "Home page":
+		st.write("Identifying your audience's stance on climate change" +
+				 " may reveal important insights about them, such as their " +
+				 "personal values, their political inclination, and web behaviour.")
+		st.write("This tool allows you to imput sample text from your target audience "+
+				 " and select a machine learning model to predict whether the author of "+
+				 " that text")
+		st.write("* Believes in climate change")
+		st.write("* Denies climate change")
+		st.write("* Is neutral about climate change")
+		st.write("* Provided a factual link to a news site")
+		st.write("You can also view an exploratory analysis about each category to gain deeper insights "+
+				 "about each category.")
+		st.write("Select Prediction in the side bar to get started.")
+
 	# Building out the "Information" page
-	if selection == "Information":
+	if selection == "Overview":
 		st.info("General Information")
 		# You can read a markdown file from supporting resources folder
 		st.markdown("info")
