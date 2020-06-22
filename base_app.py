@@ -20,6 +20,7 @@ import joblib,os
 
 # Data dependencies
 import pandas as pd
+import re
 
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -81,6 +82,16 @@ def main():
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter text","Type Here")
 
+		def _preprocess(tweet):
+			lowercase = tweet.lower()
+			without_handles = re.sub(r'@', r'', lowercase)
+			without_hashtags = re.sub(r'#', '', without_handles)
+			without_URL = re.sub(r'http[^ ]+', '', without_hashtags)
+			without_URL1 = re.sub(r'www.[^ ]+', '', without_URL)    
+			return without_URL1
+		
+		tweet_text = _preprocess(tweet_text)
+		
 		# Allow user to select algorithm
 		algorithm = st.selectbox("Select an algorithm to make the prediction",
 							['Support Vector Classifier', 'Random Forest',
