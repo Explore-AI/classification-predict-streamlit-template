@@ -74,14 +74,17 @@ def main():
 
 	# Building out the predication page
 	if selection == "Prediction":
-		st.info("Prediction with ML Models")
+		st.info("1. Enter a sample text of your audience in the box below\n " +
+				"2. Select the algorithm used to classify your text\n"+
+				"3. Click on 'Predict' to get your prediction\n\n"+
+				"To learn more about each group, please explore the options in the sidebar.")
 		# Creating a text box for user input
-		tweet_text = st.text_area("Enter sample text of your audience","Type Here")
+		tweet_text = st.text_area("Enter text","Type Here")
 
 		# Allow user to select algorithm
 		algorithm = st.selectbox("Select an algorithm to make the prediction",
 							['Support Vector Classifier', 'Random Forest',
-							'K-nearest Neighbours', 'Logistic Regression'])
+							'Logistic Regression'])
 		
 		# Classify using SVC
 		if algorithm=='Support Vector Classifier':
@@ -131,28 +134,29 @@ def main():
 				if prediction == 1:
 					st.success('Climate change believer')
 		
+		# REMOVING KNN BECAUSE OF LACK OF MEMORY
 		# Classify using K-nearest Neighbours
-		if algorithm=='K-nearest Neighbours':
-			if st.button("Predict using k-nearest neighbours"):
-				# Transforming user input with vectorizer
-				vect_text = tweet_cv.transform([tweet_text]).toarray()
-				# Load your .pkl file with the model of your choice + make predictions
-				# Try loading in multiple models to give the user a choice
-				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction = predictor.predict(vect_text)
+		# if algorithm=='K-nearest Neighbours':
+		# 	if st.button("Predict using k-nearest neighbours"):
+		# 		# Transforming user input with vectorizer
+		# 		vect_text = tweet_cv.transform([tweet_text]).toarray()
+		# 		# Load your .pkl file with the model of your choice + make predictions
+		# 		# Try loading in multiple models to give the user a choice
+		# 		predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+		# 		prediction = predictor.predict(vect_text)
 
-				# When model has successfully run, will print prediction
-				# You can use a dictionary or similar structure to make this output
-				# more human interpretable.
-				if prediction == 0:
-					st.success('Neutral')
-					#st.success("Text Categorized as: {}".format(prediction))
-				if prediction == -1:
-					st.success('Climate change denier')
-				if prediction == 2:
-					st.success('Provides link to factual news source')
-				if prediction == 1:
-					st.success('Climate change believer')
+		# 		# When model has successfully run, will print prediction
+		# 		# You can use a dictionary or similar structure to make this output
+		# 		# more human interpretable.
+		# 		if prediction == 0:
+		# 			st.success('Neutral')
+		# 			#st.success("Text Categorized as: {}".format(prediction))
+		# 		if prediction == -1:
+		# 			st.success('Climate change denier')
+		# 		if prediction == 2:
+		# 			st.success('Provides link to factual news source')
+		# 		if prediction == 1:
+		# 			st.success('Climate change believer')
 
 		# Classify using Logistic Regression
 		if algorithm=='Logistic Regression':
