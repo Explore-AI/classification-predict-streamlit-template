@@ -1,25 +1,11 @@
 """
-
-    Simple Streamlit webserver application for serving developed classification
-	models.
-
-    Author: Explore Data Science Academy.
-
-    Note:
-    ---------------------------------------------------------------------
-    Plase follow the instructions provided within the README.md file
-    located within this directory for guidance on how to use this script
-    correctly.
-    ---------------------------------------------------------------------
-
-    Description: This file is used to launch a minimal streamlit web
-	application. You are expected to extend the functionality of this script
-	as part of your predict project.
-
-	For further help with the Streamlit framework, see:
-
-	https://docs.streamlit.io/en/latest/
-
+	This streamlit web app utilises various models to analyse 
+	the sentiment of tweets regarding climate change and 
+	classify them into one of the following classes: 
+	2: The tweet is a message of factual news
+	1: The author believes in climate change
+	0: The message has a neutral sentiment
+	-1: The author does not believe in climate change
 """
 #---------------------------------------------------------------
 # Streamlit dependencies
