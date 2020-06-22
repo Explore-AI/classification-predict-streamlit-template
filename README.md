@@ -48,17 +48,17 @@ To fork the repo, simply ensure that you are logged into your GitHub account, an
 
 As a first step to becoming familiar with our web app's functioning, we recommend setting up a running instance on your own local machine.
 
-To do this, follow the steps below by running the given commands within a Git bash (Windows), or terminal (Mac/Linux):
+To do this, follow the steps below by running the given commands within anaconda terminal (Windows), or terminal (Mac/Linux):
 
  1. Ensure that you have the prerequisite Python libraries installed on your local machine:
 
- ```bash
+ ```command
  pip install -U streamlit numpy pandas scikit-learn
  ```
 
  2. Clone the *forked* repo to your local machine.
 
- ```bash
+ ```command
  git clone https://github.com/{your-account-name}/classification-predict-streamlit-template.git
  ```  
 

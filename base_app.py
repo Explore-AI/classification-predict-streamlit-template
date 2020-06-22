@@ -41,7 +41,7 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
+	st.title("Twitter Classifer")
 	st.subheader("Climate change tweet classification")
 
 	# Creating sidebar with selection box -
@@ -78,6 +78,6 @@ def main():
 			# more human interpretable.
 			st.success("Text Categorized as: {}".format(prediction))
 
-# Required to let Streamlit instantiate our web app.  
+# Required to let Streamlit instantiate our web app.
 if __name__ == '__main__':
 	main()
