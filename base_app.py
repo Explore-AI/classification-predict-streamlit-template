@@ -96,8 +96,8 @@ def main():
 		st.subheader("View visuals")
 		if st.checkbox('Distribution of different classes for tweets'): # data is hidden if box is unchecked
 			st.write() # will write the df to the page
- 		elif st.checkbox('Most common words'): # data is hidden if box is unchecked
-			st.write() # will write the df to the page
+#  		elif st.checkbox('Most common words'): # data is hidden if box is unchecked
+# 			st.write() # will write the df to the page
         
         
 # Required to let Streamlit instantiate our web app.  
