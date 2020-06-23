@@ -52,7 +52,7 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Home page", "Prediction", "Overview", "Analysis of each category"]
+	options = ["Home page", "Prediction", "Comparison of categories", "Analysis of each category"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 
 	# Building out the Home page
@@ -71,8 +71,8 @@ def main():
 				 "about each category.")
 		st.write("Select Prediction in the side bar to get started.")
 
-	# Building out the "Overview" page
-	if selection == "Overview":
+	# Building out the "Comparison of categories" page
+	if selection == "Comparison of categories":
 		st.write("## Comparison of categories")
 		st.write("The model predicts the text to be classed into one of four categories:")
 		st.write("* Denies climate change (-1)")
@@ -136,17 +136,16 @@ def main():
 				# more human interpretable.
 				if prediction == 0:
 					st.success('Neutral. Select "Analysis of each category" in the sidebar for more informatio about this category'+
-							   ' or select "Overview" for a comparison of each category.')
+							   ' or select "Comparison of categories.".')
 				if prediction == -1:
 					st.success('Climate change denier. Select "Analysis of each category" in the sidebar for more information about'+
-							   ' this category or select "Overview" for a comparison of each category.')
+							   ' this category or select "Comparison of categories."')
 				if prediction == 2:
 					st.success('Provides link to factual news source. Select "Analysis of each category" in the sidebar for more'+
-							   ' information about this category or select "Overview" for a comparison of each'+
-							   ' category.')
+							   ' information about this category or select "Comparison of categories."')
 				if prediction == 1:
 					st.success('Climate change believer. Select "Analysis of each category" in the sidebar for more information'+
-							   ' about this category or select "Overview" for a comparison of each category.')
+							   ' about this category or select "Comparison of categories."')
 
 		# Classify using Random Forest
 		if algorithm=='Random Forest':
@@ -164,17 +163,16 @@ def main():
 				# more human interpretable.
 				if prediction == 0:
 					st.success('Neutral. Select "Analysis of each category" in the sidebar for more informatio about this category'+
-							   ' or select "Overview" for a comparison of each category.')
+							   ' or select "Comparison of categories."')
 				if prediction == -1:
 					st.success('Climate change denier. Select "Analysis of each category" in the sidebar for more information about'+
-							   ' this category or select "Overview" for a comparison of each category.')
+							   ' this category or select "Comparison of categories."')
 				if prediction == 2:
 					st.success('Provides link to factual news source. Select "Analysis of each category" in the sidebar for more'+
-							   ' information about this category or select "Overview" for a comparison of each'+
-							   ' category.')
+							   ' information about this category or select "Comparison of categories."')
 				if prediction == 1:
 					st.success('Climate change believer. Select "Analysis of each category" in the sidebar for more information'+
-							   ' about this category or select "Overview" for a comparison of each category.')
+							   ' about this category or select "Comparison of categories."')
 
 		# Classify using Logistic Regression
 		if algorithm=='Logistic Regression':
@@ -192,16 +190,15 @@ def main():
 				# more human interpretable.
 				if prediction == 0:
 					st.success('Neutral. Select "Analysis of each category" in the sidebar for more informatio about this category'+
-							   ' or select "Overview" for a comparison of each category.')
+							   ' or select "Comparison of categories."')
 				st.success('Climate change denier. Select "Analysis of each category" in the sidebar for more information about'+
-							   ' this category or select "Overview" for a comparison of each category.')
+							   ' this category or select "Comparison of categories."')
 				if prediction == 2:
 					st.success('Provides link to factual news source. Select "Analysis of each category" in the sidebar for more'+
-							   ' information about this category or select "Overview" for a comparison of each'+
-							   ' category.')
+							   ' information about this category or select "Comparison of categories."')
 				if prediction == 1:
 					st.success('Climate change believer. Select "Analysis of each category" in the sidebar for more information'+
-							   ' about this category or select "Overview" for a comparison of each category.')
+							   ' about this category or select "Comparison of categories."')
 
 	# N-grams
 	raw_analysis = raw.copy()
