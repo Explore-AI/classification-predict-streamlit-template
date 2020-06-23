@@ -52,7 +52,7 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Home page", "Prediction", "Overview", "Deniers", "Neutrals", "Believers", "Factuals"]
+	options = ["Home page", "Prediction", "Overview", "Analysis of each category"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 
 	# Building out the Home page
@@ -135,17 +135,17 @@ def main():
 				# You can use a dictionary or similar structure to make this output
 				# more human interpretable.
 				if prediction == 0:
-					st.success('Neutral. Select "Neutrals" in the sidebar for more informatio about this category'+
+					st.success('Neutral. Select "Analysis of each category" in the sidebar for more informatio about this category'+
 							   ' or select "Overview" for a comparison of each category.')
 				if prediction == -1:
-					st.success('Climate change denier. Select "Deniers" in the sidebar for more information about'+
+					st.success('Climate change denier. Select "Analysis of each category" in the sidebar for more information about'+
 							   ' this category or select "Overview" for a comparison of each category.')
 				if prediction == 2:
-					st.success('Provides link to factual news source. Select "Factuals" in the sidebar for more'+
+					st.success('Provides link to factual news source. Select "Analysis of each category" in the sidebar for more'+
 							   ' information about this category or select "Overview" for a comparison of each'+
 							   ' category.')
 				if prediction == 1:
-					st.success('Climate change believer. Select "Believers" in the sidebar for more information'+
+					st.success('Climate change believer. Select "Analysis of each category" in the sidebar for more information'+
 							   ' about this category or select "Overview" for a comparison of each category.')
 
 		# Classify using Random Forest
@@ -163,17 +163,17 @@ def main():
 				# You can use a dictionary or similar structure to make this output
 				# more human interpretable.
 				if prediction == 0:
-					st.success('Neutral. Select "Neutrals" in the sidebar for more informatio about this category'+
+					st.success('Neutral. Select "Analysis of each category" in the sidebar for more informatio about this category'+
 							   ' or select "Overview" for a comparison of each category.')
 				if prediction == -1:
-					st.success('Climate change denier. Select "Deniers" in the sidebar for more information about'+
+					st.success('Climate change denier. Select "Analysis of each category" in the sidebar for more information about'+
 							   ' this category or select "Overview" for a comparison of each category.')
 				if prediction == 2:
-					st.success('Provides link to factual news source. Select "Factuals" in the sidebar for more'+
+					st.success('Provides link to factual news source. Select "Analysis of each category" in the sidebar for more'+
 							   ' information about this category or select "Overview" for a comparison of each'+
 							   ' category.')
 				if prediction == 1:
-					st.success('Climate change believer. Select "Believers" in the sidebar for more information'+
+					st.success('Climate change believer. Select "Analysis of each category" in the sidebar for more information'+
 							   ' about this category or select "Overview" for a comparison of each category.')
 
 		# Classify using Logistic Regression
@@ -191,16 +191,16 @@ def main():
 				# You can use a dictionary or similar structure to make this output
 				# more human interpretable.
 				if prediction == 0:
-					st.success('Neutral. Select "Neutrals" in the sidebar for more informatio about this category'+
+					st.success('Neutral. Select "Analysis of each category" in the sidebar for more informatio about this category'+
 							   ' or select "Overview" for a comparison of each category.')
-				st.success('Climate change denier. Select "Deniers" in the sidebar for more information about'+
+				st.success('Climate change denier. Select "Analysis of each category" in the sidebar for more information about'+
 							   ' this category or select "Overview" for a comparison of each category.')
 				if prediction == 2:
-					st.success('Provides link to factual news source. Select "Factuals" in the sidebar for more'+
+					st.success('Provides link to factual news source. Select "Analysis of each category" in the sidebar for more'+
 							   ' information about this category or select "Overview" for a comparison of each'+
 							   ' category.')
 				if prediction == 1:
-					st.success('Climate change believer. Select "Believers" in the sidebar for more information'+
+					st.success('Climate change believer. Select "Analysis of each category" in the sidebar for more information'+
 							   ' about this category or select "Overview" for a comparison of each category.')
 
 	# N-grams
@@ -235,6 +235,8 @@ def main():
 		return cnt
 	
 	dictionary = {}
+
+	# Isolate each category's ngrams
 	ngrams_deniers_tup = raw_analysis[(raw_analysis.sentiment == -1)][['grams']].apply(count_words)['grams'].most_common(20)
 	ngrams_believers_tup = raw_analysis[(raw_analysis.sentiment == 1)][['grams']].apply(count_words)['grams'].most_common(20)
 	ngrams_neutrals_tup = raw_analysis[(raw_analysis.sentiment == 0)][['grams']].apply(count_words)['grams'].most_common(20)
@@ -247,7 +249,7 @@ def main():
 		di = dict(tup) 
 		return di 
 	
-	# Create dictionary of ngrams and then convert to dataframe
+	# Create dictionary of ngrams for each category and then convert to dataframe
 	ngrams_deniers = tuples_to_dict(ngrams_deniers_tup, dictionary)
 	ngrams_deniers = pd.DataFrame(ngrams_deniers.items(), columns = ['Ngram', 'Count'])
 
@@ -261,26 +263,30 @@ def main():
 	ngrams_factuals = pd.DataFrame(ngrams_factuals.items(), columns = ['Ngram', 'Count'])
 	
 
-
-	# Building out the deniers page
-	if selection == "Deniers":
-		st.write("## Climate Change Deniers")
-		st.write(ngrams_deniers)
-	
-	# Building out the neutrals page
-	if selection == "Neutrals":
-		st.write("## Neutral About Climate Change")
-		st.write(ngrams_neutrals)
-	
-	# Building out the believers page
-	if selection == "Believers":
-		st.write("## Climate Change Believers")
-		st.write(ngrams_believers)
-	
-	# Building out the factuals page
-	if selection == "Factuals":
-		st.write("## Provided Link to Factual News Site")
-		st.write(ngrams_factuals)
+	if selection == "Analysis of each category":
+		st.write("## Analysis of Individual Categories")
+		st.info("Select a category from the dropdown menu for a more detailed analysis.")
+		category = st.selectbox("Select category",
+							['Deniers', 'Neutrals',
+							'Believers', 'Factuals'])
+		
+		st.write("### Most frequent phrases")
+		st.write("n-grams refer to a sequence of n consecutive items. In this case, it"+
+				 " refers to a n consecutive words in a text. The most common bigrams (two words) and"+
+				 " trigrams (three words) were counted in the training data. These show the most frequently"+
+				 " used sets of two and three words by each category.")
+		if category == 'Deniers':
+			st.write('#### Most common bigrams and trigrams of climate change deniers')
+			st.write(ngrams_deniers)
+		if category == 'Neutrals':
+			st.write('#### Most common bigrams and trigrams of climate change neutrals')
+			st.write(ngrams_neutrals)
+		if category == 'Believers':
+			st.write('#### Most common bigrams and trigrams of climate change believers')
+			st.write(ngrams_believers)
+		if category == 'Factuals':
+			st.write('#### Most common bigrams and trigrams of those who provided factual links')
+			st.write(ngrams_factuals)
 		
 
 # Required to let Streamlit instantiate our web app.  
