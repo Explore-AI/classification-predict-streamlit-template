@@ -21,9 +21,19 @@ import joblib,os
 # Data dependencies
 import pandas as pd
 import re
-
 import seaborn as sns
 import matplotlib.pyplot as plt
+
+# NLP packages
+import nltk
+from nltk.stem import WordNetLemmatizer
+nltk.download('stopwords')
+nltk.download('punkt')
+nltk.download('wordnet')
+from nltk.corpus import stopwords
+stop_words = set(stopwords.words('english'))
+from nltk import ngrams
+import collections
 
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
@@ -192,22 +202,85 @@ def main():
 				if prediction == 1:
 					st.success('Climate change believer. Select "Believers" in the sidebar for more information'+
 							   ' about this category or select "Overview" for a comparison of each category.')
+
+	# N-grams
+	raw_analysis = raw.copy()
+	lem = WordNetLemmatizer()
+
+	# Normalization
+	def normalizer(tweet):
+		tweet_no_url = re.sub(r'http[^ ]+', '', tweet) # Remove URLs beginning with http
+		tweet_no_url1 = re.sub(r'www.[^ ]+', '', tweet_no_url) # Remove URLs beginning with http
+		only_letters = re.sub("[^a-zA-Z]", " ",tweet_no_url1)  # Remove punctuation
+		tokens = nltk.word_tokenize(only_letters) # Tokenization
+		lower_case = [l.lower() for l in tokens] # Lowercase
+		filtered_result = list(filter(lambda l: l not in stop_words, lower_case))
+		lemmas = [lem.lemmatize(t) for t in filtered_result] 
+		return lemmas
+	raw_analysis['normalized'] = raw_analysis['message'].apply(normalizer)
+
+	# FUNCTION TO RETURN BIGRAMS AND TRIGRAMS
+	def ngrams(input_list):
+		bigrams = [' '.join(t) for t in list(zip(input_list, input_list[1:]))]
+		trigrams = [' '.join(t) for t in list(zip(input_list, input_list[1:], input_list[2:]))]
+		return bigrams+trigrams
+	raw_analysis['grams'] = raw_analysis['normalized'].apply(ngrams)
+
+	# COUNT BIGRAMS AND TRIGRAMS 
+	def count_words(input):
+		cnt = collections.Counter()
+		for row in input:
+			for word in row:
+				cnt[word] += 1
+		return cnt
 	
+	dictionary = {}
+	ngrams_deniers_tup = raw_analysis[(raw_analysis.sentiment == -1)][['grams']].apply(count_words)['grams'].most_common(20)
+	ngrams_believers_tup = raw_analysis[(raw_analysis.sentiment == 1)][['grams']].apply(count_words)['grams'].most_common(20)
+	ngrams_neutrals_tup = raw_analysis[(raw_analysis.sentiment == 0)][['grams']].apply(count_words)['grams'].most_common(20)
+	ngrams_factuals_tup = raw_analysis[(raw_analysis.sentiment == 2)][['grams']].apply(count_words)['grams'].most_common(20)
+
+	def tuples_to_dict(tup, di): 
+		"""
+		Convert a list of tuples into a dictionary
+		"""
+		di = dict(tup) 
+		return di 
+	
+	# Create dictionary of ngrams and then convert to dataframe
+	ngrams_deniers = tuples_to_dict(ngrams_deniers_tup, dictionary)
+	ngrams_deniers = pd.DataFrame(ngrams_deniers.items(), columns = ['Ngram', 'Count'])
+
+	ngrams_believers = tuples_to_dict(ngrams_believers_tup, dictionary)
+	ngrams_believers = pd.DataFrame(ngrams_believers.items(), columns = ['Ngram', 'Count'])
+
+	ngrams_neutrals = tuples_to_dict(ngrams_neutrals_tup, dictionary)
+	ngrams_neutrals = pd.DataFrame(ngrams_neutrals.items(), columns = ['Ngram', 'Count'])
+
+	ngrams_factuals = tuples_to_dict(ngrams_factuals_tup, dictionary)
+	ngrams_factuals = pd.DataFrame(ngrams_factuals.items(), columns = ['Ngram', 'Count'])
+	
+
+
 	# Building out the deniers page
 	if selection == "Deniers":
 		st.write("## Climate Change Deniers")
-
+		st.write(ngrams_deniers)
+	
 	# Building out the neutrals page
 	if selection == "Neutrals":
 		st.write("## Neutral About Climate Change")
+		st.write(ngrams_neutrals)
 	
 	# Building out the believers page
 	if selection == "Believers":
 		st.write("## Climate Change Believers")
+		st.write(ngrams_believers)
 	
 	# Building out the factuals page
 	if selection == "Factuals":
 		st.write("## Provided Link to Factual News Site")
+		st.write(ngrams_factuals)
 		
 
 # Required to let Streamlit instantiate our web app.  
