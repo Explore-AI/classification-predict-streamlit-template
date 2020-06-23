@@ -63,12 +63,7 @@ def main():
 	if selection == "Prediction":
 		st.info("Prediction with ML Models")
         # Creating selection box to be able to choose a model
-#         model_option = st.selectbox('You can choose one of the following models:',['Logistic Regression',
-#                                                                                    'Naïve Bayes',
-#                                                                                    'Linear SVM (Support Vector Machine)',
-#                                                                                    'Random Forest',
-#                                                                                    'KNN (K Nearest Neighbors)',
-#                                                                                    'Neural Networks'])
+        model_option = st.selectbox('You can choose one of the following models:',['Logistic Regression','Naïve Bayes','Linear SVM (Support Vector Machine)','Random Forest','KNN (K Nearest Neighbors)','Neural Networks'])
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
         
