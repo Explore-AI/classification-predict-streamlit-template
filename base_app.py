@@ -82,23 +82,23 @@ def main():
 			# more human interpretable.
 			st.success("Text Categorized as: {}".format(prediction))
 
-# Building out the Climate Change News page
-	if selection == "Climate Change News":
-		st.info("What is climate change? How does it impact us? Am I to blame?")  
-		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+# # Building out the Climate Change News page
+# 	if selection == "Climate Change News":
+# 		st.info("What is climate change? How does it impact us? Am I to blame?")  
+# 		# You can read a markdown file from supporting resources folder
+# 		st.markdown("Some information here")
         
-# Building out the Data Insights page
-	if selection == "Data Insights":
-		st.info("A few insights from the dataset.")  
-		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+# # Building out the Data Insights page
+# 	if selection == "Data Insights":
+# 		st.info("A few insights from the dataset.")  
+# 		# You can read a markdown file from supporting resources folder
+# 		st.markdown("Some information here")
         
-        st.subheader("View visuals")
-		if st.checkbox('Distribution of different classes for tweets'): # data is hidden if box is unchecked
-			st.write() # will write the df to the page
- 		if st.checkbox('Most common words'): # data is hidden if box is unchecked
-			st.write() # will write the df to the page
+#         st.subheader("View visuals")
+# 		if st.checkbox('Distribution of different classes for tweets'): # data is hidden if box is unchecked
+# 			st.write() # will write the df to the page
+#  		if st.checkbox('Most common words'): # data is hidden if box is unchecked
+# 			st.write() # will write the df to the page
         
         
 # Required to let Streamlit instantiate our web app.  
