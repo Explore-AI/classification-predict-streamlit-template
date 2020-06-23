@@ -43,7 +43,7 @@ def main():
 	# these are static across all pages
 	st.title("Tweet Classifer")
 	st.subheader("Climate change tweet classification")
-    
+
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
 	options = ["Prediction", "Data Insights", "App Overview", "Climate Change News"]
@@ -53,17 +53,17 @@ def main():
 	if selection == "App Overview":
 		st.info("General Information")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+		st.markdown("Some info here")
 
 	# Building out the predication page
 	if selection == "Prediction":
 		st.info("Prediction with ML Models")
-		st.markdown("You can now choose which model you would like to try out (we reccomend the neural network though).")        
+		st.markdown("You can now choose which model you would like to try out (we reccomend the neural network though).")
         # Creating selection box to be able to choose a model
 		model_option = st.selectbox('You can choose one of the following models:',['Logistic Regression','Naïve Bayes','Linear SVM (Support Vector Machine)','Random Forest','KNN (K Nearest Neighbors)','Neural Networks'])
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
-        
+
 		if st.button("Classify"):
 			# Transforming user input with vectorizer
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
@@ -79,23 +79,23 @@ def main():
 
 # Building out the Climate Change News page
 	if selection == "Climate Change News":
-		st.info("What is climate change? How does it impact us? Am I to blame?")  
+		st.info("What is climate change? How does it impact us? Am I to blame?")
 		# You can read a markdown file from supporting resources folder
 		st.markdown("Some information here")
-        
+
 # Building out the Data Insights page
 	if selection == "Data Insights":
-		st.info("A few insights from the dataset.")  
+		st.info("A few insights from the dataset.")
 		# You can read a markdown file from supporting resources folder
 		st.markdown("Some information here")
-        
+
 		st.subheader("View visuals")
 		if st.checkbox('Distribution of different classes for tweets'): # data is hidden if box is unchecked
-			st.write() # will write the df to the page
-#  		elif st.checkbox('Most common words'): # data is hidden if box is unchecked
-# 			st.write() # will write the df to the page
-        
-        
-# Required to let Streamlit instantiate our web app.  
+			st.write()
+        # if st.checkbox('Most common words'):
+        #     st.write()
+
+
+# Required to let Streamlit instantiate our web app.
 if __name__ == '__main__':
 	main()
