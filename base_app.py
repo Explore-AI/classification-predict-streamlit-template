@@ -200,7 +200,15 @@ def main():
 					st.success('Climate change believer. Select "Analysis of each category" in the sidebar for more information'+
 							   ' about this category or select "Comparison of categories."')
 
-	# N-grams
+	#----------------------------------------#
+	# Functions for analysis of twitter data
+	#----------------------------------------#
+	# 1) N-grams count
+	# 2) Word count
+	# 3) Length of tweet
+	# 4) Average word length
+
+	# 1) N-GRAMS COUNT
 	raw_analysis = raw.copy()
 	lem = WordNetLemmatizer()
 
@@ -216,14 +224,14 @@ def main():
 		return lemmas
 	raw_analysis['normalized'] = raw_analysis['message'].apply(normalizer)
 
-	# FUNCTION TO RETURN BIGRAMS AND TRIGRAMS
+	# Return bigrams and trigrams
 	def ngrams(input_list):
 		bigrams = [' '.join(t) for t in list(zip(input_list, input_list[1:]))]
 		trigrams = [' '.join(t) for t in list(zip(input_list, input_list[1:], input_list[2:]))]
 		return bigrams+trigrams
 	raw_analysis['grams'] = raw_analysis['normalized'].apply(ngrams)
 
-	# COUNT BIGRAMS AND TRIGRAMS 
+	# Count bigrams and trigrams
 	def count_words(input):
 		cnt = collections.Counter()
 		for row in input:
@@ -258,32 +266,132 @@ def main():
 
 	ngrams_factuals = tuples_to_dict(ngrams_factuals_tup, dictionary)
 	ngrams_factuals = pd.DataFrame(ngrams_factuals.items(), columns = ['Ngram', 'Count'])
-	
 
+
+	# 2) WORD COUNT
+	def word_count(tweet):
+		"""
+		Function to return the number of words in a tweet.
+		Input: A tweet (str)
+		Output: Number of words in that tweet (int)
+		"""
+		return len(tweet.split())
+	raw_analysis['word_count'] = raw_analysis['message'].apply(word_count)
+	word_count_believers = raw_analysis[raw_analysis['sentiment'] == 1]['word_count']
+	avg_word_count_believers = word_count_believers.mean()
+
+	word_count_deniers = raw_analysis[raw_analysis['sentiment'] == -1]['word_count']
+	avg_word_count_deniers = word_count_deniers.mean()
+
+	word_count_neutrals = raw_analysis[raw_analysis['sentiment'] == 0]['word_count']
+	avg_word_count_neutrals = word_count_neutrals.mean()
+
+	word_count_factuals = raw_analysis[raw_analysis['sentiment'] == 2]['word_count']
+	avg_word_count_factuals = word_count_factuals.mean()
+
+	# 3) LENGTH OF TWEET
+	def length_of_tweet(tweet):
+		"""
+		Function to return the number of characters in that tweet.
+		Input: A tweet (str)
+		Output: Number of characters in that tweet (int)
+		"""
+		return len(tweet)
+	raw_analysis['tweet_length'] = raw_analysis['message'].apply(length_of_tweet)
+
+	t_length_believers = raw_analysis[raw_analysis['sentiment'] == 1]['tweet_length']
+	avg_t_length_believers = t_length_believers.mean()
+
+	t_length_deniers = raw_analysis[raw_analysis['sentiment'] == -1]['tweet_length']
+	avg_t_length_deniers = t_length_deniers.mean()
+
+	t_length_neutrals = raw_analysis[raw_analysis['sentiment'] == 0]['tweet_length']
+	avg_t_length_neutrals = t_length_neutrals.mean()
+
+	t_length_factuals = raw_analysis[raw_analysis['sentiment'] == 2]['tweet_length']
+	avg_t_length_factuals = t_length_factuals.mean()
+
+	# 4) AVERAGE WORD LENGTH
+	def average_word_length(tweet):
+		"""
+		Function to return the average length of all the words
+		in a tweet.
+		Input: A tweet (str)
+		Output: Average word length (float)
+		"""
+		words = tweet.split()
+		average = sum(len(word) for word in words) / len(words)
+		return round(average, 2)
+	raw_analysis['avg_word_length'] = raw_analysis['message'].apply(average_word_length)
+
+	w_length_believers = raw_analysis[raw_analysis['sentiment'] == 1]['avg_word_length']
+	avg_w_length_believers = w_length_believers.mean()
+
+	w_length_deniers = raw_analysis[raw_analysis['sentiment'] == -1]['avg_word_length']
+	avg_w_length_deniers = w_length_deniers.mean()
+
+	w_length_neutrals = raw_analysis[raw_analysis['sentiment'] == 0]['avg_word_length']
+	avg_w_length_neutrals = w_length_neutrals.mean()
+
+	w_length_factuals = raw_analysis[raw_analysis['sentiment'] == 2]['avg_word_length']
+	avg_w_length_factuals = w_length_factuals.mean()
+
+	
+	# Building out the Analysis of each category page
 	if selection == "Analysis of each category":
 		st.write("## Analysis of Individual Categories")
 		st.info("Select a category from the dropdown menu for a more detailed analysis.")
+
+		# Select category of which user would like to view data
 		category = st.selectbox("Select category",
 							['Deniers', 'Neutrals',
 							'Believers', 'Factuals'])
 		
-		st.write("### Most frequent phrases")
+		st.write("### Most frequent n-grams")
 		st.write("n-grams refer to a sequence of n consecutive items. In this case, it"+
 				 " refers to a n consecutive words in a text. The most common bigrams (two words) and"+
 				 " trigrams (three words) were counted in the training data. These show the most frequently"+
 				 " used sets of two and three words by each category.")
+
 		if category == 'Deniers':
 			st.write('#### Most common bigrams and trigrams of climate change deniers')
 			st.write(ngrams_deniers)
+			st.write("In this dataset, climate change deniers seem to tend to retweet Donald Trump "+
+			"and Twitter user @SteveSGoddard, who has since changed his username to [@Tony__Heller](https://twitter.com/Tony__Heller).")
+			st.write("These ngrams suggest that climate change deniers may be aligned towards right-wing politics.")
+			st.write('### Metrics')
+			st.write("Average word count per tweet: ", round(avg_word_count_deniers, 2))
+			st.write("Average tweet length: ", round(avg_t_length_deniers, 2))
+			st.write("Average word length: ", round(avg_w_length_deniers, 2))
+
 		if category == 'Neutrals':
 			st.write('#### Most common bigrams and trigrams of climate change neutrals')
 			st.write(ngrams_neutrals)
+			st.write('### Metrics')
+			st.write("Average word count per tweet: ", round(avg_word_count_neutrals, 2))
+			st.write("Average tweet length: ", round(avg_t_length_neutrals, 2))
+			st.write("Average word length: ", round(avg_w_length_neutrals, 2))
+
 		if category == 'Believers':
 			st.write('#### Most common bigrams and trigrams of climate change believers')
 			st.write(ngrams_believers)
+			st.write('In this dataset, climate change believers seem to frequently tweet about dying.')
+			st.write('### Metrics')
+			st.write("Average word count per tweet: ", round(avg_word_count_believers, 2))
+			st.write("Average tweet length: ", round(avg_t_length_believers, 2))
+			st.write("Average word length: ", round(avg_w_length_believers, 2))
+			# fig = sns.boxplot(word_count_believers)
+			# st.pyplot()
+			
+			
+
 		if category == 'Factuals':
 			st.write('#### Most common bigrams and trigrams of those who provided factual links')
 			st.write(ngrams_factuals)
+			st.write('### Metrics')
+			st.write("Average word count per tweet: ", round(avg_word_count_factuals, 2))
+			st.write("Average tweet length: ", round(avg_t_length_factuals, 2))
+			st.write("Average word length: ", round(avg_w_length_factuals, 2))
 		
 
 # Required to let Streamlit instantiate our web app.  
