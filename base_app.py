@@ -30,13 +30,17 @@ import markdown
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-	
+from sklearn.metrics import f1_score
+from sklearn.model_selection import train_test_split
+# from resources.preprocessing import TweetPreprocessing
+
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
+
 
 # The main function where we will build the actual app
 def main():
@@ -65,9 +69,13 @@ def main():
 	# Building out the predication page
 	if selection == "Prediction":
 		st.info("Prediction with ML Models")
+		st.markdown(open("resources/models.md").read(), unsafe_allow_html=True)
+		# Creating a text box for user input
+		tweet_text = st.text_area("Enter Text","Type Here")
 		# Creating a selection box to choose different models
 		models = ['Support Vector Classifier','Logistic Regression']
 		classifiers = st.selectbox("Choose a classifier", models)
+<<<<<<< HEAD
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
 
@@ -87,16 +95,18 @@ def main():
 
 # Required to let Streamlit instantiate our web app.
 =======
+=======
+>>>>>>> 370eb2704e22623ed49c3fcef2434cef941090ab
 		if st.button("Classify"):
 			
-			if classifiers == 'Support Vector Classifier':
+			if classifiers == 'Support Vector Classifier' :
 				# Transforming user input with vectorizer
 				vect_text = [tweet_text]#.toarray()
 				# Load your .pkl file with the model of your choice + make predictions
 				# Try loading in multiple models to give the user a choice
 				predictor = joblib.load(open(os.path.join("resources/linear_svc.pkl"),"rb"))
 				prediction = predictor.predict(vect_text)
-
+				
 			elif classifiers == 'Logistic Regression':
 				# Transforming user input with vectorizer
 				vect_text = tweet_cv.transform([tweet_text]).toarray()
@@ -116,7 +126,9 @@ def main():
 				result = 'Pro'
 			else:
 				result = 'News'
+			
 			st.success("Text Categorized as: {}".format(result))
+			
 
 	# Building out the EDA page
 	if selection == "EDA":

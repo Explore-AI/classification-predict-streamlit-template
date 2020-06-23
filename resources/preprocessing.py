@@ -42,8 +42,8 @@ class TweetPreprocessing:
                         clean_tweet.append(token)
         return clean_tweet
     
-tweet = train_data.loc[0, 'message']
-tweet = tweet_preproc.lemmatizeTweet(tweet)
-tweet = tweet_preproc.tweetPreprocessor(tweet)
-tweet = tweet_preproc.tweetTokenizer(tweet)
-tweet = tweet_preproc.removeStopWords(tweet)
+# tweet = train_data.loc[0, 'message']
+# tweet = tweet_preproc.lemmatizeTweet(tweet)
+# tweet = tweet_preproc.tweetPreprocessor(tweet)
+# tweet = tweet_preproc.tweetTokenizer(tweet)
+# tweet = tweet_preproc.removeStopWords(tweet)
