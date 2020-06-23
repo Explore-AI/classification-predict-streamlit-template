@@ -65,7 +65,7 @@ def main():
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
 
-		if st.button("Classify"):
+		if st.button("Classify Text"):
 			# Transforming user input with vectorizer
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
@@ -78,6 +78,6 @@ def main():
 			# more human interpretable.
 			st.success("Text Categorized as: {}".format(prediction))
 
-# Required to let Streamlit instantiate our web app.  
+# Required to let Streamlit instantiate our web app.
 if __name__ == '__main__':
 	main()
