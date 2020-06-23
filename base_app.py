@@ -55,10 +55,6 @@ def main():
 		# You can read a markdown file from supporting resources folder
 		st.markdown("Some information here")
 
-		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
-
 	# Building out the predication page
 	if selection == "Prediction":
 		st.info("Prediction with ML Models")
