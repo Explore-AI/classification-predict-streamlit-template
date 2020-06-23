@@ -8,11 +8,13 @@
     and EDA 
 
 """
+import spacy
+nlp = spacy.load('en_core_web_sm')
 
 class TweetPreprocessing:
     
-    def __init__(self):
-        self.tweet = tweet
+    # def __init__(self):
+    #     self.tweet = tweet
     
     def lemmatizeTweet(self, tweet):
         lemmatized_tweet = list()

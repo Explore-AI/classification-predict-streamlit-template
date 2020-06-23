@@ -31,14 +31,26 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+# Data processing depencencies
+import nltk
+
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from textblob import TextBlob
+from nltk.tokenize import TweetTokenizer
+from nltk.corpus import stopwords
+
+# from resources.preprocessing import TweetPreprocessing
+# tp = TweetPreprocessing()
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
+# raw['tweets'] = raw['message'].apply(tp.lemmatizeTweet)
 
 # The main function where we will build the actual app
+@st.cache(suppress_st_warning=True)
 def main():
 	"""Tweet Classifier App with Streamlit """
 
@@ -57,7 +69,7 @@ def main():
 		st.info("General Information")
 		# You can read a markdown file from supporting resources folder
 		st.markdown(open("resources/info.md").read(),unsafe_allow_html=True)
-
+		
 		st.subheader("Raw Twitter data and label")
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
@@ -80,7 +92,7 @@ def main():
 				# Try loading in multiple models to give the user a choice
 				predictor = joblib.load(open(os.path.join("resources/linear_svc.pkl"),"rb"))
 				prediction = predictor.predict(vect_text)
-
+				
 			elif classifiers == 'Logistic Regression':
 				# Transforming user input with vectorizer
 				vect_text = tweet_cv.transform([tweet_text]).toarray()
@@ -88,7 +100,7 @@ def main():
 				# Try loading in multiple models to give the user a choice
 				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
 				prediction = predictor.predict(vect_text)
-
+			
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
@@ -100,10 +112,16 @@ def main():
 				result = 'Pro'
 			else:
 				result = 'News'
+			
 			st.success("Text Categorized as: {}".format(result))
+			
 
 	# Building out the EDA page
 	if selection == "EDA":
+		target_map = {-1:'Anti', 0:'Neutral', 1:'Pro', 2:'News'}
+		eda = raw.copy()
+		eda['target'] = raw['sentiment'].map(target_map)
+
 		st.info("Exploratory Data Analysis")
 		eda_options = ["All", "News", "Pro", "Neutral", "Anti"]
 		eda_selection = st.selectbox("Choose Sentiment", eda_options)
@@ -111,15 +129,15 @@ def main():
 			st.write('Introduction to EDA')
 			# Plot count of sentiments
 			fig, ax = plt.subplots()
-			fig = sns.countplot(x='sentiment', data=raw, palette='husl')
+			fig = sns.countplot(data = eda, x = 'target', palette = {'Pro':'#CCCC00', 'News':'teal', 'Neutral':'teal', 'Anti':'teal'})
 			plt.xlabel('Sentiment')
 			plt.ylabel('Number of Observations')
 			plt.title('Count of Observations by Class\n')
 			ax.set_xticklabels(['Anti', 'Neutral', 'Pro', 'News'])
 			plt.xticks(rotation=45)
 			st.pyplot()
-			eda_info = md[1305:1400]
-			st.markdown(eda_info,unsafe_allow_html=True)
-# Required to let Streamlit instantiate our web app.
+			
+			# st.markdown(open("resources/eda.md").read(),unsafe_allow_html=False)
+# Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
 	main()
