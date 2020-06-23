@@ -96,7 +96,7 @@ def main():
 		st.subheader("View visuals")
 		if st.checkbox('Distribution of different classes for tweets'): # data is hidden if box is unchecked
 			st.write() # will write the df to the page
- 		if st.checkbox('Most common words'): # data is hidden if box is unchecked
+ 		elif st.checkbox('Most common words'): # data is hidden if box is unchecked
 			st.write() # will write the df to the page
         
         
