@@ -86,7 +86,7 @@ def main():
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 		
 
-	# Building out the predication page
+	# Building out the prediction page
 	if selection == "Prediction":
 		st.info("1. Enter a sample text of your audience in the box below\n " +
 				"2. Select the algorithm used to classify your text\n"+
@@ -192,7 +192,22 @@ def main():
 				if prediction == 1:
 					st.success('Climate change believer. Select "Believers" in the sidebar for more information'+
 							   ' about this category or select "Overview" for a comparison of each category.')
-		
+	
+	# Building out the deniers page
+	if selection == "Deniers":
+		st.write("## Climate Change Deniers")
+
+	# Building out the neutrals page
+	if selection == "Neutrals":
+		st.write("## Neutral About Climate Change")
+	
+	# Building out the believers page
+	if selection == "Believers":
+		st.write("## Climate Change Believers")
+	
+	# Building out the factuals page
+	if selection == "Factuals":
+		st.write("## Provided Link to Factual News Site")
 		
 
 # Required to let Streamlit instantiate our web app.  
