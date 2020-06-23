@@ -20,3 +20,7 @@ Each tweet is labelled as one of the following classes:
 - 1(Pro): the tweet supports the belief of man-made climate change
 - 0(Neutral): the tweet neither supports nor refutes the belief of man-made climate change
 - -1(Anti): the tweet does not believe in man-made climate change
+
+### Sentiments
+
+This is a demonstration of how to load eda and markdown text
