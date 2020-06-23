@@ -75,28 +75,6 @@ def main():
 		# Creating a selection box to choose different models
 		models = ['Support Vector Classifier','Logistic Regression']
 		classifiers = st.selectbox("Choose a classifier", models)
-<<<<<<< HEAD
-		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
-
-<<<<<<< HEAD
-		if st.button("Classify Text"):
-			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-			prediction = predictor.predict(vect_text)
-
-			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
-
-# Required to let Streamlit instantiate our web app.
-=======
-=======
->>>>>>> 370eb2704e22623ed49c3fcef2434cef941090ab
 		if st.button("Classify"):
 			
 			if classifiers == 'Support Vector Classifier' :
@@ -149,6 +127,5 @@ def main():
 			eda_info = md[1305:1400]
 			st.markdown(eda_info,unsafe_allow_html=True)
 # Required to let Streamlit instantiate our web app.  
->>>>>>> 8eff5fbdc791ed658eff2d758ed7dcffa6e7586f
 if __name__ == '__main__':
 	main()
