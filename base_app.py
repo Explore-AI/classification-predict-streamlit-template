@@ -61,14 +61,27 @@ def main():
 				 "about each category.")
 		st.write("Select Prediction in the side bar to get started.")
 
-	# Building out the "Information" page
+	# Building out the "Overview" page
 	if selection == "Overview":
-		st.info("General Information")
-		# You can read a markdown file from supporting resources folder
-		st.markdown("info")
-		st.write(sns.countplot(x='sentiment', data = raw))
+		st.write("## Comparison of categories")
+		st.write("The model predicts the text to be classed into one of four categories:")
+		st.write("* Denies climate change (-1)")
+		st.write("* Is neutral about climate change (0)")
+		st.write("* Believes in climate change (1)")
+		st.write("* Provided a factual link to a news site (2)")
+		st.write("You can view the raw data used to train the models at the bottom of the page.")
 
-		st.subheader("Raw Twitter data and label")
+		# Count of each category
+		st.write("### Count of each category")
+		fig = sns.countplot(x='sentiment', data = raw, palette='rainbow')
+		st.pyplot()
+		st.write(raw['sentiment'].value_counts())
+		st.write("The training data contained more tweets from climate change believers"+
+				 " than any other group which implies that there may be more information"+
+				 " available about this group than others.")
+
+		st.subheader("Raw Twitter data")
+		st.write("The raw Twitter data that was used to train the models.")
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 		
@@ -112,14 +125,18 @@ def main():
 				# You can use a dictionary or similar structure to make this output
 				# more human interpretable.
 				if prediction == 0:
-					st.success('Neutral')
-					#st.success("Text Categorized as: {}".format(prediction))
+					st.success('Neutral. Select "Neutrals" in the sidebar for more informatio about this category'+
+							   ' or select "Overview" for a comparison of each category.')
 				if prediction == -1:
-					st.success('Climate change denier')
+					st.success('Climate change denier. Select "Deniers" in the sidebar for more information about'+
+							   ' this category or select "Overview" for a comparison of each category.')
 				if prediction == 2:
-					st.success('Provides link to factual news source')
+					st.success('Provides link to factual news source. Select "Factuals" in the sidebar for more'+
+							   ' information about this category or select "Overview" for a comparison of each'+
+							   ' category.')
 				if prediction == 1:
-					st.success('Climate change believer')
+					st.success('Climate change believer. Select "Believers" in the sidebar for more information'+
+							   ' about this category or select "Overview" for a comparison of each category.')
 
 		# Classify using Random Forest
 		if algorithm=='Random Forest':
@@ -136,14 +153,18 @@ def main():
 				# You can use a dictionary or similar structure to make this output
 				# more human interpretable.
 				if prediction == 0:
-					st.success('Neutral')
-					#st.success("Text Categorized as: {}".format(prediction))
+					st.success('Neutral. Select "Neutrals" in the sidebar for more informatio about this category'+
+							   ' or select "Overview" for a comparison of each category.')
 				if prediction == -1:
-					st.success('Climate change denier.')
+					st.success('Climate change denier. Select "Deniers" in the sidebar for more information about'+
+							   ' this category or select "Overview" for a comparison of each category.')
 				if prediction == 2:
-					st.success('Provides link to factual news source')
+					st.success('Provides link to factual news source. Select "Factuals" in the sidebar for more'+
+							   ' information about this category or select "Overview" for a comparison of each'+
+							   ' category.')
 				if prediction == 1:
-					st.success('Climate change believer')
+					st.success('Climate change believer. Select "Believers" in the sidebar for more information'+
+							   ' about this category or select "Overview" for a comparison of each category.')
 
 		# Classify using Logistic Regression
 		if algorithm=='Logistic Regression':
@@ -160,14 +181,17 @@ def main():
 				# You can use a dictionary or similar structure to make this output
 				# more human interpretable.
 				if prediction == 0:
-					st.success('Neutral')
-					#st.success("Text Categorized as: {}".format(prediction))
-				if prediction == -1:
-					st.success('Climate change denier')
+					st.success('Neutral. Select "Neutrals" in the sidebar for more informatio about this category'+
+							   ' or select "Overview" for a comparison of each category.')
+				st.success('Climate change denier. Select "Deniers" in the sidebar for more information about'+
+							   ' this category or select "Overview" for a comparison of each category.')
 				if prediction == 2:
-					st.success('Provides link to factual news source')
+					st.success('Provides link to factual news source. Select "Factuals" in the sidebar for more'+
+							   ' information about this category or select "Overview" for a comparison of each'+
+							   ' category.')
 				if prediction == 1:
-					st.success('Climate change believer')
+					st.success('Climate change believer. Select "Believers" in the sidebar for more information'+
+							   ' about this category or select "Overview" for a comparison of each category.')
 		
 		
 
