@@ -32,14 +32,18 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from collections import Counter
 from wordcloud import WordCloud
+from nltk.probability import FreqDist
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+from textblob import TextBlob
 
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
 # Load your raw data
-raw = pd.read_csv("resources/train.csv")
-eda = pd.read_csv("resources/eda.csv", sep ='\t')
+raw = pd.read_csv("resources/datasets/train.csv")
+eda = pd.read_csv("resources/datasets/eda.csv", sep ='\t')
+
 
 # The main function where we will build the actual app
 def main():
@@ -55,12 +59,7 @@ def main():
 	options = ["Information", "EDA", "Insights", "Prediction"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 
-	# Building a vocab list
-		
-	vocab = list()
-	for tweet in eda['tweets']:
-		for token in tweet:
-			vocab.append(token)
+
 
 	# Building out the "Information" page
 	if selection == "Information":
@@ -72,7 +71,7 @@ def main():
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 
-	# Building out the predication page
+	# Building out the "Prediction" page
 	if selection == "Prediction":
 		st.info("Prediction with ML Models")
 		# Creating a selection box to choose different models
@@ -113,8 +112,7 @@ def main():
 			
 			st.success("Text Categorized as: {}".format(result))
 			
-
-	# Building out the EDA page
+	# Building out the "EDA" page
 	if selection == "EDA":
 		target_map = {-1:'Anti', 0:'Neutral', 1:'Pro', 2:'News'}
 		eda['target'] = eda['sentiment'].map(target_map)
@@ -134,9 +132,6 @@ def main():
 		st.pyplot()
 		st.markdown(open("resources/eda.md").read(),unsafe_allow_html=False)
 
-		
-
-		st.write("There are {} unique words in the sample".format(pd.Series(vocab).nunique()))
 
 		# Sentiment Scores
 		# fig, axes = plt.subplots(1, 4, figsize = (18, 6), sharey = True)
@@ -196,19 +191,94 @@ def main():
 		plotScatter(x = 'subjectivity', y = 'pol_plus_comp', df = data)
 		st.pyplot()
 
+	# Building out the "Insights" page
 	if selection == "Insights":
+		insight_df = pd.read_csv("resources/datasets/interactive.csv", sep ='\t')
+		st.info("Insights from Word Clouds")
+		
+		# Building vocabulary
+		vocab = list()
+		ignore = ['rt', 'urlweb', 'htt', 'ht','pron','amp','https','http','mr']
+		for tweet in insight_df['tweets']:
+			for token in tweet:
+				if token not in ignore:
+					vocab.append(token)
+		
+		
+		
+		# Generate a list of the most common words
+		most_common_words = Counter(vocab).most_common()
+		n = st.sidebar.slider('Top n words to include in Wordcloud', min_value=100, max_value=13000, value=12000, step=None, format=None, key=None)
+		most_common = list()
+		for word in most_common_words[:n]:
+			most_common.append(word[0])
+		st.write(vocab)
+		def removeInfrequentWords(tweet):
+			pre_proc_tweet = list()
+			for token in tweet:
+				if token in most_common:
+					pre_proc_tweet.append(token)
+			return pre_proc_tweet
+
+		insight_df['tweets'] = insight_df['tweets'].map(removeInfrequentWords)
+
+		target_map = {-1:'Anti', 0:'Neutral', 1:'Pro', 2:'News'}
+		insight_df['target'] = insight_df['sentiment'].map(target_map)
+
+		def getPolarityScores(tweet):
+			tweet = ' '.join(tweet)
+			sid = SentimentIntensityAnalyzer()
+			scores = sid.polarity_scores(tweet)
+			return scores
+
+		nltk_scores = dict(compound = list(), negative = list(), neutral = list(), positive = list())
+		for tweet in insight_df['tweets']:
+			output = getPolarityScores(tweet)
+			nltk_scores['compound'].append(output['compound'])
+			nltk_scores['negative'].append(output['neg'])
+			nltk_scores['neutral'].append(output['neu'])
+			nltk_scores['positive'].append(output['pos'])
+
+		if 'compound' in insight_df.columns:
+			insight_df.drop(['compound', 'negative', 'neutral', 'positive'], axis = 1, inplace = True)
+			insight_dfe = pd.concat([insight_df, pd.DataFrame(nltk_scores)], axis = 1)
+		else:
+			insight_df = pd.concat([insight_df, pd.DataFrame(nltk_scores)], axis = 1)
+
+		sentiment_scores = [TextBlob(tweet).sentiment for tweet in insight_df['message']]
+
+		pol = list()
+		subj = list()
+		for scores in sentiment_scores:
+			pol.append(scores.polarity)
+			subj.append(scores.subjectivity)
+
+		insight_df['polarity'] = pol
+		insight_df['subjectivity'] = subj
+
+
+		
 		# Create selections for each class
 		insight_options = ["Overview", "News", "Pro", "Neutral", "Anti"]
-		insights = st.selectbox("Choose Sentiment", insight_options, key="Overview")
+		insights = st.sidebar.selectbox("Choose Sentiment", insight_options)
 
+		# Most Common
 		hundred_most_common_words_count = Counter(vocab).most_common(50)
 		hundred_most_common_words = list()
 		for word in hundred_most_common_words_count:
 			token = word[0]
 			hundred_most_common_words.append(token)
-
-		# Word Cloud Function
-		def plotWordCloud(data):
+		st.write(hundred_most_common_words)
+		# Creating sliders for sentiment tuning
+		neg_upper = st.sidebar.slider('Negative Sentiment Upper Bound', min_value=-1.0, max_value=0.0, value=-0.2, step=0.01)
+		pos_lower = st.sidebar.slider('Positive Sentiment Lower Bound', min_value=0.0, max_value=1.0, value=0.2, step=0.01)
+		
+		
+		if insights == "Overview":			
+			# Plotting Compound = Neutral
+			data = insight_df[(insight_df['compound'] > -neg_upper) & (insight_df['compound'] < pos_lower)]
+			
+			# Building word list
 			words = list()
 			for tweet in data['tweets']:
 				for token in tweet:
@@ -223,20 +293,17 @@ def main():
 			plt.axis("off")
 			plt.margins(x=0, y=0)
 			st.pyplot()
-		
-		if insights == "Overview":
-			st.write('graph here')
-			print('Compound = Neutral')
-			data = eda[eda['compound'] == 0]
-			plotWordCloud(data)
 
-			print('Sentiment = Negative')
-			data = eda[eda['compound'] < 0.5]
-			plotWordCloud(data)
+			# st.write(data)
+			cloud = plotWordCloud(data)
+			st.pyplot()
+			# print('Sentiment = Negative')
+			# data = eda[eda['compound'] < neg_upper]
+			# plotWordCloud(data)
 
-			print('Sentiment = Positive')
-			data = eda[eda['compound'] > 0.5]
-			plotWordCloud(data)
+			# print('Sentiment = Positive')
+			# data = eda[eda['compound'] > pos_lower]
+			# plotWordCloud(data)
 
 		elif insights == "News":
 			st.write('graph here')
