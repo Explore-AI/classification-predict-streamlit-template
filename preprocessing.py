@@ -49,8 +49,6 @@ def findURLs(tweet):
 
     all_ = " ".join(re.findall(pattern,tweet))
     return all_
-
-
 def strip_url(df):
     """
     removes all urls from a the DataFrame raw message and replaces them with "urlweb"
@@ -73,7 +71,6 @@ def strip_url(df):
     subs_url = r'urlweb'
     clean_df['message'] = clean_df['message'].replace(to_replace = pattern_url, value = subs_url, regex = True)
     return clean_df
-
 def findHandles(tweet):
     """
     returns a list of all handles in a tweet
@@ -93,7 +90,6 @@ def findHandles(tweet):
         if token.startswith('@'):
             handles.append(token)#.replace('@', '')
     return handles
-
 def findHashTags(tweet):
     """
     returns a list of all hashtags in a tweet
@@ -113,7 +109,6 @@ def findHashTags(tweet):
         if token.startswith('#'):
             hash_tags.append(token)
     return hash_tags
-
 # Feature Creation and extration
 def removePunctuation(tweet):
     """
@@ -131,12 +126,10 @@ def removePunctuation(tweet):
             "Hey Check out this story urlweb He doesn't seem impressed"
     """
     clean_tweet = tweet.replace('\n', ' ') # first remove line spaces
-    clean_tweet = re.sub('\w*\d\w*', ' ', clean_tweet) # substitute digits within text with an empty string
+    clean_tweet = re.sub(r'\w*\d\w*', ' ', clean_tweet) # substitute digits within text with an empty string
     clean_tweet = re.sub(r'[:;.,_()/\{}"?\!&¬¦ãÃâÂ¢\d]', '', clean_tweet) # remove punctuation
     # some of the character removed here were determined by visually inspecting the text
     return clean_tweet
-
-
 def tweetTokenizer(tweet):
     """
     tokenizes and strips handles from twitter data
@@ -167,7 +160,6 @@ def tweetTokenizer(tweet):
     tokenizer = TweetTokenizer(preserve_case = False, strip_handles = False)
     tokenized_tweet = tokenizer.tokenize(tweet)
     return tokenized_tweet
-
 def removeStopWords(tokenized_tweet):
     """
     removes stop words and punctation relics
@@ -221,7 +213,6 @@ def removeStopWords(tokenized_tweet):
                     
     # return the cleaner tweet
     return clean_tweet
-
 def lemmatizeTweet(tweet):
     """
     tweet lemmatizer
@@ -264,7 +255,30 @@ def lemmatizeTweet(tweet):
         lemmatized_tweet.append(lmtzr.lemmatize(token))
         
     return lemmatized_tweet
-
+def topNWords(bag, n = 10000):
+    """
+    returns the most common words from a bag of words
+    Parameters
+    ----------
+        bag (list): list of tuples of the form ('word', int)
+        n (int): number of words to include in bag Default = 10000
+    Returns
+    -------
+        most_common (list): list of the most common words in vocabulary
+    Examples
+    --------
+        >>> bag = [('change', 12634),
+                    ('climate', 12609),
+                    ('rt', 9720),
+                    ('urlweb', 9656),
+                    ('global', 3773)]
+        >>> topNWords(bag, n = 1)
+            ['change']
+    """
+    most_common = list()
+    for word in bag[:n]:
+        most_common.append(word[0])
+    return most_common
 def removeInfrequentWords(tweet, top_n_words):
     """
     Function that goes through the words in a tweet,
@@ -294,8 +308,7 @@ def removeInfrequentWords(tweet, top_n_words):
         if token in top_n_words:
             filt_tweet.append(token)
     return filt_tweet
-
-def removeCommonWords(tweet):
+def removeCommonWords(tweet,bag):
     """
     removes the most common words from a list of given words
     Parameters
@@ -312,6 +325,40 @@ def removeCommonWords(tweet):
     """
     filt_tweet = list()
     for token in tweet:
-        if token not in very_common_words:
+        if token not in bag:
             filt_tweet.append(token)
     return filt_tweet
+def lengthOfTweet(tweet):
+    """
+    returns the length of a tweet
+    Parameters
+    ----------
+        tweet (list): list to be counted
+    Returns
+    -------
+        length (int): lenth of tweet
+    Examples
+    --------
+        >>> lengthOfTweet(['This', 'is', 'a' , 'tweet'])
+            4
+    """
+    length = len(tweet)
+    return length
+def getPolarityScores(tweet):
+    """
+    calculate polarity scores of tweets
+    Parameters
+    ----------
+        tweet (list): tweet to be scored
+    Returns
+    -------
+        score (dict): dictionary containing sentiment scores
+    Examples
+    -------
+        >>> getPolarityScores(['polyscimajor', 'chief', 'carbon', 'dioxide', 'main', 'cause', 'wait'])
+            {'neg': 0.0, 'neu': 1.0, 'pos': 0.0, 'compound': 0.0}
+    """
+    tweet = ' '.join(tweet)
+    sid = SentimentIntensityAnalyzer()
+    scores = sid.polarity_scores(tweet)
+    return scores
