@@ -29,8 +29,7 @@ def main():
     if selection == "Information":
         st.info("General Information")
         # You can read a markdown file from supporting resources folder
-        st.markdown("This climate change tweet classifier app is useful for classifying whether or not a person believes in climate change, based on their tweet)
-         st.markdown('The App is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. The App gives users a choice to use a model of their choice to determine how the tweet(s) they have percieve(s) climate change')
+        st.markdown("This climate change tweet classifier app is useful for classifying whether or not a person believes in climate change, based on their tweet. \n The App is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. The App gives users a choice to use a model of their choice to determine how the tweet(s) they have percieve(s) climate change')
         st.subheader("Raw Twitter data and label")
         if st.checkbox('Show raw data'): # data is hidden if box is unchecked
             st.write(raw[['sentiment', 'message']]) # will write the df to the page
