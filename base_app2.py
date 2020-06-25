@@ -109,6 +109,11 @@ def main():
         sns.distplot(raw['sentiment'],color='g',kde_kws={'bw':0.1}, bins=100, hist_kws={'alpha': 0.4})
         plt.title('Distribution graph for different classes')
         st.pyplot()
+        plt.figure(figsize=(10,10))
+        names = ['Pro','News','Neutral','Anti']
+        raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='pie', labels=names, autopct='%1.1f%%')
+        plt.title('Number of types of comments')
+        st.pyplot()
 
 
 # Required to let Streamlit instantiate our web app.  
