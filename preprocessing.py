@@ -266,11 +266,6 @@ def lemmatizeTweet(tweet):
     for token in tweet:
         lemmatized_tweet.append(lmtzr.lemmatize(token))
         
-    return lemmatized_tweet = list()
-    lmtzr = WordNetLemmatizer()
-    for token in tweet:
-        lemmatized_tweet.append(lmtzr.lemmatize(token))
-        
     return lemmatized_tweet
 
 def removeInfrequentWords(tweet, top_n_words):
