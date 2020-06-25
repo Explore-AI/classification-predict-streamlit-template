@@ -26,10 +26,11 @@
 ######################################################################################################
 
 ### General commands
-# git branch branchn_name - creates a branch
-# git checkout branch_name - switches branches
-# git checkout - branch_name - creates and switches to new branch
-# git branch displays active branches
+# creates a branch -- git branch branchn_name
+# switches branches -- git checkout branch_name
+# creates and switches branch -- git checkout -b branch_name
+# display branches -- git branch
+# delete branch -- git branch -d branch_name
 ### GIT INSTRUCTIONS
 # for every task that you work on you must follow this process
 # 1. switch to the development branch using "git checkout development"
@@ -39,9 +40,7 @@
 # 5. commit changes THIS IS IMPORTANT with "git commit -m "fixes issue x" where x is the issue number"
 # 6. Switch to development branch "git checkout development"
 # 7. Merge the feature branch with "git merge issue_16"
-
-### IF YOU HAVE A MERGE CONFLICT, refer to this link: https://docs.google.com/presentation/d/1MyZAy63pEExvF-z9mr3nFHORw-6uo_IQhJlV0656G5U/edit#slide=id.g8a00cae286_0_30
-
+# ### IF YOU HAVE A MERGE CONFLICT, refer to this link: https://docs.google.com/presentation/d/1MyZAy63pEExvF-z9mr3nFHORw-6uo_IQhJlV0656G5U/edit#slide=id.g8a00cae286_0_30
 # 8. Delete the branch using "git branch -d issue_16"
 # 9. create a pull request by using "git push"
 # 10. The code administrator will review your changes and complete the merge to the development branch
