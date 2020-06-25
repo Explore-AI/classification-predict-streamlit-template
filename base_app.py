@@ -25,6 +25,27 @@
 ##################################-------------EVERYONE-------------##################################
 ######################################################################################################
 
+### General commands
+# git branch branchn_name - creates a branch
+# git checkout branch_name - switches branches
+# git checkout - branch_name - creates and switches to new branch
+# git branch displays active branches
+### GIT INSTRUCTIONS
+# for every task that you work on you must follow this process
+# 1. switch to the development branch using "git checkout development"
+# 2. Create a new feature branch using "git checkout -b issue_16"
+# 3. Resolve issues then save changes
+# 4. stage changes to feature branch using "git add ."
+# 5. commit changes THIS IS IMPORTANT with "git commit -m "fixes issue x" where x is the issue number"
+# 6. Switch to development branch "git checkout development"
+# 7. Merge the feature branch with "git merge issue_16"
+
+### IF YOU HAVE A MERGE CONFLICT, refer to this link: https://docs.google.com/presentation/d/1MyZAy63pEExvF-z9mr3nFHORw-6uo_IQhJlV0656G5U/edit#slide=id.g8a00cae286_0_30
+
+# 8. Delete the branch using "git branch -d issue_16"
+# 9. create a pull request by using "git push"
+# 10. The code administrator will review your changes and complete the merge to the development branch
+
 # Streamlit dependencies
 import streamlit as st
 import joblib,os
@@ -35,7 +56,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Data Cleaning
-
 import preprocessing as prep
 
 # Data analysis
@@ -58,6 +78,7 @@ eda = pd.read_csv("resources/datasets/eda.csv", sep ='\t') # This must be remove
 ##################################----------EVERYONE-END------------##################################
 ######################################################################################################
 
+#====================================================================================================#
 
 ######################################################################################################
 ##################################--------------BULELANI----------------##############################
@@ -65,7 +86,9 @@ eda = pd.read_csv("resources/datasets/eda.csv", sep ='\t') # This must be remove
 ### Data Preparation
 ### Feature Extraction
 
-# TASK 1, IMPORT FUNCTIONS FROM PREPROCESSING.PY TO CLEAN DATA
+### ISSUES
+### 1.IMPORT FUNCTIONS FROM PREPROCESSING.PY TO CLEAN DATA
+
 # def prepareData(df, datatype='eda'/'insights'):
 #     eda2 = df.copy()
 eda2 = raw['urls'] = raw['message'].map(prep.findURLs)
@@ -78,6 +101,8 @@ eda2 = raw['urls'] = raw['message'].map(prep.findURLs)
 ######################################################################################################
 ##################################-------------BULELANI-END-------------##############################
 ######################################################################################################
+
+#====================================================================================================#
 
 # The main function where we will build the actual app
 def main():
@@ -93,7 +118,6 @@ def main():
 	# Reorder the list to change the page order
 	options = ["Information", "EDA", "Insights", "Prediction"] # These are the four main pages
 	selection = st.sidebar.selectbox("Choose Option", options)
-
 ######################################################################################################
 ##################################-----------INFORMATION-PAGE-----------##############################
 ######################################################################################################
@@ -101,9 +125,9 @@ def main():
 	### DEADLINE: 26/06/2020 - Friday
 
 	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
-	### 1. Complete "General Information"
-	### 2. Complete "Problem Statement"
-	### 3. Complete "Contributors"
+	### 2. Complete "General Information"
+	### 3. Complete "Problem Statement"
+	### 4. Complete "Contributors"
 	
 	##########################################################################################
 	############################-----------BULELANI-ZANELE------------########################
@@ -150,14 +174,14 @@ def main():
 	### Delete an issue after committing please
 
 	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
-	### 4. Add VECTORIZERS.PKL to resources\vectorizers folder
-	### 5. Create a  selectbox to choose from vectorizers
-	### 6. write an "if and else" function in order to make a prediction with the user selections
-	### 7. Add vectorizers.md to the resources\markdown folder briefly explaining what a vectorizer does
+	### 5. Add VECTORIZERS.PKL to resources\vectorizers folder
+	### 6. Create a  selectbox to choose from vectorizers
+	### 7. write an "if and else" function in order to make a prediction with the user selections
+	### 8. Add vectorizers.md to the resources\markdown folder briefly explaining what a vectorizer does
 	###    and the difference beterrn the two
-	### 8. Add all model.pkl files to the resources\vectorizers folder
-	### 9. Update selectbox with new nodels
-	### 10. Write model.md files to explain each model briefly and perhaps mention the models f1-score
+	### 9. Add all model.pkl files to the resources\vectorizers folder
+	### 10. Update selectbox with new nodels
+	### 11. Write model.md files to explain each model briefly and perhaps mention the models f1-score
 
 	##########################################################################################
 	############################------------MELVA-MRMAMADI------------########################
@@ -225,12 +249,12 @@ def main():
 	### Delete an issue after committing please
 	
 	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
-	### 11. Add all images for visuals to the resources\imgs\base_app folder
-	### 12. Add all markdown to eda.md in the resources\markdown folder
-	### 13. Display static images for visualizations that will not change no matter how you play with it
+	### 12. Add all images for visuals to the resources\imgs\base_app folder
+	### 13. Add all markdown to eda.md in the resources\markdown folder
+	### 14. Display static images for visualizations that will not change no matter how you play with it
 	###		Wordclouds should remain static
-	### 14. Write the code for interactive or otherwise creative ways to display the visuals
-	### 15. Include markdown in appropriate areas
+	### 15. Write the code for interactive or otherwise creative ways to display the visuals
+	### 16. Include markdown in appropriate areas
 	
 	##########################################################################################
 	############################------------TITUS-STANLEY-------------########################
@@ -318,6 +342,7 @@ def main():
 	##########################################################################################
 	############################----------TITUS-STANLEY-END-----------########################
 	##########################################################################################
+
 	### Zanele and Bulelani review and finalize
 	### Delete instruction comments when done
 ######################################################################################################
@@ -338,14 +363,14 @@ def main():
 	### Delete an issue after committing.
 	
 	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
-	### 16. Complete interactive wordcloud - Last commit
-	### 17. General wordcloud
-	### 18. Pro wordcloud
-	### 19. Neutral wordcloud
-	### 20. Anti wordcloud
-	### 21. NER wordclouds
-	### 22. Handles wordcloud
-	### 23. Hashtags wordcloud
+	### 17. Complete interactive wordcloud - Last commit
+	### 18. General wordcloud
+	### 19. Pro wordcloud
+	### 20. Neutral wordcloud
+	### 21. Anti wordcloud
+	### 22. NER wordclouds
+	### 23. Handles wordcloud
+	### 24. Hashtags wordcloud
 
 	# Building out the "Insights" page
 	if selection == "Insights":
@@ -472,6 +497,7 @@ def main():
 	##########################################################################################
 	############################---------BULELANI-ZANELE-END----------########################
 	##########################################################################################
+
 	### Zanele and Bulelani review and finalize
 	### Delete instruction comments when done
 ######################################################################################################
