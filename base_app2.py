@@ -29,7 +29,7 @@ def main():
         st.subheader("About the app")
         st.markdown("![Image of Yaktocat](https://abcsplash-bc-a.akamaized.net/4477599164001/201604/4477599164001_4864948520001_4863149671001-vs.jpg?pubId=4477599164001.jpg)")
         st.markdown("This app is useful for classifying whether or not a person believes in climate change, based on their tweet(s).")
-        st.markdown("The app is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. The determine how tweets percieve climate change, the app gives users a choice to use a model of their choice.")
+        st.markdown("The app is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. To determine how tweets percieve climate change, the app gives users a choice to use a model of their choice.")
         # You can read a markdown file from supporting resources folder
         st.subheader("Raw Twitter data and label")
         if st.checkbox('Show raw data'): # data is hidden if box is unchecked
