@@ -11,8 +11,11 @@ import joblib,os
 import pandas as pd
 import re
 import en_core_web_sm
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 nlp = en_core_web_sm.load()
 import spacy
+from spacy import displacy
 from textblob import TextBlob
 
 
@@ -20,8 +23,14 @@ from textblob import TextBlob
 
 
 # Vectorizer
-news_vectorizer = open("tfidfvect.pkl","rb")
-tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
+lsvc_vectorizer = open("tfidfvect.pkl","rb")
+lsvc_vectorizer = joblib.load(lsvc_vectorizer) # loading your vectorizer from the pkl file
+svc_vectorizer = open("tf_vect1.pkl", "rb")
+svc_vectorizer = joblib.load(svc_vectorizer) 
+sgd_vectorizer = open("tf_vect2.pkl", "rb")
+sgd_vectorizer = joblib.load(sgd_vectorizer)
+rf_vectorizer = open("tf_vect3.pkl", "rb")
+rf_vectorizer = joblib.load(rf_vectorizer)
 
 
 # In[ ]:
@@ -93,19 +102,61 @@ def main():
         st.subheader("Raw Twitter data and label")
         if st.checkbox('Show raw data'): # data is hidden if box is unchecked
             st.write(raw[['sentiment', 'message']]) # will write the df to the page
+        if st.checkbox('Show WordCloud'):
+            j = 0
+            for message in raw['message']:
+                message = message.lower()
+                message = re.sub(r'http\S+', 'LINK', message)
+                message = re.sub(r'[^\w\s]', '', message)
+                message = message.lstrip()
+                message = message.rstrip()
+                message = message.replace('  ', ' ')
+                raw.loc[j, 'message'] = message
+                j += 1
 
+
+            wordcloud = WordCloud().generate(' '.join(raw['message']))
+            plt.figure(figsize=(10, 7))
+            plt.imshow(wordcloud, interpolation="bilinear")
+            plt.axis('off')
+            plt.show()
+            st.pyplot()
+
+
+        if st.checkbox('Named Entity Recognition'):
+            j = 0
+            for message in raw['message']:
+                message = message.lower()
+                message = re.sub(r'http\S+', 'LINK', message)
+                message = re.sub(r'[^\w\s]', '', message)
+                message = message.lstrip()
+                message = message.rstrip()
+                message = message.replace('  ', ' ')
+                raw.loc[j, 'message'] = message
+                j += 1
+
+
+            result = extract_entity(raw['message'])
+
+            wordcloud = WordCloud().generate(result)
+            plt.figure(figsize=(10, 7))
+            plt.imshow(wordcloud, interpolation="bilinear")
+            plt.axis('off')
+            plt.show()
+            st.pyplot()
 
 
     # Building out the "General" page
-    #if selection == "General":
-        #st.info("Project Overview")
-		# You can read a markdown file from supporting resources folder
-	    #st.markdown(open("generaloverview.md","r").read())     
-        
+    if selection == "General":
+        st.info("Project Overview")
+	# You can read a markdown file from supporting resources folder
+        st.markdown(open("generaloverview.md","r").read())     
+
+
     # Building out the "EDA" page
 	#if selection == "EDA":
-		#st.info("Eploratory Data Analysis")
-		# You can read a markdown file from supporting resources folder--------
+	    #st.info("Exploratory Data Analysis")
+	# You can read a markdown file from supporting resources folder--------
 		#st.markdown(open("eda.md","r").read())
 
 
@@ -130,31 +181,35 @@ def main():
         task_choice = st.selectbox("Choose Model",model_type)
        
         if st.button("Classify"):
-            st.text("Original test ::\n{}".format(tweet_text))
+            st.text("Original test :\n{}".format(tweet_text))
           
             tweet_text = clean_text(tweet_text)
             # Transforming user input with vectorizer
-            vect_text = tweet_cv.transform([tweet_text]).toarray()
+            vect_text = lsvc_vectorizer.transform([tweet_text]).toarray()
+            vect_text1 = svc_vectorizer.transform([tweet_text]).toarray()
+            vect_text2 = sgd_vectorizer.transform([tweet_text]).toarray()
+            vect_text3 = rf_vectorizer.transform([tweet_text]).toarray()
             # Load your .pkl file with the model of your choice + make predictions
             # Try loading in multiple models to give the user a choice
             if task_choice == "Linear SVC":
                 predictor = joblib.load(open(os.path.join("linear_svc.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success(prediction)
+               
 
             elif task_choice == "SVC":
                 predictor = joblib.load(open(os.path.join("SVC.pkl"), "rb"))
-                predictor = predictor.predict(vect_text)
-                st.success(prediction)
+                prediction = predictor.predict(vect_text1)
+                
            
             elif task_choice == "SGD Classifier":
                 predictor = joblib.load(open(os.path.join("SGD.pkl"), "rb"))
-                predictor = predictor.predict(vect_text)
-                st.success(prediction)
+                prediction = predictor.predict(vect_text2)
+                
 
             elif task_choice == "Random Forest Classifier":
-                predictor = joblib.load(open(os.path.join("RFC.plk"), "rb"))
-                predictor = predictor.predict(vect_text)
+                predictor = joblib.load(open(os.path.join("RFC.pkl"), "rb"))
+                prediction = predictor.predict(vect_text3)
+                
 
             # When model has successfully run, will print prediction
             # You can use a dictionary or similar structure to make this output
