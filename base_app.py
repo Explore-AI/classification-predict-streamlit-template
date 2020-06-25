@@ -86,7 +86,7 @@ eda = pd.read_csv("resources/datasets/eda.csv", sep ='\t') # This must be remove
 ### Feature Extraction
 
 ### ISSUES
-### 1.IMPORT FUNCTIONS FROM PREPROCESSING.PY TO CLEAN DATA
+### 2.IMPORT FUNCTIONS FROM PREPROCESSING.PY TO CLEAN DATA
 
 # def prepareData(df, datatype='eda'/'insights'):
 #     eda2 = df.copy()
@@ -124,9 +124,9 @@ def main():
 	### DEADLINE: 26/06/2020 - Friday
 
 	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
-	### 2. Complete "General Information"
-	### 3. Complete "Problem Statement"
-	### 4. Complete "Contributors"
+	### 3. Complete "General Information"
+	### 4. Complete "Problem Statement"
+	### 5. Complete "Contributors"
 	
 	##########################################################################################
 	############################-----------BULELANI-ZANELE------------########################
@@ -173,14 +173,14 @@ def main():
 	### Delete an issue after committing please
 
 	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
-	### 5. Add VECTORIZERS.PKL to resources\vectorizers folder
-	### 6. Create a  selectbox to choose from vectorizers
-	### 7. write an "if and else" function in order to make a prediction with the user selections
-	### 8. Add vectorizers.md to the resources\markdown folder briefly explaining what a vectorizer does
+	### 6. Add VECTORIZERS.PKL to resources\vectorizers folder
+	### 7. Create a  selectbox to choose from vectorizers
+	### 8. write an "if and else" function in order to make a prediction with the user selections
+	### 9. Add vectorizers.md to the resources\markdown folder briefly explaining what a vectorizer does
 	###    and the difference beterrn the two
-	### 9. Add all model.pkl files to the resources\vectorizers folder
-	### 10. Update selectbox with new nodels
-	### 11. Write model.md files to explain each model briefly and perhaps mention the models f1-score
+	### 10. Add all model.pkl files to the resources\vectorizers folder
+	### 11. Update selectbox with new nodels
+	### 12. Write model.md files to explain each model briefly and perhaps mention the models f1-score
 
 	##########################################################################################
 	############################------------MELVA-MRMAMADI------------########################
@@ -248,12 +248,12 @@ def main():
 	### Delete an issue after committing please
 	
 	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
-	### 12. Add all images for visuals to the resources\imgs\base_app folder
-	### 13. Add all markdown to eda.md in the resources\markdown folder
-	### 14. Display static images for visualizations that will not change no matter how you play with it
+	### 13. Add all images for visuals to the resources\imgs\base_app folder
+	### 14. Add all markdown to eda.md in the resources\markdown folder
+	### 15. Display static images for visualizations that will not change no matter how you play with it
 	###		Wordclouds should remain static
-	### 15. Write the code for interactive or otherwise creative ways to display the visuals
-	### 16. Include markdown in appropriate areas
+	### 16. Write the code for interactive or otherwise creative ways to display the visuals
+	### 17. Include markdown in appropriate areas
 	
 	##########################################################################################
 	############################------------TITUS-STANLEY-------------########################
@@ -362,14 +362,14 @@ def main():
 	### Delete an issue after committing.
 	
 	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
-	### 17. Complete interactive wordcloud - Last commit
-	### 18. General wordcloud
-	### 19. Pro wordcloud
-	### 20. Neutral wordcloud
-	### 21. Anti wordcloud
-	### 22. NER wordclouds
-	### 23. Handles wordcloud
-	### 24. Hashtags wordcloud
+	### 18. Complete interactive wordcloud - Last commit
+	### 19. General wordcloud
+	### 20. Pro wordcloud
+	### 21. Neutral wordcloud
+	### 22. Anti wordcloud
+	### 23. NER wordclouds
+	### 24. Handles wordcloud
+	### 25. Hashtags wordcloud
 
 	# Building out the "Insights" page
 	if selection == "Insights":
