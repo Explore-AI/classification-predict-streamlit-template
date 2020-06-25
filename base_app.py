@@ -132,16 +132,16 @@ def main():
 		st.pyplot()
 		st.markdown(open("resources/eda.md").read(),unsafe_allow_html=False)
 
-
+		
 		# Sentiment Scores
-		# fig, axes = plt.subplots(1, 4, figsize = (18, 6), sharey = True)
-		# palette = {'Pro':'#CCCC00', 'News':'teal', 'Neutral':'teal', 'Anti':'teal'}
-		# for i, column in enumerate(nltk_scores.keys()):
-		# 	g = sns.barplot(data=train_data, x='target', y=column, ax=axes[i], palette=palette)
-		# 	g.set_title(column)
-		# 	g.set_ylabel(' ')
-		# 	g.set_xlabel(' ')
-		# st.pyplot()
+		fig, axes = plt.subplots(1, 4, figsize = (18, 6), sharey = True)
+		palette = {'Pro':'#CCCC00', 'News':'teal', 'Neutral':'teal', 'Anti':'teal'}
+		for i, column in enumerate(nltk_scores.keys()):
+			g = sns.barplot(data=train_data, x='target', y=column, ax=axes[i], palette=palette)
+			g.set_title(column)
+			g.set_ylabel(' ')
+			g.set_xlabel(' ')
+		st.pyplot()
 
 		# Subjectivity and Polarity
 		# fig, axes = plt.subplots(1, 2, figsize = (12, 5), sharey = True)
