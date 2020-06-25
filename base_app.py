@@ -21,29 +21,63 @@
 	https://docs.streamlit.io/en/latest/
 
 """
+######################################################################################################
+##################################-------------EVERYONE-------------##################################
+######################################################################################################
+
 # Streamlit dependencies
 import streamlit as st
 import joblib,os
-#import markdown
 
 # Data dependencies
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+# Data Cleaning
+
+import preprocessing as prep
+
+# Data analysis
 from collections import Counter
 from wordcloud import WordCloud
 from nltk.probability import FreqDist
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from textblob import TextBlob
 
-# Vectorizer
+# Vectorizer - ADD A SECOND VECTORIZER (MELVA/KGAOGELO)
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
-# Load your raw data
+# Load data
 raw = pd.read_csv("resources/datasets/train.csv")
-eda = pd.read_csv("resources/datasets/eda.csv", sep ='\t')
+eda = pd.read_csv("resources/datasets/eda.csv", sep ='\t') # This must be removed, all functions must be placed in preprocecessing.py
 
+
+######################################################################################################
+##################################----------EVERYONE-END------------##################################
+######################################################################################################
+
+
+######################################################################################################
+##################################--------------BULELANI----------------##############################
+######################################################################################################
+### Data Preparation
+### Feature Extraction
+
+# TASK 1, IMPORT FUNCTIONS FROM PREPROCESSING.PY TO CLEAN DATA
+# def prepareData(df, datatype='eda'/'insights'):
+#     eda2 = df.copy()
+eda2 = raw['urls'] = raw['message'].map(prep.findURLs)
+### Data Cleaning
+
+### Feature Creation
+
+# 	return eda2 # - cleaned dataframe
+
+######################################################################################################
+##################################-------------BULELANI-END-------------##############################
+######################################################################################################
 
 # The main function where we will build the actual app
 def main():
@@ -56,27 +90,87 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Information", "EDA", "Insights", "Prediction"]
+	# Reorder the list to change the page order
+	options = ["Information", "EDA", "Insights", "Prediction"] # These are the four main pages
 	selection = st.sidebar.selectbox("Choose Option", options)
 
+######################################################################################################
+##################################-----------INFORMATION-PAGE-----------##############################
+######################################################################################################
 
+	### DEADLINE: 26/06/2020 - Friday
 
-	# Building out the "Information" page
+	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
+	### 1. Complete "General Information"
+	### 2. Complete "Problem Statement"
+	### 3. Complete "Contributors"
+	
+	##########################################################################################
+	############################-----------BULELANI-ZANELE------------########################
+	##########################################################################################	
+	
+	### Building out the "Information" page
 	if selection == "Information":
-		st.info("General Information")
-		# You can read a markdown file from supporting resources folder
-		st.markdown(open("resources/info.md").read())
+		info_options = ["General Information", "Problem Statement", "Contributors"]
+		info_selection = st.selectbox("",info_options)
+			
+		if info_selection == "General Information": # Bulelani
+			# You can read a markdown file from supporting resources folder
+			info = open("resources\markdown\info.md").read()
+			st.markdown(info[0:1243])
 		
-		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+			st.subheader("Raw Twitter data and label")
+			if st.checkbox('Show raw data'): # data is hidden if box is unchecked
+				st.write(raw[['sentiment', 'message']]) # will write the df to the page
+
+		if info_selection == "Problem Statement": # Zanele
+			ps = open("resources\markdown\problem_statement.md").read()
+			st.markdown(ps)
+
+		if info_selection == "Contributors": # Bulelani
+			cs = open("resources\markdown\contributors.md").read()
+			st.markdown(cs)
+
+	##########################################################################################
+	############################---------BULELANI-ZANELE-END----------########################
+	##########################################################################################
+
+	### Delete instruction comments when done
+######################################################################################################
+##################################---------INFORMATION-PAGE-END---------##############################
+######################################################################################################
+
+#====================================================================================================#
+
+######################################################################################################
+##################################------------PREDICTION-PAGE-----------##############################
+######################################################################################################
+
+	### DEADLINE: 27/06/2020 - Saturday
+	### Delete an issue after committing please
+
+	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
+	### 4. Add VECTORIZERS.PKL to resources\vectorizers folder
+	### 5. Create a  selectbox to choose from vectorizers
+	### 6. write an "if and else" function in order to make a prediction with the user selections
+	### 7. Add vectorizers.md to the resources\markdown folder briefly explaining what a vectorizer does
+	###    and the difference beterrn the two
+	### 8. Add all model.pkl files to the resources\vectorizers folder
+	### 9. Update selectbox with new nodels
+	### 10. Write model.md files to explain each model briefly and perhaps mention the models f1-score
+
+	##########################################################################################
+	############################------------MELVA-MRMAMADI------------########################
+	##########################################################################################
 
 	# Building out the "Prediction" page
 	if selection == "Prediction":
 		st.info("Prediction with ML Models")
+		
 		# Creating a selection box to choose different models
 		models = ['Support Vector Classifier','Logistic Regression']
 		classifiers = st.selectbox("Choose a classifier", models)
+		
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
 
@@ -111,7 +205,37 @@ def main():
 				result = 'News'
 			
 			st.success("Text Categorized as: {}".format(result))
-			
+
+	##########################################################################################
+	############################----------MELVA-MRMAMADI-END----------########################
+	##########################################################################################
+	### Zanele and Bulelani review and finalize
+	### Delete instruction comments when done
+######################################################################################################
+##################################----------PREDICTION-PAGE-END---------##############################
+######################################################################################################
+
+#====================================================================================================#
+
+######################################################################################################
+##################################----------------EDA-PAGE--------------##############################
+######################################################################################################
+	
+	### DEADLINE: 28/06/2020 - Sunday
+	### Delete an issue after committing please
+	
+	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
+	### 11. Add all images for visuals to the resources\imgs\base_app folder
+	### 12. Add all markdown to eda.md in the resources\markdown folder
+	### 13. Display static images for visualizations that will not change no matter how you play with it
+	###		Wordclouds should remain static
+	### 14. Write the code for interactive or otherwise creative ways to display the visuals
+	### 15. Include markdown in appropriate areas
+	
+	##########################################################################################
+	############################------------TITUS-STANLEY-------------########################
+	##########################################################################################
+
 	# Building out the "EDA" page
 	if selection == "EDA":
 		target_map = {-1:'Anti', 0:'Neutral', 1:'Pro', 2:'News'}
@@ -191,6 +315,38 @@ def main():
 		plotScatter(x = 'subjectivity', y = 'pol_plus_comp', df = data)
 		st.pyplot()
 
+	##########################################################################################
+	############################----------TITUS-STANLEY-END-----------########################
+	##########################################################################################
+	### Zanele and Bulelani review and finalize
+	### Delete instruction comments when done
+######################################################################################################
+##################################-------------EDA-PAGE-END-------------##############################
+######################################################################################################
+
+#====================================================================================================#
+
+######################################################################################################
+##################################------------INSIGHTS-PAGE-------------##############################
+######################################################################################################
+
+	##########################################################################################
+	############################-----------BULELANI-ZANELE------------########################
+	##########################################################################################
+
+	### DEADLINE: 28/06/2020 - Sunday
+	### Delete an issue after committing.
+	
+	### ISSUES use: git commit -m "Description. Fixes issue x" : Where "x" is the issue number
+	### 16. Complete interactive wordcloud - Last commit
+	### 17. General wordcloud
+	### 18. Pro wordcloud
+	### 19. Neutral wordcloud
+	### 20. Anti wordcloud
+	### 21. NER wordclouds
+	### 22. Handles wordcloud
+	### 23. Hashtags wordcloud
+
 	# Building out the "Insights" page
 	if selection == "Insights":
 		insight_df = pd.read_csv("resources/datasets/interactive.csv", sep ='\t')
@@ -203,16 +359,15 @@ def main():
 			for token in tweet:
 				if token not in ignore:
 					vocab.append(token)
-		
-		
+	
 		
 		# Generate a list of the most common words
 		most_common_words = Counter(vocab).most_common()
-		n = st.sidebar.slider('Top n words to include in Wordcloud', min_value=100, max_value=13000, value=12000, step=None, format=None, key=None)
+		n = st.sidebar.slider('Top n words to include in Wordcloud', min_value=100, max_value=13000, value=12000, step=500, format=None, key=None)
 		most_common = list()
 		for word in most_common_words[:n]:
 			most_common.append(word[0])
-		st.write(vocab)
+
 		def removeInfrequentWords(tweet):
 			pre_proc_tweet = list()
 			for token in tweet:
@@ -314,7 +469,14 @@ def main():
 		else:
 			st.write('graph here')
 
-
+	##########################################################################################
+	############################---------BULELANI-ZANELE-END----------########################
+	##########################################################################################
+	### Zanele and Bulelani review and finalize
+	### Delete instruction comments when done
+######################################################################################################
+##################################----------INSIGHTS-PAGE-END-----------##############################
+######################################################################################################
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
