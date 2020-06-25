@@ -122,6 +122,7 @@ def main():
 		
 		# Classify using SVC
 		if algorithm=='Support Vector Classifier':
+			st.write("This model is good at predicting believers and factuals, but can perform poorly on neutrals.")
 			if st.button("Predict using Support Vector Classifier"):
 				# Transforming user input with vectorizer
 				#vect_text = tweet_cv.transform([tweet_text]).toarray()
@@ -149,6 +150,7 @@ def main():
 
 		# Classify using Random Forest
 		if algorithm=='Random Forest':
+			st.write("This model has high precision but is susceptible to false positives")
 			if st.button("Predict using Random Forest"):
 				# Transforming user input with vectorizer
 				#vect_text = tweet_cv.transform([tweet_text]).toarray()
@@ -177,6 +179,7 @@ def main():
 		# Classify using Logistic Regression
 		if algorithm=='Logistic Regression':
 			if st.button("Predict using Logistic Regression"):
+				st.write("This model is good at predicting believers and factuals.")
 				# Transforming user input with vectorizer
 				#vect_text = tweet_cv.transform([tweet_text]).toarray()
 				# Load your .pkl file with the model of your choice + make predictions
@@ -247,6 +250,12 @@ def main():
 	ngrams_neutrals_tup = raw_analysis[(raw_analysis.sentiment == 0)][['grams']].apply(count_words)['grams'].most_common(20)
 	ngrams_factuals_tup = raw_analysis[(raw_analysis.sentiment == 2)][['grams']].apply(count_words)['grams'].most_common(20)
 
+	# Get category's most frequent individual words
+	words_deniers_tup = raw_analysis[(raw_analysis.sentiment == -1)][['normalized']].apply(count_words)['normalized'].most_common(40)
+	words_believers_tup = raw_analysis[(raw_analysis.sentiment == 1)][['normalized']].apply(count_words)['normalized'].most_common(40)
+	words_neutrals_tup = raw_analysis[(raw_analysis.sentiment == 0)][['normalized']].apply(count_words)['normalized'].most_common(40)
+	words_factuals_tup = raw_analysis[(raw_analysis.sentiment == 2)][['normalized']].apply(count_words)['normalized'].most_common(40)
+
 	def tuples_to_dict(tup, di): 
 		"""
 		Convert a list of tuples into a dictionary
@@ -266,6 +275,19 @@ def main():
 
 	ngrams_factuals = tuples_to_dict(ngrams_factuals_tup, dictionary)
 	ngrams_factuals = pd.DataFrame(ngrams_factuals.items(), columns = ['Ngram', 'Count'])
+
+	# Create dictionary of most frequent individual words and then convert to dataframe
+	comm_words_deniers = tuples_to_dict(words_deniers_tup, dictionary)
+	comm_words_deniers = pd.DataFrame(comm_words_deniers.items(), columns = ['Word', 'Count'])
+
+	comm_words_believers = tuples_to_dict(words_believers_tup, dictionary)
+	comm_words_believers = pd.DataFrame(comm_words_believers.items(), columns = ['Word', 'Count'])
+
+	comm_words_neutrals = tuples_to_dict(words_neutrals_tup, dictionary)
+	comm_words_neutrals = pd.DataFrame(comm_words_neutrals.items(), columns = ['Word', 'Count'])
+
+	comm_words_factuals = tuples_to_dict(words_factuals_tup, dictionary)
+	comm_words_factuals = pd.DataFrame(comm_words_factuals.items(), columns = ['Word', 'Count'])
 
 
 	# 2) WORD COUNT
@@ -340,58 +362,99 @@ def main():
 	# Building out the Analysis of each category page
 	if selection == "Analysis of each category":
 		st.write("## Analysis of Individual Categories")
-		st.info("Select a category from the dropdown menu for a more detailed analysis.")
+		st.info("1. Select a category from the dropdown menu for a more detailed analysis.\n\n"+
+				"2. Select which analysis you would like to see")
 
 		# Select category of which user would like to view data
 		category = st.selectbox("Select category",
 							['Deniers', 'Neutrals',
 							'Believers', 'Factuals'])
+
+		# Most frequent individual words
+		if st.checkbox('Show most frequent individual words'):
+			st.write("### Most frequent individual words (lemmas)")
+			st.write("What you are seeing are the words' lemmas. One of the text preprocessing "+
+					"steps involved lemmatization, which is simplifying a word to its most basic "+
+					"form. This groups related words together, e.g. 'walked', 'walks', 'walking' "+
+					"would be simplified to just 'walk.'")
+			if category == 'Deniers':
+				st.write('#### Most common words of climate change deniers')
+				st.write(comm_words_deniers)
+			
+			if category == 'Neutrals':
+				st.write('#### Most common words of climate change neutrals')
+				st.write(comm_words_neutrals)
+			
+			if category == 'Believers':
+				st.write('#### Most common words of climate change believers')
+				st.write(comm_words_believers)
+			
+			if category == 'Factuals':
+				st.write('#### Most common words of those who provided factual links')
+				st.write(comm_words_factuals)
+
+		# N-grams analysis
+		if st.checkbox('Show most frequent groups of words'):
+			st.write("### Most frequent n-grams")
+			st.write("n-grams refer to a sequence of n consecutive items. In this case, it"+
+					" refers to a n consecutive words in a text. The most common bigrams (two words) and"+
+					" trigrams (three words) were counted in the training data. These show the most frequently"+
+					" used sets of two and three words by each category.")
+
+			if category == 'Deniers':
+				st.write('#### Most common bigrams and trigrams of climate change deniers')
+				st.write(ngrams_deniers)
+				st.write("In this dataset, climate change deniers seem to tend to retweet Donald Trump "+
+				"and Twitter user @SteveSGoddard, who has since changed his username to [@Tony__Heller](https://twitter.com/Tony__Heller).")
+				st.write("These ngrams suggest that climate change deniers may be aligned towards right-wing politics.")
+
+			if category == 'Neutrals':
+				st.write('#### Most common bigrams and trigrams of climate change neutrals')
+				st.write(ngrams_neutrals)
+
+			if category == 'Believers':
+				st.write('#### Most common bigrams and trigrams of climate change believers')
+				st.write(ngrams_believers)
+				st.write('In this dataset, climate change believers seem to frequently tweet about dying.'+
+						' They often retweet a specific tweet from Twitter user @StephenSchlegel that is criticising'+
+						' Melania and Donald Trump.')
+
+			if category == 'Factuals':
+				st.write('#### Most common bigrams and trigrams of those who provided factual links')
+				st.write(ngrams_factuals)
+				st.write("These tweets seem to be centered around issues relating to policy and Donald Trump and "+
+					 	 "Scott Pruitt's (former Administrator of the U.S. Environmental Protection Agency)"+
+						 " views on climate change. There is also mention of the "+
+						 "[Paris Agreement](https://unfccc.int/process-and-meetings/the-paris-agreement/the-paris-agreement).")
 		
-		st.write("### Most frequent n-grams")
-		st.write("n-grams refer to a sequence of n consecutive items. In this case, it"+
-				 " refers to a n consecutive words in a text. The most common bigrams (two words) and"+
-				 " trigrams (three words) were counted in the training data. These show the most frequently"+
-				 " used sets of two and three words by each category.")
+		# Length-related metrics checkbox
+		if st.checkbox('Show length-related metrics'):
+			if category == 'Deniers':
+				st.write('### Metrics')
+				st.write("Average word count per tweet: ", round(avg_word_count_deniers, 2))
+				st.write("Average tweet length: ", round(avg_t_length_deniers, 2))
+				st.write("Average word length: ", round(avg_w_length_deniers, 2))
 
-		if category == 'Deniers':
-			st.write('#### Most common bigrams and trigrams of climate change deniers')
-			st.write(ngrams_deniers)
-			st.write("In this dataset, climate change deniers seem to tend to retweet Donald Trump "+
-			"and Twitter user @SteveSGoddard, who has since changed his username to [@Tony__Heller](https://twitter.com/Tony__Heller).")
-			st.write("These ngrams suggest that climate change deniers may be aligned towards right-wing politics.")
-			st.write('### Metrics')
-			st.write("Average word count per tweet: ", round(avg_word_count_deniers, 2))
-			st.write("Average tweet length: ", round(avg_t_length_deniers, 2))
-			st.write("Average word length: ", round(avg_w_length_deniers, 2))
+			if category == 'Neutrals':
+				st.write('### Metrics')
+				st.write("Average word count per tweet: ", round(avg_word_count_neutrals, 2))
+				st.write("Average tweet length: ", round(avg_t_length_neutrals, 2))
+				st.write("Average word length: ", round(avg_w_length_neutrals, 2))
 
-		if category == 'Neutrals':
-			st.write('#### Most common bigrams and trigrams of climate change neutrals')
-			st.write(ngrams_neutrals)
-			st.write('### Metrics')
-			st.write("Average word count per tweet: ", round(avg_word_count_neutrals, 2))
-			st.write("Average tweet length: ", round(avg_t_length_neutrals, 2))
-			st.write("Average word length: ", round(avg_w_length_neutrals, 2))
+			if category == 'Believers':
+				st.write('### Metrics')
+				st.write("Average word count per tweet: ", round(avg_word_count_believers, 2))
+				st.write("Average tweet length: ", round(avg_t_length_believers, 2))
+				st.write("Average word length: ", round(avg_w_length_believers, 2))
 
-		if category == 'Believers':
-			st.write('#### Most common bigrams and trigrams of climate change believers')
-			st.write(ngrams_believers)
-			st.write('In this dataset, climate change believers seem to frequently tweet about dying.')
-			st.write('### Metrics')
-			st.write("Average word count per tweet: ", round(avg_word_count_believers, 2))
-			st.write("Average tweet length: ", round(avg_t_length_believers, 2))
-			st.write("Average word length: ", round(avg_w_length_believers, 2))
-			# fig = sns.boxplot(word_count_believers)
-			# st.pyplot()
-			
-			
+			if category == 'Factuals':
+				st.write('### Metrics')
+				st.write("Average word count per tweet: ", round(avg_word_count_factuals, 2))
+				st.write("Average tweet length: ", round(avg_t_length_factuals, 2))
+				st.write("Average word length: ", round(avg_w_length_factuals, 2))
 
-		if category == 'Factuals':
-			st.write('#### Most common bigrams and trigrams of those who provided factual links')
-			st.write(ngrams_factuals)
-			st.write('### Metrics')
-			st.write("Average word count per tweet: ", round(avg_word_count_factuals, 2))
-			st.write("Average tweet length: ", round(avg_t_length_factuals, 2))
-			st.write("Average word length: ", round(avg_w_length_factuals, 2))
+
+		
 		
 
 # Required to let Streamlit instantiate our web app.  
