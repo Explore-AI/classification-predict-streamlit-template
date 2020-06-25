@@ -19,17 +19,17 @@ raw = pd.read_csv("resources/train.csv")
 def main():
     
     #title and subheader 
-    st.title("Tweet Classifer App")
+    st.title("Climate Change Tweet Classifer App")
     #creating side menu
     options = ["About the app","Classify tweets","Visuals"]
     selection = st.sidebar.selectbox("Menu Options", options)
 
     #building the Information page
     if selection == "About the app":
-        st.subheader("About the climate change tweet classififer app")
+        st.subheader("About the app")
         st.markdown("![Image of Yaktocat](https://abcsplash-bc-a.akamaized.net/4477599164001/201604/4477599164001_4864948520001_4863149671001-vs.jpg?pubId=4477599164001.jpg)")
-        st.markdown("This climate change tweet classifier app is useful for classifying whether or not a person believes in climate change, based on their tweet.")
-        st.markdown("The App is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. The App gives users a choice to use a model of their choice to determine how the tweet(s) they have percieve(s) climate change.")
+        st.markdown("This app is useful for classifying whether or not a person believes in climate change, based on their tweet(s).")
+        st.markdown("The app is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. The determine how tweets percieve climate change, the app gives users a choice to use a model of their choice.")
         # You can read a markdown file from supporting resources folder
         st.subheader("Raw Twitter data and label")
         if st.checkbox('Show raw data'): # data is hidden if box is unchecked
