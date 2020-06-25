@@ -21,7 +21,7 @@ def main():
     #title and subheader 
     st.title("Tweet Classifer App")
     #creating side menu
-    options = ["About the app","Models","Visuals"]
+    options = ["About the app","Classify tweets","Visuals"]
     selection = st.sidebar.selectbox("Menu Options", options)
 
     #building the Information page
@@ -35,15 +35,15 @@ def main():
         if st.checkbox('Show raw data'): # data is hidden if box is unchecked
             st.write(raw[['sentiment', 'message']]) # will write the df to the page
     
-    if selection== "Models":
-        
+    if selection== "Classify tweets":
+        st.markdown("![Image of Yaktocat](https://www.tweetbinder.com/blog/wp-content/uploads/2018/07/classify-tweets-1.jpg)")
         models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors']})
         model_sel=st.selectbox('Select a model', models['model name'])
     
         #building the Logistic Regression
         if model_sel == "Logistic Regression":
             st.info("Prediction with Logistic Regression Model")
-            tweet_text = st.text_area("enter text ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
@@ -55,7 +55,7 @@ def main():
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
             st.info("Prediction with Naive Bayes Model")
-            tweet_text = st.text_area("enter text ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
@@ -67,7 +67,7 @@ def main():
         #building the Linear SVM
         if model_sel == "Linear SVM":
             st.info("Prediction with Linear SVM Model")
-            tweet_text = st.text_area("enter text ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
@@ -78,7 +78,7 @@ def main():
         #building the Random Forest
         if model_sel == "Random Forest":
             st.info("Prediction with Random Forest Model")
-            tweet_text = st.text_area("enter text ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
@@ -89,7 +89,7 @@ def main():
         #building the KNN
         if model_sel == "K Nearest Neighbors":
             st.info("Prediction with K Nearest Neighbors Model")
-            tweet_text = st.text_area("enter text ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
