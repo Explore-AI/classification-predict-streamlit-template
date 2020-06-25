@@ -33,12 +33,12 @@
 # delete branch -- git branch -d branch_name
 ### GIT INSTRUCTIONS
 # for every task that you work on you must follow this process
-# 1. switch to the development branch using "git checkout development"
+# 1. switch to the development branch using "git checkout dev"
 # 2. Create a new feature branch using "git checkout -b issue_16"
 # 3. Resolve issues then save changes
 # 4. stage changes to feature branch using "git add ."
 # 5. commit changes THIS IS IMPORTANT with "git commit -m "fixes issue x" where x is the issue number"
-# 6. Switch to development branch "git checkout development"
+# 6. Switch to development branch "git checkout dev"
 # 7. Merge the feature branch with "git merge issue_16"
 # ### IF YOU HAVE A MERGE CONFLICT, refer to this link: https://docs.google.com/presentation/d/1MyZAy63pEExvF-z9mr3nFHORw-6uo_IQhJlV0656G5U/edit#slide=id.g8a00cae286_0_30
 # 8. Delete the branch using "git branch -d issue_16"
