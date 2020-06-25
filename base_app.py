@@ -25,7 +25,7 @@
 ##################################-------------EVERYONE-------------##################################
 ######################################################################################################
 
-### General commands
+### General git commands
 # creates a branch -- git branch branchn_name
 # switches branches -- git checkout branch_name
 # creates and switches branch -- git checkout -b branch_name
@@ -77,31 +77,104 @@ eda = pd.read_csv("resources/datasets/eda.csv", sep ='\t') # This must be remove
 ##################################----------EVERYONE-END------------##################################
 ######################################################################################################
 
-#====================================================================================================#
-
-######################################################################################################
-##################################--------------BULELANI----------------##############################
-######################################################################################################
 ### Data Preparation
+@st.cache(allow_output_mutation=True)
+def prepareData(df):
+	"""
+	function to apply data cleaning steps
+	Parameters
+	----------
+		df (DataFrame): DataFrame to be cleaned
+	Returns
+	-------
+		prep_df (DataFrame): cleaned DataFrame
+	"""
+	prep_df = df.copy()
+	prep_df['urls'] = prep_df['message'].map(prep.findURLs)
+	prep_df = prep.strip_url(prep_df)
+	prep_df['handles'] = prep_df['message'].map(prep.findHandles)
+	prep_df['hash_tags'] = prep_df['message'].map(prep.findHashTags)
+	prep_df['tweets'] = prep_df['message'].map(prep.removePunctuation)
+	return prep_df
+
+interactive = prepareData(raw)
+
 ### Feature Extraction
+@st.cache(allow_output_mutation=True)
+def featureCreation(df, uncommon = 10000, common = 20):
+	"""
+	Create features from input dataframe
+	Parameters
+	----------
+		df (DataFrame): input DataFrame
+		uncommon (int): keep top n words Default = 10000
+		common (int): remove n most common words Default = 20
+	Returns
+	-------
+		feat_df (DataFrame): output DataFrame
+	"""
+	feat_df = df.copy()
+	# Prepare data for feature manipulation
+	feat_df['tweets'] = feat_df['tweets'].map(prep.tweetTokenizer)
+	feat_df['tweets'] = feat_df['tweets'].map(prep.removeStopWords)
+	feat_df['tweets'] = feat_df['tweets'].map(prep.lemmatizeTweet)
 
-### ISSUES
-### 2.IMPORT FUNCTIONS FROM PREPROCESSING.PY TO CLEAN DATA
+	# Create a vocabulary
+	vocab = list()
+	for tweet in feat_df['tweets']:
+		for token in tweet:
+			vocab.append(token)
 
-# def prepareData(df, datatype='eda'/'insights'):
-#     eda2 = df.copy()
-eda2 = raw['urls'] = raw['message'].map(prep.findURLs)
-### Data Cleaning
+	# Create a frequency list
+	ordered_words = Counter(vocab).most_common()
+	# creat a list of most common words
+	top_n_words = prep.topNWords(ordered_words, n = uncommon)
 
-### Feature Creation
+	# Remove infrequent words
+	feat_df['tweets_clean'] = feat_df['tweets'].map(lambda tweet: prep.removeInfrequentWords(tweet, top_n_words))
 
-# 	return eda2 # - cleaned dataframe
+	# Create list of very common words
+	very_common_words = prep.topNWords(ordered_words, n = common)
 
-######################################################################################################
-##################################-------------BULELANI-END-------------##############################
-######################################################################################################
+	# Remove common words
+	feat_df['tweets_clean'] = feat_df['tweets_clean'].map(lambda tweet: prep.removeCommonWords(tweet, very_common_words))
 
-#====================================================================================================#
+	# Count the tweet length
+	feat_df['len_of_tweet'] = feat_df['tweets_clean'].map(prep.lengthOfTweet)
+	
+	# Add target labels
+	target_map = {-1:'Anti', 0:'Neutral', 1:'Pro', 2:'News'}
+	feat_df['target'] = feat_df['sentiment'].map(target_map)
+
+	# Calculate tweet sentiment
+	nltk_scores = dict(compound = list(), negative = list(), neutral = list(), positive = list())
+	for tweet in feat_df['message']:
+		output = prep.getPolarityScores(tweet)
+		nltk_scores['compound'].append(output['compound'])
+		nltk_scores['negative'].append(output['neg'])
+		nltk_scores['neutral'].append(output['neu'])
+		nltk_scores['positive'].append(output['pos'])
+
+	if 'compound' in feat_df.columns:
+		feat_df.drop(['compound', 'negative', 'neutral', 'positive'], axis = 1, inplace = True)
+		feat_df = pd.concat([feat_df, pd.DataFrame(nltk_scores)], axis = 1)
+	else:
+		feat_df = pd.concat([feat_df, pd.DataFrame(nltk_scores)], axis = 1)
+
+	sentiment_scores = [TextBlob(' '.join(tweet)).sentiment for tweet in feat_df['message']]
+
+	pol = list()
+	subj = list()
+	for scores in sentiment_scores:
+		pol.append(scores.polarity)
+		subj.append(scores.subjectivity)
+
+	feat_df['polarity'] = pol
+	feat_df['subjectivity'] = subj
+
+	return feat_df
+
+eda_df = featureCreation(interactive)
 
 # The main function where we will build the actual app
 def main():
