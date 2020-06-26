@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import nltk
-nltk.download('vader_lexicon')
+#nltk.download('vader_lexicon')
 
 #stemming class 
 class StemAndTokenize:
@@ -23,7 +23,7 @@ def main():
     #title and subheader 
     st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/logos.PNG?raw=true.PNG)")
     #creating side menu
-    options = ["About the app","Data insights","Data Visualisation","Classify tweets",]
+    options = ["About the app","Data insights","Data Visualisation","Classify tweets"]
     selection = st.sidebar.selectbox("Menu Options", options)
 
     #building the Information page
@@ -58,9 +58,17 @@ def main():
                 # Transforming user input into a list
                 vect_text = [tweet_text]
                 # Load .pkl file with the model of your choice + make predictions
-                predictor = joblib.load(open(os.path.join("lr.pkl"),"rb"))
+                predictor = joblib.load(open(os.path.join("models/Logistic_regression.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))
+                #st.success("Text Categorized as: {}".format(prediction))
+                if prediction==-1:
+                    st.success("Anti")
+                elif prediction==0:
+                    st.success("Neutral")
+                elif prediction == 1:
+                    st.success("Pro")
+                else:
+                    st.success("News")
 
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
@@ -70,9 +78,17 @@ def main():
                 # Transforming user input into a list
                 vect_text = [tweet_text]
                 # Load .pkl file with the model of your choice + make predictions
-                predictor = joblib.load(open(os.path.join("lr.pkl"),"rb"))
+                predictor = joblib.load(open(os.path.join("models/Naive_bayes.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))
+                #st.success("Text Categorized as: {}".format(prediction))
+                if prediction==-1:
+                    st.success("Anti")
+                elif prediction==0:
+                    st.success("Neutral")
+                elif prediction == 1:
+                    st.success("Pro")
+                else:
+                    st.success("News")                
         
         #building the Linear SVM
         if model_sel == "Linear SVM":
@@ -82,9 +98,17 @@ def main():
                 # Transforming user input into a list
                 vect_text = [tweet_text]
                 # Load .pkl file with the model of your choice + make predictions
-                predictor = joblib.load(open(os.path.join("Linear_SVM_base_model.pkl"),"rb"))
+                predictor = joblib.load(open(os.path.join("models/SVM.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))
+                #st.success("Text Categorized as: {}".format(prediction))
+                if prediction==-1:
+                    st.success("Anti")
+                elif prediction==0:
+                    st.success("Neutral")
+                elif prediction == 1:
+                    st.success("Pro")
+                else:
+                    st.success("News")                
         #building the Random Forest
         if model_sel == "Random Forest":
             st.info("Prediction with Random Forest Model")
@@ -93,9 +117,17 @@ def main():
                 # Transforming user input into a list
                 vect_text = [tweet_text]
                 # Load .pkl file with the model of your choice + make predictions
-                predictor = joblib.load(open(os.path.join("lr.pkl"),"rb"))
+                predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))   
+                #st.success("Text Categorized as: {}".format(prediction))
+                if prediction==-1:
+                    st.success("Anti")
+                elif prediction==0:
+                    st.success("Neutral")
+                elif prediction == 1:
+                    st.success("Pro")
+                else:
+                    st.success("News")                
         #building the KNN
         if model_sel == "K Nearest Neighbors":
             st.info("Prediction with K Nearest Neighbors Model")
@@ -104,28 +136,37 @@ def main():
                 # Transforming user input into a list
                 vect_text = [tweet_text]
                 # Loading .pkl file with the model of your choice + make predictions
-                predictor = joblib.load(open(os.path.join("lr.pkl"),"rb"))
+                predictor = joblib.load(open(os.path.join("models/lr.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))
+                #st.success("Text Categorized as: {}".format(prediction))
+                if prediction==-1:
+                    st.success("Anti")
+                elif prediction==0:
+                    st.success("Neutral")
+                elif prediction == 1:
+                    st.success("Pro")
+                else:
+                    st.success("News")                
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
-        plt.figure(figsize=(8.5,5))
-        raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='bar',figsize=(8.5,5), color='tan')
-        plt.title('Number of types of comments')
-        plt.xlabel('Comment type')
-        plt.ylabel('Number of comments')
-        st.pyplot()
-        plt.figure(figsize=(8.5,5))
-        sns.distplot(raw['sentiment'],color='g',kde_kws={'bw':0.1}, bins=100, hist_kws={'alpha': 0.4})
-        plt.title('Distribution graph for different classes')
-        st.pyplot()
+        if st.checkbox("show/hide"):
+            plt.figure(figsize=(8.5,5))
+            raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='bar',figsize=(8.5,5), color='tan')
+            plt.title('Number of types of comments')
+            plt.xlabel('Comment type')
+            plt.ylabel('Number of comments')
+            st.pyplot()
+            plt.figure(figsize=(8.5,5))
+            sns.distplot(raw['sentiment'],color='g',kde_kws={'bw':0.1}, bins=100, hist_kws={'alpha': 0.4})
+            plt.title('Distribution graph for different classes')
+            st.pyplot()
         
-        plt.figure(figsize=(10,10))
-        names = ['Pro','News','Neutral','Anti']
-        raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='pie', labels=names, autopct='%1.1f%%')
-        plt.title('Number of types of comments')
-        st.pyplot()
+            plt.figure(figsize=(10,10))
+            names = ['Pro','News','Neutral','Anti']
+            raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='pie', labels=names, autopct='%1.1f%%')
+            plt.title('Number of types of comments')
+            st.pyplot()
         
         df_analyse = raw.copy()
         sid = SentimentIntensityAnalyzer()
