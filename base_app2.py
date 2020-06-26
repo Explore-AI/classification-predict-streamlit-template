@@ -21,7 +21,7 @@ raw = pd.read_csv("resources/train.csv")
 def main():
     
     #title and subheader 
-    st.title("Climate Change Tweet Classifer App")
+    st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/logo.PNG?raw=true.PNG)")
     #creating side menu
     options = ["About the app","Data insights","Data Visualisation","Classify tweets",]
     selection = st.sidebar.selectbox("Menu Options", options)
