@@ -203,10 +203,11 @@ def main():
         plt.xlabel('sentiment score',fontsize=12)
         ax2.legend(loc='upper right')
         plt.figtext(0.75, 0.0001, 'figure 2: positive and negative sentiment', horizontalalignment='right',fontsize = 14,style='italic')
-
         plt.tight_layout()
         st.pyplot()
-
+        #file = joblib.load(open(os.path.join("Common_words_pro"),"rb"))
+        
+        
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
 	main()
