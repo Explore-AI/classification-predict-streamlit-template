@@ -60,7 +60,7 @@ def main():
                 # Load .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/Logistic_regression.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))
+                #st.success("Text Categorized as: {}".format(prediction))
                 if prediction==-1:
                     st.success("Anti")
                 elif prediction==0:
@@ -80,7 +80,7 @@ def main():
                 # Load .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/Naive_bayes.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))
+                #st.success("Text Categorized as: {}".format(prediction))
                 if prediction==-1:
                     st.success("Anti")
                 elif prediction==0:
@@ -100,7 +100,7 @@ def main():
                 # Load .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/SVM.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))
+                #st.success("Text Categorized as: {}".format(prediction))
                 if prediction==-1:
                     st.success("Anti")
                 elif prediction==0:
@@ -119,7 +119,7 @@ def main():
                 # Load .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))
+                #st.success("Text Categorized as: {}".format(prediction))
                 if prediction==-1:
                     st.success("Anti")
                 elif prediction==0:
@@ -138,7 +138,7 @@ def main():
                 # Loading .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/lr.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(prediction))
+                #st.success("Text Categorized as: {}".format(prediction))
                 if prediction==-1:
                     st.success("Anti")
                 elif prediction==0:
