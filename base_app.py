@@ -211,9 +211,19 @@ tweet_metrics = {'Average word count': [avg_word_count_deniers,
 										  avg_w_length_believers,
 										  avg_w_length_factuals]}
 
+# Convert dictionary to dataframe
 tweet_metrics = pd.DataFrame.from_dict(tweet_metrics, orient='index',
                                        columns=['Deniers', 'Neutrals',
                                                 'Believers', 'Factuals'])
+
+# Divide "Average tweet length" by 10 so that it visualises nicely
+tweet_metrics.iloc[1,:] = tweet_metrics.iloc[1,:].apply(lambda x: x / 10)
+
+# Scale down "average tweet length" for visualisation
+tweet_metrics = tweet_metrics.reset_index()
+tweet_metrics_melted = pd.melt(tweet_metrics, id_vars=['index'],
+                               value_vars=['Deniers', 'Neutrals',
+                               'Believers', 'Factuals'])
 
 
 # The main function where we will build the actual app
@@ -260,7 +270,7 @@ def main():
 		st.write("### Count of each category")
 		st.write("Number of tweets available in each category of the training data.")
 		if st.checkbox('Show count of each category'):
-			fig = sns.countplot(x='sentiment', data = raw, palette='rainbow')
+			fig1 = sns.countplot(x='sentiment', data=raw, palette='rainbow')
 			st.pyplot()
 			st.write(raw['sentiment'].value_counts())
 			st.write("The training data contained more tweets from climate change believers"+
@@ -273,6 +283,11 @@ def main():
 		st.write("Comparison of categories' average tweet length, word count, and average word length.")
 		if st.checkbox('Show length metrics'):
 			st.write(tweet_metrics)
+			fig2 = sns.barplot(x='variable', y='value', hue='index', data=tweet_metrics_melted,
+            				   palette='rainbow')
+			st.pyplot()
+			st.write("The 'Average tweet length' metric was divided by 10 so that it could "+
+					 "be visualised on the graph.")
 				
 
 		# Raw Twitter data
