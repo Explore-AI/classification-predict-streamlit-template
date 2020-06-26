@@ -28,7 +28,7 @@ def main():
 
     #building the Information page
     if selection == "About the app":
-        st.subheader("About the app")
+        st.title("About the app")
         st.markdown("![Image of Yaktocat](https://abcsplash-bc-a.akamaized.net/4477599164001/201604/4477599164001_4864948520001_4863149671001-vs.jpg?pubId=4477599164001.jpg)")
         st.markdown("While climate is a measure of the average weather over a period of time, climate change means a change in the measures of climate, such as temperature, rainfall, or wind, lasting for an extended period – decades or longer.")
         st.markdown("This app is useful for classifying whether or not a person believes in climate change, based on their tweet(s). The app is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. To determine how tweets percieve climate change, the app gives users a choice to use a model of their choice.")
@@ -36,7 +36,7 @@ def main():
         
             
     if selection == "Data insights":
-        st.subheader("Data insights")
+        st.title("Data insights")
         st.markdown("Table of variable description")
         st.markdown("![Image](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/image1.PNG?raw=true.PNG)")
         st.markdown("Table of class description")
@@ -45,7 +45,8 @@ def main():
             st.write(raw[['sentiment', 'message']]) # will write the df to the page
     
     if selection== "Classify tweets":
-        st.markdown("![Image of Yaktocat](https://www.tweetbinder.com/blog/wp-content/uploads/2018/07/classify-tweets-1.jpg)")
+        st.title("Classify tweets")
+        st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/tweets.PNG)")
         models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors']})
         model_sel=st.selectbox('Select a model', models['model name'])
     
@@ -108,6 +109,7 @@ def main():
                 st.success("Text Categorized as: {}".format(prediction))
     #building the Draw
     if selection == "Data Visualisation":
+        st.title("Data Visualisation")
         plt.figure(figsize=(8.5,5))
         raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='bar',figsize=(8.5,5), color='tan')
         plt.title('Number of types of comments')
