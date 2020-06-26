@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 import nltk
+from PIL import Image
 #nltk.download('vader_lexicon')
 
 #stemming class 
@@ -23,10 +24,28 @@ def main():
     #title and subheader 
     st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/logos.PNG?raw=true.PNG)")
     #creating side menu
-    options = ["About the app","Data insights","Data Visualisation","Classify tweets"]
+    options = ["About the app","Data insights","Data Visualisation","Classify tweets","Model Perfomance"]
     selection = st.sidebar.selectbox("Menu Options", options)
-
-    #building the Information page
+    #model Perfomance page
+    if selection == "Model Perfomance":
+        st.title("Classification report")
+        st.markdown("A classification report measure the quality of the predictions made by a classification algorithm.it indicates how many predictions are True and how many are False. The report also uses the True Positives(TP), False Positives(FP), True Negatives(TN) and False Negatives(FN) to show the main classification metrics,i.e precision, recall and f1-score on a per-class basis. These are the same concepts used in the confusion matrix above.")
+        st.markdown("**Precision** : The ability of a classifier to not label an instance positive when it is actually negative. So it considers how                  accurate a classifier is in predicting positive cases.For each class it is defined as the ratio of true positives to the sum of true and false positives:")
+        st.markdown("precision = TP/(TP + FP)")
+        st.markdown("**Recall** : The ability of a classifier to find all positive instances. It considers the fraction of positives that were                     correctly identified. For each class it is defined as the ratio of true positives to the sum of true positives and false negatives:")
+        st.markdown("recall = TP/(TP + FN)")
+        st.markdown("**F1 Score** : A weighted harmonic mean of precision and recall such that the best score is 1.0 and the worst is 0.0. As a rule                 of thumb, the weighted average of F1 should be used to compare classifier models")
+        st.markdown("F1 Score = 2 x (Recall x Precision) / (Recall + Precision)")
+        st.markdown(" ")
+        st.markdown("**Classification Report from Logistic Regression Model**")
+        st.image(Image.open("images/lr.PNG"))
+        st.image(Image.open("images/na.PNG"))
+        st.image(Image.open("images/svm.PNG"))
+        st.image(Image.open("images/rf.PNG"))
+        st.image(Image.open("images/knn.PNG"))
+        st.markdown("The `F1 score` is our main metric that we use to decide on the best model to use.")
+        
+  #building the Information page
     if selection == "About the app":
         st.title("About the app")
         st.markdown("![Image of Yaktocat](https://abcsplash-bc-a.akamaized.net/4477599164001/201604/4477599164001_4864948520001_4863149671001-vs.jpg?pubId=4477599164001.jpg)")
@@ -53,6 +72,7 @@ def main():
         #building the Logistic Regression
         if model_sel == "Logistic Regression":
             st.info("Prediction with Logistic Regression Model")
+            #st.markdown("
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Transforming user input into a list
