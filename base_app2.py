@@ -5,6 +5,8 @@ import joblib,os
 from nltk import word_tokenize
 import matplotlib.pyplot as plt
 import seaborn as sns
+from IPython.display import display
+from PIL import Image
 
 
 #stemming class 
@@ -21,19 +23,23 @@ def main():
     #title and subheader 
     st.title("Climate Change Tweet Classifer App")
     #creating side menu
-    options = ["About the app","Classify tweets","Visuals"]
+    options = ["About the app","Data insights","Visuals","Classify tweets",]
     selection = st.sidebar.selectbox("Menu Options", options)
 
     #building the Information page
     if selection == "About the app":
         st.subheader("About the app")
         st.markdown("![Image of Yaktocat](https://abcsplash-bc-a.akamaized.net/4477599164001/201604/4477599164001_4864948520001_4863149671001-vs.jpg?pubId=4477599164001.jpg)")
-        st.markdown("This app is useful for classifying whether or not a person believes in climate change, based on their tweet(s).")
-        st.markdown("The app is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. The determine how tweets percieve climate change, the app gives users a choice to use a model of their choice.")
+        st.markdown("While climate is a measure of the average weather over a period of time, climate change means a change in the measures of climate, such as temperature, rainfall, or wind, lasting for an extended period – decades or longer.")
+        st.markdown("This app is useful for classifying whether or not a person believes in climate change, based on their tweet(s). The app is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. To determine how tweets percieve climate change, the app gives users a choice to use a model of their choice.")
         # You can read a markdown file from supporting resources folder
-        st.subheader("Raw Twitter data and label")
+        
+            
+    if selection == "Data insights":
+        st.subheader("Data insights")
         if st.checkbox('Show raw data'): # data is hidden if box is unchecked
             st.write(raw[['sentiment', 'message']]) # will write the df to the page
+        st.markdown("![Image](images/image1.PNG)")
     
     if selection== "Classify tweets":
         st.markdown("![Image of Yaktocat](https://www.tweetbinder.com/blog/wp-content/uploads/2018/07/classify-tweets-1.jpg)")
@@ -108,6 +114,11 @@ def main():
         plt.figure(figsize=(8.5,5))
         sns.distplot(raw['sentiment'],color='g',kde_kws={'bw':0.1}, bins=100, hist_kws={'alpha': 0.4})
         plt.title('Distribution graph for different classes')
+        st.pyplot()
+        plt.figure(figsize=(10,10))
+        names = ['Pro','News','Neutral','Anti']
+        raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='pie', labels=names, autopct='%1.1f%%')
+        plt.title('Number of types of comments')
         st.pyplot()
 
 
