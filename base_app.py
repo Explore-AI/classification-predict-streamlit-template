@@ -197,7 +197,7 @@ avg_w_length_neutrals = w_length_neutrals.mean()
 w_length_factuals = raw_analysis[raw_analysis['sentiment'] == 2]['avg_word_length']
 avg_w_length_factuals = w_length_factuals.mean()
 
-# 5) Create table for "length metrics" comparison
+# 5) TABLE FOR LENGTH METRICS
 tweet_metrics = {'Average word count': [avg_word_count_deniers,
 										avg_word_count_neutrals,
 										avg_word_count_believers,
@@ -224,6 +224,42 @@ tweet_metrics = tweet_metrics.reset_index()
 tweet_metrics_melted = pd.melt(tweet_metrics, id_vars=['index'],
                                value_vars=['Deniers', 'Neutrals',
                                'Believers', 'Factuals'])
+
+# 6) MOST COMMON HASHTAGS
+def find_hashtags(tweet):
+	"""
+	Create a list of all the hashtags in a string
+
+	Parameters:
+	tweet: String 
+	Outputs:
+	hashtags: List of strings containing hashtags in input string
+
+	"""
+	hashtags = []         
+	for word in tweet.lower().split(' '): 
+		#Appending the hashtag into the list hashtags
+		if word.startswith('#'):        
+			hashtags.append(word)	
+	return hashtags
+  
+
+# Create new column for hashtags
+raw_analysis['hashtags'] = raw_analysis['message'].apply(find_hashtags)
+
+def show_hashtags(category, amount):
+	"""
+	Finds a specified amount of top hashtags for a category
+
+	Parameters:
+	category: (int) training data label (-1, 0, 1, 2)
+	amount: (int) number of hashtags to return
+	"""
+	hashtags_tup = raw_analysis[(raw_analysis.sentiment == category)][['hashtags']].apply(count_words)['hashtags'].most_common(amount+1)
+
+	hashtags_dict = tuples_to_dict(hashtags_tup, dictionary)
+	hashtags_df = pd.DataFrame(hashtags_dict.items(), columns = ['Ngram', 'Count'])
+	return hashtags_df
 
 
 # The main function where we will build the actual app
@@ -264,7 +300,9 @@ def main():
 		st.write("* Is neutral about climate change (0)")
 		st.write("* Believes in climate change (1)")
 		st.write("* Provided a factual link to a news site (2)")
-		st.write("You can view the raw data used to train the models at the bottom of the page.")
+		st.write("View the raw data used to train the models at the bottom of the page.")
+		st.write("More information relating to the most commonly used words for each category can"+
+				 " be found in the 'Analysis of each category' page in the sidebar.")
 
 		# Count of each category
 		st.write("### Count of each category")
@@ -417,7 +455,9 @@ def main():
 							'Believers', 'Factuals'])
 
 		# Most frequent individual words
-		if st.checkbox('Show most frequent individual words'):
+		st.write("### Most frequently used words")
+		st.write("40 most commonly-used words for this category.")
+		if st.checkbox('Show most frequent words'):
 			st.write("### Most frequent individual words (lemmas)")
 			st.write("What you are seeing are the words' lemmas. One of the text preprocessing "+
 					"steps involved lemmatization, which is simplifying a word to its most basic "+
@@ -440,7 +480,9 @@ def main():
 				st.write(comm_words_factuals)
 
 		# N-grams analysis
-		if st.checkbox('Show most frequent groups of words'):
+		st.write("### Most frequently used phrases")
+		st.write("20 most commonly-used phrases for this category.")
+		if st.checkbox('Show most frequent phrases'):
 			st.write("### Most frequent n-grams")
 			st.write("n-grams refer to a sequence of n consecutive items. In this case, it"+
 					" refers to a n consecutive words in a text. The most common bigrams (two words) and"+
@@ -474,6 +516,8 @@ def main():
 						 "[Paris Agreement](https://unfccc.int/process-and-meetings/the-paris-agreement/the-paris-agreement).")
 		
 		# Length-related metrics checkbox
+		st.write("### Length-related metrics")
+		st.write("Average word count per tweet, average tweet length, average word length.")
 		if st.checkbox('Show length-related metrics'):
 			if category == 'Deniers':
 				st.write('### Metrics')
@@ -498,6 +542,21 @@ def main():
 				st.write("Average word count per tweet: ", round(avg_word_count_factuals, 2))
 				st.write("Average tweet length: ", round(avg_t_length_factuals, 2))
 				st.write("Average word length: ", round(avg_w_length_factuals, 2))
+		
+		# Top hashtags
+		st.write("### Top hashtags")
+		st.write("Most frequently-used hashtags for this category.")
+		if st.checkbox("Show top hashtags"):
+			if category == 'Deniers':
+				cat_slider = -1
+			if category == 'Neutrals':
+				cat_slider = 0
+			if category == 'Believers':
+				cat_slider = 1
+			if category == 'Factuals':
+				cat_dlier = 2
+			number_to_show = st.slider('Amount of entries to show', 1, 50, 10)
+			st.write(show_hashtags(cat_slider, number_to_show))
 
 	
 		
