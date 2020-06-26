@@ -35,6 +35,7 @@ stop_words = set(stopwords.words('english'))
 from nltk import ngrams
 import collections
 
+
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
@@ -49,6 +50,8 @@ raw = pd.read_csv("resources/train.csv")
 # 2) Word count
 # 3) Length of tweet
 # 4) Average word length
+# 5) Table for length metrics
+# 6) Most common hashtags
 
 # 1) N-GRAMS COUNT
 raw_analysis = raw.copy()
@@ -83,11 +86,6 @@ def count_words(input):
 
 dictionary = {}
 
-# Isolate each category's ngrams
-ngrams_deniers_tup = raw_analysis[(raw_analysis.sentiment == -1)][['grams']].apply(count_words)['grams'].most_common(20)
-ngrams_believers_tup = raw_analysis[(raw_analysis.sentiment == 1)][['grams']].apply(count_words)['grams'].most_common(20)
-ngrams_neutrals_tup = raw_analysis[(raw_analysis.sentiment == 0)][['grams']].apply(count_words)['grams'].most_common(20)
-ngrams_factuals_tup = raw_analysis[(raw_analysis.sentiment == 2)][['grams']].apply(count_words)['grams'].most_common(20)
 
 # Get category's most frequent individual words
 words_deniers_tup = raw_analysis[(raw_analysis.sentiment == -1)][['normalized']].apply(count_words)['normalized'].most_common(40)
@@ -102,31 +100,32 @@ def tuples_to_dict(tup, di):
 	di = dict(tup) 
 	return di 
 
-# Create dictionary of ngrams for each category and then convert to dataframe
-ngrams_deniers = tuples_to_dict(ngrams_deniers_tup, dictionary)
-ngrams_deniers = pd.DataFrame(ngrams_deniers.items(), columns = ['Ngram', 'Count'])
+def show_ngrams(category, amount):
+	"""
+	Finds a specified amount of top hashtags for a category
 
-ngrams_believers = tuples_to_dict(ngrams_believers_tup, dictionary)
-ngrams_believers = pd.DataFrame(ngrams_believers.items(), columns = ['Ngram', 'Count'])
+	Parameters:
+	category: (int) training data label (-1, 0, 1, 2)
+	amount: (int) number of hashtags to return
+	"""
+	ngrams_tup = raw_analysis[(raw_analysis.sentiment == category)][['grams']].apply(count_words)['grams'].most_common(amount+1)
 
-ngrams_neutrals = tuples_to_dict(ngrams_neutrals_tup, dictionary)
-ngrams_neutrals = pd.DataFrame(ngrams_neutrals.items(), columns = ['Ngram', 'Count'])
+	ngrams_dict = tuples_to_dict(ngrams_tup, dictionary)
+	ngrams_df = pd.DataFrame(ngrams_dict.items(), columns = ['Ngram', 'Count'])
+	return ngrams_df
 
-ngrams_factuals = tuples_to_dict(ngrams_factuals_tup, dictionary)
-ngrams_factuals = pd.DataFrame(ngrams_factuals.items(), columns = ['Ngram', 'Count'])
+# # Create dictionary of most frequent individual words and then convert to dataframe
+# comm_words_deniers = tuples_to_dict(words_deniers_tup, dictionary)
+# comm_words_deniers = pd.DataFrame(comm_words_deniers.items(), columns = ['Word', 'Count'])
 
-# Create dictionary of most frequent individual words and then convert to dataframe
-comm_words_deniers = tuples_to_dict(words_deniers_tup, dictionary)
-comm_words_deniers = pd.DataFrame(comm_words_deniers.items(), columns = ['Word', 'Count'])
+# comm_words_believers = tuples_to_dict(words_believers_tup, dictionary)
+# comm_words_believers = pd.DataFrame(comm_words_believers.items(), columns = ['Word', 'Count'])
 
-comm_words_believers = tuples_to_dict(words_believers_tup, dictionary)
-comm_words_believers = pd.DataFrame(comm_words_believers.items(), columns = ['Word', 'Count'])
+# comm_words_neutrals = tuples_to_dict(words_neutrals_tup, dictionary)
+# comm_words_neutrals = pd.DataFrame(comm_words_neutrals.items(), columns = ['Word', 'Count'])
 
-comm_words_neutrals = tuples_to_dict(words_neutrals_tup, dictionary)
-comm_words_neutrals = pd.DataFrame(comm_words_neutrals.items(), columns = ['Word', 'Count'])
-
-comm_words_factuals = tuples_to_dict(words_factuals_tup, dictionary)
-comm_words_factuals = pd.DataFrame(comm_words_factuals.items(), columns = ['Word', 'Count'])
+# comm_words_factuals = tuples_to_dict(words_factuals_tup, dictionary)
+# comm_words_factuals = pd.DataFrame(comm_words_factuals.items(), columns = ['Word', 'Count'])
 
 
 # 2) WORD COUNT
@@ -137,6 +136,7 @@ def word_count(tweet):
 	Output: Number of words in that tweet (int)
 	"""
 	return len(tweet.split())
+
 raw_analysis['word_count'] = raw_analysis['message'].apply(word_count)
 word_count_believers = raw_analysis[raw_analysis['sentiment'] == 1]['word_count']
 avg_word_count_believers = word_count_believers.mean()
@@ -260,7 +260,6 @@ def show_hashtags(category, amount):
 	hashtags_dict = tuples_to_dict(hashtags_tup, dictionary)
 	hashtags_df = pd.DataFrame(hashtags_dict.items(), columns = ['Ngram', 'Count'])
 	return hashtags_df
-
 
 # The main function where we will build the actual app
 def main():
@@ -480,40 +479,25 @@ def main():
 				st.write(comm_words_factuals)
 
 		# N-grams analysis
-		st.write("### Most frequently used phrases")
-		st.write("20 most commonly-used phrases for this category.")
+		#show_ngrams(category, amount)
+		st.write("### Most frequently used phrases (n-grams)")
+		st.write("Most commonly-used phrases for this category.")
 		if st.checkbox('Show most frequent phrases'):
-			st.write("### Most frequent n-grams")
 			st.write("n-grams refer to a sequence of n consecutive items. In this case, it"+
 					" refers to a n consecutive words in a text. The most common bigrams (two words) and"+
 					" trigrams (three words) were counted in the training data. These show the most frequently"+
 					" used sets of two and three words by each category.")
-
 			if category == 'Deniers':
-				st.write('#### Most common bigrams and trigrams of climate change deniers')
-				st.write(ngrams_deniers)
-				st.write("In this dataset, climate change deniers seem to tend to retweet Donald Trump "+
-				"and Twitter user @SteveSGoddard, who has since changed his username to [@Tony__Heller](https://twitter.com/Tony__Heller).")
-				st.write("These ngrams suggest that climate change deniers may be aligned towards right-wing politics.")
-
+				cat_slider_ngram = -1
 			if category == 'Neutrals':
-				st.write('#### Most common bigrams and trigrams of climate change neutrals')
-				st.write(ngrams_neutrals)
-
+				cat_slider_ngram = 0
 			if category == 'Believers':
-				st.write('#### Most common bigrams and trigrams of climate change believers')
-				st.write(ngrams_believers)
-				st.write('In this dataset, climate change believers seem to frequently tweet about dying.'+
-						' They often retweet a specific tweet from Twitter user @StephenSchlegel that is criticising'+
-						' Melania and Donald Trump.')
-
+				cat_slider_ngram = 1
 			if category == 'Factuals':
-				st.write('#### Most common bigrams and trigrams of those who provided factual links')
-				st.write(ngrams_factuals)
-				st.write("These tweets seem to be centered around issues relating to policy and Donald Trump and "+
-					 	 "Scott Pruitt's (former Administrator of the U.S. Environmental Protection Agency)"+
-						 " views on climate change. There is also mention of the "+
-						 "[Paris Agreement](https://unfccc.int/process-and-meetings/the-paris-agreement/the-paris-agreement).")
+				cat_slider_ngram = 2
+			number_to_show_ngram = st.slider('Amount of entries to show', 1, 50, 10)
+			st.write(show_ngrams(cat_slider_ngram, number_to_show_ngram))
+
 		
 		# Length-related metrics checkbox
 		st.write("### Length-related metrics")
@@ -554,7 +538,7 @@ def main():
 			if category == 'Believers':
 				cat_slider = 1
 			if category == 'Factuals':
-				cat_dlier = 2
+				cat_slider = 2
 			number_to_show = st.slider('Amount of entries to show', 1, 50, 10)
 			st.write(show_hashtags(cat_slider, number_to_show))
 
