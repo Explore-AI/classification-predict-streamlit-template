@@ -5,9 +5,9 @@ import joblib,os
 from nltk import word_tokenize
 import matplotlib.pyplot as plt
 import seaborn as sns
-from IPython.display import display
-from PIL import Image
-
+from nltk.sentiment.vader import SentimentIntensityAnalyzer
+import nltk
+nltk.download('vader_lexicon')
 
 #stemming class 
 class StemAndTokenize:
@@ -23,7 +23,7 @@ def main():
     #title and subheader 
     st.title("Climate Change Tweet Classifer App")
     #creating side menu
-    options = ["About the app","Data insights","Visuals","Classify tweets",]
+    options = ["About the app","Data insights","Data Visualisation","Classify tweets",]
     selection = st.sidebar.selectbox("Menu Options", options)
 
     #building the Information page
@@ -37,10 +37,12 @@ def main():
             
     if selection == "Data insights":
         st.subheader("Data insights")
+        st.markdown("Table of variable description")
+        st.markdown("![Image](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/image1.PNG?raw=true.PNG)")
+        st.markdown("Table of class description")
+        st.markdown("![Image](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/image2.PNG?raw=true.PNG)")
         if st.checkbox('Show raw data'): # data is hidden if box is unchecked
             st.write(raw[['sentiment', 'message']]) # will write the df to the page
-        st.markdown("![Image](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/image1.PNG?raw=true.PNG)")
-        st.markdown("![Image](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/image2.PNG?raw=true.PNG)")
     
     if selection== "Classify tweets":
         st.markdown("![Image of Yaktocat](https://www.tweetbinder.com/blog/wp-content/uploads/2018/07/classify-tweets-1.jpg)")
@@ -50,7 +52,7 @@ def main():
         #building the Logistic Regression
         if model_sel == "Logistic Regression":
             st.info("Prediction with Logistic Regression Model")
-            tweet_text = st.text_area("Enter your tweet ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
@@ -62,7 +64,7 @@ def main():
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
             st.info("Prediction with Naive Bayes Model")
-            tweet_text = st.text_area("Enter your tweet ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
@@ -74,7 +76,7 @@ def main():
         #building the Linear SVM
         if model_sel == "Linear SVM":
             st.info("Prediction with Linear SVM Model")
-            tweet_text = st.text_area("Enter your tweet ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
@@ -85,7 +87,7 @@ def main():
         #building the Random Forest
         if model_sel == "Random Forest":
             st.info("Prediction with Random Forest Model")
-            tweet_text = st.text_area("Enter your tweet ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
@@ -96,7 +98,7 @@ def main():
         #building the KNN
         if model_sel == "K Nearest Neighbors":
             st.info("Prediction with K Nearest Neighbors Model")
-            tweet_text = st.text_area("Enter your tweet ","Type Here")
+            tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Transforming user input into a list
                 vect_text = [tweet_text]
@@ -105,7 +107,7 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(prediction))
     #building the Draw
-    if selection == "Visuals":
+    if selection == "Data Visualisation":
         plt.figure(figsize=(8.5,5))
         raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='bar',figsize=(8.5,5), color='tan')
         plt.title('Number of types of comments')
@@ -116,12 +118,31 @@ def main():
         sns.distplot(raw['sentiment'],color='g',kde_kws={'bw':0.1}, bins=100, hist_kws={'alpha': 0.4})
         plt.title('Distribution graph for different classes')
         st.pyplot()
+        
         plt.figure(figsize=(10,10))
         names = ['Pro','News','Neutral','Anti']
         raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='pie', labels=names, autopct='%1.1f%%')
         plt.title('Number of types of comments')
         st.pyplot()
+        
+        df_analyse = raw.copy()
+        sid = SentimentIntensityAnalyzer()
+        df_analyse['compound']  =  df_analyse['message'].apply(lambda x: sid.polarity_scores(x)['compound'])
+        fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(15, 4))
+        plt.figtext(.51,.95, 'Distribution of the tweets sentiment\n', fontsize=20, ha='center',fontweight='bold')
+        ax1.hist(df_analyse['compound'], bins=15, edgecolor='k',color='lightblue')
+        plt.figtext(0.23, 0.06, 'sentiment score', horizontalalignment='left',fontsize = 12)
+        fig.text(0.00001, 0.5, 'number of tweets in sentiment', va='center', rotation='vertical',fontsize=12)
+        plt.figtext(0.02, 0.0001, 'figure 1: positive, negative and neutral sentiment', horizontalalignment='left',fontsize = 14,style='italic')
 
+        bins = np.linspace(-1, 1, 30)
+        ax2.hist([df_analyse['compound'][df_analyse['compound'] > 0], df_analyse['compound'][df_analyse['compound'] < 0]], bins, label=['Positive sentiment', 'Negative sentiment'])
+        plt.xlabel('sentiment score',fontsize=12)
+        ax2.legend(loc='upper right')
+        plt.figtext(0.75, 0.0001, 'figure 2: positive and negative sentiment', horizontalalignment='right',fontsize = 14,style='italic')
+
+        plt.tight_layout()
+        st.pyplot()
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
