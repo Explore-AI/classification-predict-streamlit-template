@@ -39,7 +39,7 @@ def main():
         st.subheader("Data insights")
         if st.checkbox('Show raw data'): # data is hidden if box is unchecked
             st.write(raw[['sentiment', 'message']]) # will write the df to the page
-        st.markdown("![Image](images/image1.PNG)")
+        st.markdown("![Image](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/image1.PNG?raw=true.PNG)")
     
     if selection== "Classify tweets":
         st.markdown("![Image of Yaktocat](https://www.tweetbinder.com/blog/wp-content/uploads/2018/07/classify-tweets-1.jpg)")
