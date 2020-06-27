@@ -345,11 +345,11 @@ def main():
         st.markdown("F1 Score = 2 x (Recall x Precision) / (Recall + Precision)")
         st.markdown(" ")
         st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/lr.PNG"))
-        st.image(Image.open("images/na.PNG"))
-        st.image(Image.open("images/svm.PNG"))
-        st.image(Image.open("images/rf.PNG"))
-        st.image(Image.open("images/knn.PNG"))
+        st.image(Image.open("images/lr.png"))
+        st.image(Image.open("images/na.png"))
+        st.image(Image.open("images/svm.png"))
+        st.image(Image.open("images/rf.png"))
+        st.image(Image.open("images/knn.png"))
         st.markdown("The `F1 score` is our main metric that we use to decide on the best model to use.")
 
   #building the Information page
