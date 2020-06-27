@@ -5,6 +5,7 @@ from PIL import Image
 
 import nltk
 nltk.download('vader_lexicon')
+nltk.download('punkt')
 
 # Data dependencies
 # Packages for data analysis
