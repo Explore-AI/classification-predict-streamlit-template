@@ -1,10 +1,3 @@
-!pip install comet_ml
-!pip install seaborn
-!pip install wordcloud
-!pip install emoji
-!pip install pyspellchecker
-!pip install ftfy
-
 # Streamlit dependencies
 import streamlit as st
 import joblib,os
