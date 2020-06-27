@@ -218,7 +218,7 @@ def main():
     if selection == "About the app":
         st.title("About the app")
         st.markdown("![Image of Yaktocat](https://abcsplash-bc-a.akamaized.net/4477599164001/201604/4477599164001_4864948520001_4863149671001-vs.jpg?pubId=4477599164001.jpg)")
-        st.markdown("While climate is a measure of the average weather over a period of time, climate change means a change in the measures of climate, such as temperature, rainfall, or wind, lasting for an extended period – decades or longer.")
+        st.markdown("While climate is a measure of the average weather over a period of time, climate change means a change in the measures of climate, such as temperature, rainfall, or wind, lasting for an extended period – decades or longer. Man made climate change is the phenomena that humans cause or contribute towards the change in climate")
         st.markdown("This app is useful for classifying whether or not a person believes in climate change, based on their tweet(s). The app is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. To determine how tweets percieve climate change, the app gives users a choice to use a model of their choice.")
 
         # You can read a markdown file from supporting resources folder
