@@ -3,6 +3,9 @@ import streamlit as st
 import joblib,os
 from PIL import Image
 
+import nltk
+nltk.download('vader_lexicon')
+
 # Data dependencies
 # Packages for data analysis
 import numpy as np
