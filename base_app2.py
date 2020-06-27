@@ -56,40 +56,6 @@ def sentiment_score(text):
 with open('Lists_and_dictionaries/news_file.pkl', 'rb') as file:
     news = pickle.load(file)
 
-# Read in created hashtag text file and create a hashtags dictionary
-# Keys
-hash_file = [line.rstrip('\n') for line in open('Lists_and_dictionaries/hash_file.txt')]
-hash_file = [i.center(len(i)+2) for i in hash_file]
-# Values
-hash_file_clean = [line.rstrip('\n') for line in open('Lists_and_dictionaries/hash_file_clean.txt')]
-hash_file_clean = [i.center(len(i)+2) for i in hash_file_clean]
-
-hashtags = {hash_file[i]: hash_file_clean[i] for i in range(len(hash_file))}
-hashtags.update({'todayinmaker ':'today in maker'})#this is added to differentiate it from ' todayinmaker ' because this 1 occurs at start of tweet
-
-# Function to substitute hastags with separated words
-def expand_hashtags(df,column_name):
-    """ A funtion that expands the hashtag words into separate words.
-
-        Parameters
-        ----------
-        df:          Dataframe containing the text column to be transformed.
-        column_name: Name of the column containing the text data.
-
-        Returns
-        -------
-        df:  Dataframe containg the updated text column
-
-        Example
-        -------
-        #iamgreat returns 'i am great'
-    """
-
-    df[column_name] = df[column_name].str.lower()
-    df[column_name] = df[column_name].apply(lambda x: re.sub(r"[#]",'',x))
-    for word in hashtags.keys():
-            df[column_name] = df[column_name].apply(lambda x: re.sub(word,hashtags[word],x))
-    return df
 
 # Import dictionary of contractions
 with open('Lists_and_dictionaries/contractions_dict.pkl', 'rb') as file:
@@ -126,10 +92,6 @@ def cleanup(raw):
 
     # Fix strange characters
     raw = fix_text(raw)
-
-    # Substitute hastags with separated words
-    for w in hashtags.keys():
-        raw = re.sub(w,hashtags[w]+' ',re.sub(r"#",'',raw))
 
     # Replace contracted words with full word
     raw = ' '.join([contractions[w.lower()] if w.lower() in contractions.keys() else w for w in raw.split()])
