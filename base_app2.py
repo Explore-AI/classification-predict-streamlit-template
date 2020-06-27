@@ -52,18 +52,6 @@ def sentiment_score(text):
 
     return sentiment
 
-# Load list of unique news related handles
-with open('Lists_and_dictionaries/news_file.pkl', 'rb') as file:
-    news = pickle.load(file)
-
-
-# Import dictionary of contractions
-with open('Lists_and_dictionaries/contractions_dict.pkl', 'rb') as file:
-    contractions = pickle.load(file)
-
-# Import dictionary of contractions
-with open('Lists_and_dictionaries/short_dict.pkl', 'rb') as file:
-    short = pickle.load(file)
 
 # Cleaning Function
 def cleanup(raw):
