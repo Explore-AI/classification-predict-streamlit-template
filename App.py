@@ -256,7 +256,7 @@ def main():
             result = extract_entity(tweet_text)
             st.success(result)
     
-    # Show Plots
+    # show plots
     if st.checkbox("Simple Bar Plot with Matplotlib "):
         train.plot(kind='bar')
         st.pyplot()
