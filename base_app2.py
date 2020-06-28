@@ -329,7 +329,7 @@ raw = pd.read_csv("resources/train.csv")
 def main():
 
     #title and subheader
-    st.image(Image.open("images/logos.png"))
+    st.image(Image.open("images/logos.PNG"))
     #creating side menu
     options = ["About the app","Data insights","Data Visualisation","Model Perfomance","Classify tweets"]
     selection = st.sidebar.selectbox("Menu Options", options)
