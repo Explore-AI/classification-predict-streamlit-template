@@ -255,8 +255,27 @@ def main():
         if st.button("Extract"):
             result = extract_entity(tweet_text)
             st.success(result)
+    
+    # Show Plots
+    if st.checkbox("Simple Bar Plot with Matplotlib "):
+        train.plot(kind='bar')
+        st.pyplot()
 
 
+    # Show Correlation Plots
+    if st.checkbox("Simple Correlation Plot with Matplotlib "):
+        train.matshow(train.corr())
+        st.pyplot()
+
+    # Show Correlation Plots with Sns
+    if st.checkbox("Simple Correlation Plot with Seaborn "):
+        st.write(sns.heatmap(train.corr(),annot=True))
+        st.pyplot()
+
+    # Show Plots
+    if st.checkbox("Bar Plot of Groups or Counts"):
+        v_counts = train.groupby('species')
+        st.bar_chart(v_counts)
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
