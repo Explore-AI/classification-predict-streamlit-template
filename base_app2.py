@@ -336,7 +336,7 @@ def main():
     #model Perfomance page
     if selection == "Model Perfomance":
         st.title("Classification report")
-        st.markdown("A classification report measure the quality of the predictions made by a classification algorithm.it indicates how many predictions are True and how many are False. The report also uses the True Positives(TP), False Positives(FP), True Negatives(TN) and False Negatives(FN) to show the main classification metrics,i.e precision, recall and f1-score on a per-class basis. These are the same concepts used in the confusion matrix above.")
+        st.markdown("A classification report measure the quality of the predictions made by a classification algorithm.it indicates how many predictions are True and how many are False. The report also uses the True Positives(TP), False Positives(FP), True Negatives(TN) and False Negatives(FN) to show the main classification metrics, i.e precision, recall and f1-score on a per-class basis. These are the same concepts used in the confusion matrix above.")
         st.markdown("**Precision** : The ability of a classifier to not label an instance positive when it is actually negative. So it considers how                  accurate a classifier is in predicting positive cases.For each class it is defined as the ratio of true positives to the sum of true and false positives:")
         st.markdown("precision = TP/(TP + FP)")
         st.markdown("**Recall** : The ability of a classifier to find all positive instances. It considers the fraction of positives that were                     correctly identified. For each class it is defined as the ratio of true positives to the sum of true positives and false negatives:")
