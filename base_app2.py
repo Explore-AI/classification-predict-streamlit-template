@@ -478,7 +478,7 @@ def main():
                 # Preparing text for the model
                 vect_text = [cleanup(tweet_text)]
                 # Loading .pkl file with the model of your choice + make predictions
-                predictor = joblib.load(open(os.path.join("models/Neural_network.pkl"),"rb"))
+                predictor = joblib.load(open(os.path.join("models/KNN.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
 <<<<<<< HEAD
