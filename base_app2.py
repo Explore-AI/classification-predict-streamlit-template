@@ -346,10 +346,14 @@ def main():
         st.markdown(" ")
         st.markdown("**Classification Report from Logistic Regression Model**")
         st.image(Image.open("images/lr.png"))
+        #st.markdown("**Classification Report from Logistic Regression Model**")
         st.image(Image.open("images/na.png"))
+        #st.markdown("**Classification Report from Logistic Regression Model**")
         st.image(Image.open("images/svm.png"))
+        st.markdown("**Classification Report from Random Forest Model**")
         st.image(Image.open("images/rf.png"))
-        st.image(Image.open("images/knn.png"))
+        st.markdown("**Classification Report from Neural Networks Model**")
+        st.image(Image.open("images/nn.png"))
         st.markdown("The `F1 score` is our main metric that we use to decide on the best model to use.")
 
   #building the Information page
@@ -393,7 +397,7 @@ def main():
     if selection== "Classify tweets":
         st.title("Classify tweets")
         st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/tweets.PNG?raw=true.PNG)")
-        models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors']})
+        models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural_network']})
         model_sel=st.selectbox('Select a model', models['model name'])
 
         #building the Logistic Regression
@@ -474,14 +478,29 @@ def main():
                 # Preparing text for the model
                 vect_text = [cleanup(tweet_text)]
                 # Loading .pkl file with the model of your choice + make predictions
-                predictor = joblib.load(open(os.path.join("models/lr.pkl"),"rb"))
+                predictor = joblib.load(open(os.path.join("models/Neural_network.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
 <<<<<<< HEAD
 
 =======
                 st.success("Accuracy of this model is: 73%")
+<<<<<<< HEAD
 >>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
+=======
+        #building the KNN
+        if model_sel == "Neural_network":
+            st.info("Prediction with Neural_network Model")
+            tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
+            if st.button("Classify"):
+                # Preparing text for the model
+                vect_text = [cleanup(tweet_text)]
+                # Loading .pkl file with the model of your choice + make predictions
+                predictor = joblib.load(open(os.path.join("models/Neural_network.pkl"),"rb"))
+                prediction = predictor.predict(vect_text)
+                st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+                st.success("Accuracy of this model is: 73%")                
+>>>>>>> dev
 
     #building the Draw
     if selection == "Data Visualisation":
