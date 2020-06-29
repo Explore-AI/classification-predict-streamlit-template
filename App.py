@@ -110,7 +110,7 @@ def main():
         st.info("Project Overview")
     # You can read a markdown file from supporting resources folder
         from PIL import Image
-        image = Image.open('resources/Capture.jpg')
+        image = Image.open('resources/Capture.JPG')
         st.image(image, use_column_width=True)
 
     # Building out the "EDA" page
