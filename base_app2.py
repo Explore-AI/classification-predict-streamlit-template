@@ -181,7 +181,7 @@ def cleanup(raw):
 ' OMG ': ' Oh My God ',
 ' Pls ': ' Please ',
 ' Plz ': ' Please ',
-' Q ': ' Question ', 
+' Q ': ' Question ',
 ' QQ ': ' Quick Question ',
 ' RLY ': ' Really ',
 ' SRLSY ': ' Seriously ',
@@ -368,8 +368,8 @@ def main():
 
 
 
-        
-       
+
+
 
     if selection == "Data insights":
         st.title("Data insights")
@@ -391,7 +391,7 @@ def main():
             st.write(raw[['sentiment','message']][raw['sentiment']==0].head(x))
         if st.checkbox('show News tweets'):
             st.write(raw[['sentiment','message']][raw['sentiment']==2].head(x))
-        
+
 
 
     if selection== "Classify tweets":
@@ -402,8 +402,8 @@ def main():
 
         #building the Logistic Regression
         if model_sel == "Logistic Regression":
+            st.markdown(open('resources/lr.md').read())
             st.info("Prediction with Logistic Regression Model")
-            #st.markdown("
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Preparing text for the model
@@ -479,7 +479,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Neural_network.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-                st.success("Accuracy of this model is: 73%")                
+                st.success("Accuracy of this model is: 73%")
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
@@ -510,7 +510,7 @@ def main():
             df_analyse = df_analyse[df_analyse['sentiment'] != 2]
             df_analyse['compound']  =  df_analyse['message'].apply(lambda x: sid.polarity_scores(x)['compound'])
             df_analyse['comp_score'] = df_analyse['compound'].apply(lambda c: 'pos' if c >0 else 'neg' if c<0 else 'neu')
-            
+
             fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(15, 4))
             plt.figtext(.51,.95, 'Distribution of the tweets sentiment scores\n', fontsize=20, ha='center',fontweight='bold')
 
@@ -550,7 +550,7 @@ def main():
 
         #file = joblib.load(open(os.path.join("Common_words_pro"),"rb"))
 
-# Required to let Streamlit instantiate our web app.  
+# Required to let Streamlit instantiate our web app.
 
 if __name__ == '__main__':
 	main()
