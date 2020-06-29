@@ -407,7 +407,7 @@ def main():
 
     if selection== "Classify tweets":
         st.title("Classify tweets")
-        st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/tweets.PNG?raw=true.PNG)")
+        st.image(Image.open("tweets/kernel.PNG"))
         models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Support Vector Machine','Random Forest', 'K Nearest Neighbors','Neural network']})
         model_sel=st.selectbox('Select a model', models['model name'])
 
