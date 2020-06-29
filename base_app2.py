@@ -412,11 +412,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Logistic_regression.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-<<<<<<< HEAD
-
-=======
                 st.success("Accuracy of this model is: 76%")
->>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
@@ -429,12 +425,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Naive_bayes.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-<<<<<<< HEAD
-
-=======
                 st.success("Accuracy of this model is: 73%")
-                
->>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 
         #building the Linear SVM
         if model_sel == "Linear SVM":
@@ -447,11 +438,8 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/SVM.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-<<<<<<< HEAD
 
-=======
                 st.success("Accuracy of this model is: 78%")
->>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 
         #building the Random Forest
         if model_sel == "Random Forest":
@@ -464,11 +452,8 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-<<<<<<< HEAD
 
-=======
                 st.success("Accuracy of this model is: 69%")
->>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 
         #building the KNN
         if model_sel == "K Nearest Neighbors":
@@ -481,13 +466,8 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Neural_network.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-<<<<<<< HEAD
-
-=======
                 st.success("Accuracy of this model is: 73%")
-<<<<<<< HEAD
->>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
-=======
+
         #building the KNN
         if model_sel == "Neural_network":
             st.info("Prediction with Neural_network Model")
@@ -500,8 +480,6 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")                
->>>>>>> dev
-
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
@@ -550,7 +528,6 @@ def main():
             plt.tight_layout()
             st.pyplot()
 
-<<<<<<< HEAD
         df_analyse = raw.copy()
         sid = SentimentIntensityAnalyzer()
         df_analyse['compound']  =  df_analyse['message'].apply(lambda x: sid.polarity_scores(x)['compound'])
@@ -569,7 +546,6 @@ def main():
         plt.tight_layout()
         st.pyplot()
 
-=======
 # Required to let Streamlit instantiate our web app.
 
         #file = joblib.load(open(os.path.join("Common_words_pro"),"rb"))
