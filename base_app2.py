@@ -337,14 +337,14 @@ def main():
     if selection == "Model Perfomance":
         st.title("Classification report")
         st.markdown("A classification report measure the quality of the predictions made by a classification algorithm.it indicates how many predictions are True and how many are False. The report also uses the True Positives(TP), False Positives(FP), True Negatives(TN) and False Negatives(FN) to show the main classification metrics, i.e precision, recall and f1-score on a per-class basis. These are the same concepts used in the confusion matrix above.")
-        st.markdown("**Precision** : The ability of a classifier to not label an instance positive when it is actually negative. So it considers how                  accurate a classifier is in predicting positive cases.For each class it is defined as the ratio of true positives to the sum of true and false positives:")
-        st.markdown("precision = TP/(TP + FP)")
-        st.markdown("**Recall** : The ability of a classifier to find all positive instances. It considers the fraction of positives that were                     correctly identified. For each class it is defined as the ratio of true positives to the sum of true positives and false negatives:")
-        st.markdown("recall = TP/(TP + FN)")
+        st.markdown("**Precision** : The ability of a classifier to not label an instance positive when it is actually negative. So it considers how                  accurate a classifier is in predicting positive cases.For each class it is defined as the ratio of true positives to the sum of true and false positives.")
+        st.markdown("Precision = TP/(TP + FP)")
+        st.markdown("**Recall** : The ability of a classifier to find all positive instances. It considers the fraction of positives that were                     correctly identified. For each class it is defined as the ratio of true positives to the sum of true positives and false negatives.")
+        st.markdown("Recall = TP/(TP + FN)")
         st.markdown("**F1 Score** : A weighted harmonic mean of precision and recall such that the best score is 1.0 and the worst is 0.0. As a rule                 of thumb, the weighted average of F1 should be used to compare classifier models")
         st.markdown("F1 Score = 2 x (Recall x Precision) / (Recall + Precision)")
-        st.markdown(" ")
-        report = pd.DataFrame({'report name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural_network']})
+        st.markdown(" To get a classification report of your model of interest, select the model:")
+        report = pd.DataFrame({'report name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural network']})
         model_sel=st.selectbox('Select a model', report['report name'])
         if model_sel == 'Logistic Regression':
             st.markdown("**Classification Report from Logistic Regression Model**")
@@ -358,7 +358,7 @@ def main():
         if model_sel =='Random Forest':
             st.markdown("**Classification Report from Random Forest Model**")
             st.image(Image.open("images/rf.png"))
-        if model_sel =='Neural_network':
+        if model_sel =='Neural network':
             st.markdown("**Classification Report from Neural Networks Model**")
             st.image(Image.open("images/nn.png"))
         if model_sel =='K Nearest Neighbors':
@@ -407,7 +407,7 @@ def main():
     if selection== "Classify tweets":
         st.title("Classify tweets")
         st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/tweets.PNG?raw=true.PNG)")
-        models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural_network']})
+        models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural network']})
         model_sel=st.selectbox('Select a model', models['model name'])
 
         #building the Logistic Regression
@@ -479,7 +479,7 @@ def main():
                 st.success("Accuracy of this model is: 73%")
 
         #building the KNN
-        if model_sel == "Neural_network":
+        if model_sel == "Neural network":
             st.info("Prediction with Neural_network Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
