@@ -404,14 +404,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Logistic_regression.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-                # if prediction==-1:
-                #     st.success("Anti")
-                # elif prediction==0:
-                #     st.success("Neutral")
-                # elif prediction == 1:
-                #     st.success("Pro")
-                # else:
-                #     st.success("News")
+
 
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
@@ -424,14 +417,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Naive_bayes.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-                # if prediction==-1:
-                #     st.success("Anti")
-                # elif prediction==0:
-                #     st.success("Neutral")
-                # elif prediction == 1:
-                #     st.success("Pro")
-                # else:
-                #     st.success("News")
+
 
         #building the Linear SVM
         if model_sel == "Linear SVM":
@@ -444,14 +430,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/SVM.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-                # if prediction==-1:
-                #     st.success("Anti")
-                # elif prediction==0:
-                #     st.success("Neutral")
-                # elif prediction == 1:
-                #     st.success("Pro")
-                # else:
-                #     st.success("News")
+
 
         #building the Random Forest
         if model_sel == "Random Forest":
@@ -464,14 +443,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-                # if prediction==-1:
-                #     st.success("Anti")
-                # elif prediction==0:
-                #     st.success("Neutral")
-                # elif prediction == 1:
-                #     st.success("Pro")
-                # else:
-                #     st.success("News")
+
 
         #building the KNN
         if model_sel == "K Nearest Neighbors":
@@ -484,14 +456,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/lr.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-                # if prediction==-1:
-                #     st.success("Anti")
-                # elif prediction==0:
-                #     st.success("Neutral")
-                # elif prediction == 1:
-                #     st.success("Pro")
-                # else:
-                #     st.success("News")
+
 
     #building the Draw
     if selection == "Data Visualisation":
@@ -532,12 +497,6 @@ def main():
         plt.tight_layout()
         st.pyplot()
 
-
-# Required to let Streamlit instantiate our web app.
-
-        #file = joblib.load(open(os.path.join("Common_words_pro"),"rb"))
-        
-        
 # Required to let Streamlit instantiate our web app.  
 
 if __name__ == '__main__':
