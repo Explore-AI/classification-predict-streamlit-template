@@ -423,6 +423,7 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 76%")
+                st.success("F1 score of this model is:0.80")           
 
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
@@ -437,6 +438,7 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
+                st.success("F1 score of this model is:0.75")
 
         #building the Linear SVM
         if model_sel == "Linear SVM":
@@ -450,8 +452,8 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/SVM.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-
                 st.success("Accuracy of this model is: 78%")
+                st.success("F1 score of this model is:0.82")
 
         #building the Random Forest
         if model_sel == "Random Forest":
@@ -465,8 +467,8 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-
                 st.success("Accuracy of this model is: 69%")
+                st.success("F1 score of this model is:0.79")
 
         #building the KNN
         if model_sel == "K Nearest Neighbors":
@@ -481,14 +483,11 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
+                st.success("F1 score of this model is:0.75")
 
-        #building the KNN
-<<<<<<< HEAD
+        #building the Neural network
         if model_sel == "Neural network":
-=======
-        if model_sel == "Neural_network":
             st.markdown(open('resources/nn.md').read())
->>>>>>> ef3b1360c5f547e6ba0299fb13dd877458ff018b
             st.info("Prediction with Neural_network Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
@@ -499,6 +498,7 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
+                st.success("F1 score of this model is:0.79")
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
