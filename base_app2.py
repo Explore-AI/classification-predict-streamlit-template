@@ -344,17 +344,27 @@ def main():
         st.markdown("**F1 Score** : A weighted harmonic mean of precision and recall such that the best score is 1.0 and the worst is 0.0. As a rule                 of thumb, the weighted average of F1 should be used to compare classifier models")
         st.markdown("F1 Score = 2 x (Recall x Precision) / (Recall + Precision)")
         st.markdown(" ")
-        st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/lr.png"))
-        #st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/na.png"))
-        #st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/svm.png"))
-        st.markdown("**Classification Report from Random Forest Model**")
-        st.image(Image.open("images/rf.png"))
-        st.markdown("**Classification Report from Neural Networks Model**")
-        st.image(Image.open("images/nn.png"))
-        st.markdown("The `F1 score` is our main metric that we use to decide on the best model to use.")
+        report = pd.DataFrame({'report name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural_network']})
+        model_sel=st.selectbox('Select a model', report['report name'])
+        if model_sel == 'Logistic Regression':
+            st.markdown("**Classification Report from Logistic Regression Model**")
+            st.image(Image.open("images/lr.png"))
+        if model_sel =='Naive Bayes':
+            st.markdown("**Classification Report from Naive Bayes Model**")
+            st.image(Image.open("images/na.png"))
+        if model_sel =='Linear SVM':
+            st.markdown("**Classification Report from Linear SVM Model**")
+            st.image(Image.open("images/svm.png"))
+        if model_sel =='Random Forest':
+            st.markdown("**Classification Report from Random Forest Model**")
+            st.image(Image.open("images/rf.png"))
+        if model_sel =='Neural_network':
+            st.markdown("**Classification Report from Neural Networks Model**")
+            st.image(Image.open("images/nn.png"))
+        if model_sel =='K Nearest Neighbors':
+            st.markdown("**Classification Report from K Nearest Neighbors Model**")
+            st.image(Image.open("images/knn.png"))
+        st.markdown("The `F1 score` is recommended metric to use to decide on the best model to use.")
 
   #building the Information page
     if selection == "About the app":
