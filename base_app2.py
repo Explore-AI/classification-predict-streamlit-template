@@ -426,7 +426,6 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
-                
 
         #building the Linear SVM
         if model_sel == "Linear SVM":
@@ -439,6 +438,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/SVM.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+
                 st.success("Accuracy of this model is: 78%")
 
         #building the Random Forest
@@ -452,6 +452,7 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+
                 st.success("Accuracy of this model is: 69%")
 
         #building the KNN
@@ -466,6 +467,7 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
+
         #building the KNN
         if model_sel == "Neural_network":
             st.info("Prediction with Neural_network Model")
@@ -478,7 +480,6 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")                
-
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
@@ -527,11 +528,28 @@ def main():
             plt.tight_layout()
             st.pyplot()
 
+        df_analyse = raw.copy()
+        sid = SentimentIntensityAnalyzer()
+        df_analyse['compound']  =  df_analyse['message'].apply(lambda x: sid.polarity_scores(x)['compound'])
+        fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(15, 4))
+        plt.figtext(.51,.95, 'Distribution of the tweets sentiment\n', fontsize=20, ha='center',fontweight='bold')
+        ax1.hist(df_analyse['compound'], bins=15, edgecolor='k',color='lightblue')
+        plt.figtext(0.23, 0.06, 'sentiment score', horizontalalignment='left',fontsize = 12)
+        fig.text(0.00001, 0.5, 'number of tweets in sentiment', va='center', rotation='vertical',fontsize=12)
+        plt.figtext(0.02, 0.0001, 'figure 1: positive, negative and neutral sentiment', horizontalalignment='left',fontsize = 14,style='italic')
+
+        bins = np.linspace(-1, 1, 30)
+        ax2.hist([df_analyse['compound'][df_analyse['compound'] > 0], df_analyse['compound'][df_analyse['compound'] < 0]], bins, label=['Positive sentiment', 'Negative sentiment'])
+        plt.xlabel('sentiment score',fontsize=12)
+        ax2.legend(loc='upper right')
+        plt.figtext(0.75, 0.0001, 'figure 2: positive and negative sentiment', horizontalalignment='right',fontsize = 14,style='italic')
+        plt.tight_layout()
+        st.pyplot()
+
 # Required to let Streamlit instantiate our web app.
 
         #file = joblib.load(open(os.path.join("Common_words_pro"),"rb"))
-        
-        
+
 # Required to let Streamlit instantiate our web app.  
 
 if __name__ == '__main__':
