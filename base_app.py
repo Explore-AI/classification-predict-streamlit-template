@@ -23,61 +23,150 @@
 """
 # Streamlit dependencies
 import streamlit as st
-import joblib,os
+import joblib
+import os
 
 # Data dependencies
 import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import wordcloud
+
+import nltk
+
+from PIL import Image
+
+from model import select_model
+from preprocessing import clean_text
+from visualisation import visualize_data, common_words
+from hashtags import extract_hash
 
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl","rb")
-tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
-
+news_vectorizer = open("resources/tfidfvect.pkl", "rb")
+# loading your vectorizer from the pkl file
+tweet_cv = joblib.load(news_vectorizer)
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
 
+def display_image(name, caption):
+    image = Image.open(f"resources/imgs/undraw/{name}.png")
+    st.image(image, caption=caption, use_column_width=True)
+
+def information_view(df, other):
+
+    st.info("How to use this platform")
+    # You can read a markdown file from supporting resources folder
+    st.markdown("""
+        ### **So you want to find out what your customers think about Climate Change?**
+        ### Instructions
+        1. Go to the sidebar and upload your dataset or continue with existing one
+        2. Go to Insights to see data visualisations about what users think about climate change.
+        3. Finally, go to the Predictions page to use machine learning models find out sentiments of tweets.
+    """)
+
+    display_image('undraw_data_reports_706v','')
+
+    st.markdown("""
+        ## Pre-existing dataset
+    """)
+
+    st.subheader("Raw Twitter data and label")
+    if st.checkbox('Show raw data'):  # data is hidden if box is unchecked
+        # will write the df to the page
+        st.table(df[['sentiment', 'message']].head())
+
+    st.subheader("Clean Twitter data and label")
+    if st.checkbox('Show clean data'):
+        st.table(other[['sentiment', 'message']].head())
+
+def model_prediction_view():
+
+    display_image('undraw_viral_tweet_gndb','')
+    st.info("Classification with Machine Learning Models")
+    st.markdown("""
+        ### Use some of the built-in models to find out the sentiment of your tweet.
+        #### **Instructions:**
+        1. Simply pick a model you would like used to classify your tweet from the dropdown menu
+        2. Type in your tweet on the text area
+        3. Click the 'Classify' button and see your results below.
+    """)
+
+    # Creating sidebar with selection box -
+    # you can create multiple pages this way
+    models = ("Logistic_regression", "Linear SVC", "SVM")
+    st.subheader('Pick a model to classify your text:')
+    chosen = st.selectbox('', models)
+
+    if chosen in models:
+        select_model(chosen)
+
 # The main function where we will build the actual app
 def main():
-	"""Tweet Classifier App with Streamlit """
+    """Tweet Classifier App with Streamlit """
 
-	# Creates a main title and subheader on your page -
-	# these are static across all pages
-	st.title("Tweet Classifer")
-	st.subheader("Climate change tweet classification")
+    # Creates a main title and subheader on your page -
+    # these are static across all pages
+    display_image('undraw_welcome_cats_thqn','')
+    st.title("Sentiment Analysis on Climate Change")
 
-	# Creating sidebar with selection box -
-	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
-	selection = st.sidebar.selectbox("Choose Option", options)
+    st.subheader("Should your business be Eco-friendly?")
+    st.markdown("""
+        This platform helps you make data-driven decisions. Find out how your customers feel about climate change.
+    """)
 
-	# Building out the "Information" page
-	if selection == "Information":
-		st.info("General Information")
-		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+    df = clean_text(raw)
 
-		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+    data = None
+    uploaded_file = st.sidebar.file_uploader("Choose a CSV file", type="csv")
 
-	# Building out the predication page
-	if selection == "Prediction":
-		st.info("Prediction with ML Models")
-		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
 
-		if st.button("Classify"):
-			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-			prediction = predictor.predict(vect_text)
+    # Creating sidebar with selection box -
+    # you can create multiple pages this way
+    options = ["Information", "Insights", "Predictions"]
+    selection = st.sidebar.selectbox("Menu", options)
 
-			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
+    # Building out the "Insights" page
+    if selection == "Insights":
+        title = 'Below are some data visualisations and Insights extracted from the tweets'
+        display_image('undraw_google_analytics_a57d',title)
+        st.write("## **Wordcloud Visualisations**")
+        visualize_data(df)
 
-# Required to let Streamlit instantiate our web app.  
+        options = st.multiselect('Select tweet category to visualize with BarPlot:', ['Pro', 'Anti', 'Neutral', 'News'], ['Pro'])
+        for sentiment in options:
+            common_words(df, sentiment, f'{sentiment} Tweets')
+
+        st.write("""
+            Investigating individual words still shows that there is an overlap of most used words between the classes.
+            However, it does become very apparent that there are themes that help formulate or form tweeters opinions on twitter.
+            Seeing words such as Trump, Obama would lead one to believe that there is a political connection to what people tweet about climate change.
+            We can also see the word 'husband' appearing as most common under the pro tweets, this shows that the climate change topic is being discussed amongst families as well, or that people do think about climate change in relation to people close to them.
+            We can then also assume that there is perhaps a social aspect to how people form their opinion on climate change.
+            We will investigate this observation further by investigating the most common hashtags.
+            Hashtags will provide more context, as people will most usually tweet under a certain hashtag as a means of making it easier to find information with a theme or specific context.
+            """)
+
+        extract_hash(df)
+        #plot_pie(df_pol, 'Political View')
+        #plot_pie(df_pol, 'Political View')
+
+    # Building out the "Information" page
+    if selection == "Information":
+        display_image('undraw_my_code_snippets_lynx','Find out what users say about your business')
+
+        information_view(pd.read_csv("resources/train.csv"), df)
+
+        if uploaded_file is not None:
+            st.markdown("""
+                ## Your new dataset.
+            """)
+            data = pd.read_csv(uploaded_file)
+            st.table(data.message.head())
+
+    # Building out the predication page
+    if selection == "Predictions":
+        model_prediction_view()
+
+# Required to let Streamlit instantiate our web app.
 if __name__ == '__main__':
-	main()
+    main()
