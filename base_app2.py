@@ -441,9 +441,9 @@ def main():
                 st.success("F1 score of this model is:0.75")
 
         #building the Linear SVM
-        if model_sel == "Linear SVM":
+        if model_sel == "Support Vector Machine (SVM)":
             st.markdown(open('resources/svm.md').read())
-            st.info("Prediction with Linear SVM Model")
+            st.info("Prediction with Support Vector Machine (SVM) Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Preparing text for the model
