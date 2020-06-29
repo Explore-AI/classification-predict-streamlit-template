@@ -329,14 +329,14 @@ raw = pd.read_csv("resources/train.csv")
 def main():
 
     #title and subheader
-    st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/logos.PNG?raw=true.PNG)")
+    st.image(Image.open("images/logos.PNG"))
     #creating side menu
-    options = ["About the app","Data insights","Data Visualisation","Classify tweets","Model Perfomance"]
+    options = ["About the app","Data insights","Data Visualisation","Model Perfomance","Classify tweets"]
     selection = st.sidebar.selectbox("Menu Options", options)
     #model Perfomance page
     if selection == "Model Perfomance":
         st.title("Classification report")
-        st.markdown("A classification report measure the quality of the predictions made by a classification algorithm.it indicates how many predictions are True and how many are False. The report also uses the True Positives(TP), False Positives(FP), True Negatives(TN) and False Negatives(FN) to show the main classification metrics,i.e precision, recall and f1-score on a per-class basis. These are the same concepts used in the confusion matrix above.")
+        st.markdown("A classification report measure the quality of the predictions made by a classification algorithm.it indicates how many predictions are True and how many are False. The report also uses the True Positives(TP), False Positives(FP), True Negatives(TN) and False Negatives(FN) to show the main classification metrics, i.e precision, recall and f1-score on a per-class basis. These are the same concepts used in the confusion matrix above.")
         st.markdown("**Precision** : The ability of a classifier to not label an instance positive when it is actually negative. So it considers how                  accurate a classifier is in predicting positive cases.For each class it is defined as the ratio of true positives to the sum of true and false positives:")
         st.markdown("precision = TP/(TP + FP)")
         st.markdown("**Recall** : The ability of a classifier to find all positive instances. It considers the fraction of positives that were                     correctly identified. For each class it is defined as the ratio of true positives to the sum of true positives and false negatives:")
@@ -345,36 +345,40 @@ def main():
         st.markdown("F1 Score = 2 x (Recall x Precision) / (Recall + Precision)")
         st.markdown(" ")
         st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/lr.PNG"))
-        st.image(Image.open("images/na.PNG"))
-        st.image(Image.open("images/svm.PNG"))
-        st.image(Image.open("images/rf.PNG"))
-        st.image(Image.open("images/knn.PNG"))
+        st.image(Image.open("images/lr.png"))
+        st.image(Image.open("images/na.png"))
+        st.image(Image.open("images/svm.png"))
+        st.image(Image.open("images/rf.png"))
+        st.image(Image.open("images/knn.png"))
         st.markdown("The `F1 score` is our main metric that we use to decide on the best model to use.")
 
   #building the Information page
     if selection == "About the app":
         st.title("About the app")
-        st.markdown("![Image of Yaktocat](https://abcsplash-bc-a.akamaized.net/4477599164001/201604/4477599164001_4864948520001_4863149671001-vs.jpg?pubId=4477599164001.jpg)")
+        st.image(Image.open("images/earth.jpg"))
         st.markdown("While climate is a measure of the average weather over a period of time, climate change means a change in the measures of climate, such as temperature, rainfall, or wind, lasting for an extended period – decades or longer. Man made climate change is the phenomena that humans cause or contribute towards the change in climate.")
+        st.video("images/global.mp4")
         st.markdown("This app is useful for classifying whether or not a person believes in climate change, based on their tweet(s). The app is created to help companies determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. To determine how tweets percieve climate change, the app gives users a choice to use a model of their choice.")
 
         # You can read a markdown file from supporting resources folder
 
 
 
-        st.video("images/global.mp4")
+        
        
 
     if selection == "Data insights":
         st.title("Data insights")
+        st.subheader("Descriptions")
         st.markdown("Table of variable description")
         st.markdown("![Image](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/image1.PNG?raw=true.PNG)")
         st.markdown("Table of class description")
         st.markdown("![Image](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/image2.PNG?raw=true.PNG)")
-        if st.checkbox('Show raw data'): # data is hidden if box is unchecked
+        st.subheader("Raw data")
+        if st.checkbox('Show'): # data is hidden if box is unchecked
             st.write(raw[['sentiment', 'message']]) # will write the df to the page
-        x = st.slider('number of tweets')
+        st.subheader("Raw data for each class")
+        x = st.slider('Choose the number of tweets to show')
         if st.checkbox('show Pro tweets'):
             st.write(raw[['sentiment','message']][raw['sentiment']==1].head(x))
         if st.checkbox('show Anti tweets'):
@@ -404,7 +408,11 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Logistic_regression.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+<<<<<<< HEAD
 
+=======
+                st.success("Accuracy of this model is: 76%")
+>>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
@@ -417,7 +425,12 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Naive_bayes.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+<<<<<<< HEAD
 
+=======
+                st.success("Accuracy of this model is: 73%")
+                
+>>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 
         #building the Linear SVM
         if model_sel == "Linear SVM":
@@ -430,7 +443,11 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/SVM.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+<<<<<<< HEAD
 
+=======
+                st.success("Accuracy of this model is: 78%")
+>>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 
         #building the Random Forest
         if model_sel == "Random Forest":
@@ -443,7 +460,11 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+<<<<<<< HEAD
 
+=======
+                st.success("Accuracy of this model is: 69%")
+>>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 
         #building the KNN
         if model_sel == "K Nearest Neighbors":
@@ -456,29 +477,61 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/lr.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+<<<<<<< HEAD
 
+=======
+                st.success("Accuracy of this model is: 73%")
+>>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
-        if st.checkbox("show/hide"):
+        visualss= st.radio("Select a visual you would like to see",("A graph of number of tweets per class","A pie chart of proportion of tweets per class","Graphs of distribution of tweets sentiment scores"))
+        if visualss=="A graph of number of tweets per class":
             plt.figure(figsize=(8.5,5))
-            raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='bar',figsize=(8.5,5), color='tan')
-            plt.title('Number of types of comments')
-            plt.xlabel('Comment type')
-            plt.ylabel('Number of comments')
+            raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='bar',figsize=(8.5,5), color="ForestGreen")
+            plt.xlabel('Sentiment class', fontsize = 10)
+            plt.xticks(rotation='horizontal')
+            plt.ylabel('Number of tweets', fontsize = 10)
+            plt.figtext(0.12, 0.00000000001, '', horizontalalignment='left', fontsize = 14,style='italic')
             st.pyplot()
-            plt.figure(figsize=(8.5,5))
-            sns.distplot(raw['sentiment'],color='g',kde_kws={'bw':0.1}, bins=100, hist_kws={'alpha': 0.4})
-            plt.title('Distribution graph for different classes')
-            st.pyplot()
-
-            plt.figure(figsize=(10,10))
+        elif visualss == "A pie chart of proportion of tweets per class":
+            plt.figure(figsize=(11,11))
             names = ['Pro','News','Neutral','Anti']
-            raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='pie', labels=names, autopct='%1.1f%%')
-            plt.title('Number of types of comments')
+            perc = raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts()
+            perc.name = ''
+            perc.plot(kind='pie', labels=names, autopct='%1.1f%%')
+            plt.figtext(0.12, 0.1, '', horizontalalignment='left',fontsize = 14,style='italic')
+            plt.legend(raw['sentiment'].replace({-1: 'Anti: Does not believe in manmade climate change',
+                                                      0:'Neutral: Neither believes nor refutes manmade climate change',
+                                                      1:'Pro:Believe in manmade climate change',2:'News: Factual News about climate change'}), bbox_to_anchor=(2,0.7), loc="right")
+            st.pyplot()
+        elif visualss== "Graphs of distribution of tweets sentiment scores":
+            sid = SentimentIntensityAnalyzer()
+            df_analyse = raw.copy()
+            df_news = df_analyse[df_analyse['sentiment']==2] #extract all news and separate them from positive,neut and neg
+            df_analyse = df_analyse[df_analyse['sentiment'] != 2]
+            df_analyse['compound']  =  df_analyse['message'].apply(lambda x: sid.polarity_scores(x)['compound'])
+            df_analyse['comp_score'] = df_analyse['compound'].apply(lambda c: 'pos' if c >0 else 'neg' if c<0 else 'neu')
+            
+            fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(15, 4))
+            plt.figtext(.51,.95, 'Distribution of the tweets sentiment scores\n', fontsize=20, ha='center',fontweight='bold')
+
+            ax1.hist(df_analyse['compound'], bins=15, edgecolor='k',color='lightblue')
+            plt.figtext(0.23, 0.06, 'sentiment score', horizontalalignment='left',fontsize = 12)
+            fig.text(0.00001, 0.5, 'number of tweets in sentiment', va='center', rotation='vertical',fontsize=12)
+            plt.figtext(0.02, 0.0001, 'figure 1: positive, negative and neutral sentiment', horizontalalignment='left',fontsize = 14,style='italic')
+
+            bins = np.linspace(-1, 1, 30)
+            ax2.hist([df_analyse['compound'][df_analyse['compound'] > 0], df_analyse['compound'][df_analyse['compound'] < 0]], bins, label=['Positive sentiment', 'Negative sentiment'])
+            plt.xlabel('sentiment score',fontsize=12)
+            ax2.legend(loc='upper right')
+            plt.figtext(0.75, 0.0001, 'figure 2: positive and negative sentiment', horizontalalignment='right',fontsize = 14,style='italic')
+
+            plt.tight_layout()
             st.pyplot()
 
+<<<<<<< HEAD
         df_analyse = raw.copy()
         sid = SentimentIntensityAnalyzer()
         df_analyse['compound']  =  df_analyse['message'].apply(lambda x: sid.polarity_scores(x)['compound'])
@@ -497,6 +550,13 @@ def main():
         plt.tight_layout()
         st.pyplot()
 
+=======
+# Required to let Streamlit instantiate our web app.
+
+        #file = joblib.load(open(os.path.join("Common_words_pro"),"rb"))
+        
+        
+>>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
 # Required to let Streamlit instantiate our web app.  
 
 if __name__ == '__main__':
