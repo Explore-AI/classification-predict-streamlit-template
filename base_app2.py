@@ -502,8 +502,7 @@ def main():
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
-        st.markdown("The graphs shown below illustrate how the Data that was used to train the models looks like in terms of the distribution of the predictor variable and predicted variable. To view a particular graph u can use the buttons below.")
-        visualss= st.radio("Select a visual you would like to see",("A graph of number of tweets per class","A pie chart of proportion of tweets per class","Graphs of distribution of tweets sentiment scores"))
+        visualss= st.radio("Select a visual you would like to see",("A graph of number of tweets per class","A pie chart of proportion of tweets per class",'Kernel distribution of number of words per class'))
         if visualss=="A graph of number of tweets per class":
             plt.figure(figsize=(8.5,5))
             raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='bar',figsize=(8.5,5), color="ForestGreen")
@@ -523,48 +522,19 @@ def main():
                                                       0:'Neutral: Neither believes nor refutes manmade climate change',
                                                       1:'Pro:Believe in manmade climate change',2:'News: Factual News about climate change'}), bbox_to_anchor=(2,0.7), loc="right")
             st.pyplot()
-        elif visualss== "Graphs of distribution of tweets sentiment scores":
-            sid = SentimentIntensityAnalyzer()
-            df_analyse = raw.copy()
-            df_news = df_analyse[df_analyse['sentiment']==2] #extract all news and separate them from positive,neut and neg
-            df_analyse = df_analyse[df_analyse['sentiment'] != 2]
-            df_analyse['compound']  =  df_analyse['message'].apply(lambda x: sid.polarity_scores(x)['compound'])
-            df_analyse['comp_score'] = df_analyse['compound'].apply(lambda c: 'pos' if c >0 else 'neg' if c<0 else 'neu')
-
-            fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(15, 4))
-            plt.figtext(.51,.95, 'Distribution of the tweets sentiment scores\n', fontsize=20, ha='center',fontweight='bold')
-
-            ax1.hist(df_analyse['compound'], bins=15, edgecolor='k',color='lightblue')
-            plt.figtext(0.23, 0.06, 'sentiment score', horizontalalignment='left',fontsize = 12)
-            fig.text(0.00001, 0.5, 'number of tweets in sentiment', va='center', rotation='vertical',fontsize=12)
-            plt.figtext(0.02, 0.0001, 'figure 1: positive, negative and neutral sentiment', horizontalalignment='left',fontsize = 14,style='italic')
-
-            bins = np.linspace(-1, 1, 30)
-            ax2.hist([df_analyse['compound'][df_analyse['compound'] > 0], df_analyse['compound'][df_analyse['compound'] < 0]], bins, label=['Positive sentiment', 'Negative sentiment'])
-            plt.xlabel('sentiment score',fontsize=12)
-            ax2.legend(loc='upper right')
-            plt.figtext(0.75, 0.0001, 'figure 2: positive and negative sentiment', horizontalalignment='right',fontsize = 14,style='italic')
-
-            plt.tight_layout()
+        elif visualss== 'Kernel distribution of number of words per class':
+            raw['count'] = raw['message'].apply(lambda x: len(x.split()))
+            plot7 = plt.figure(figsize=(12,6))
+            sns.kdeplot(raw['count'][raw['sentiment']==1], shade=True, color='g',legend=False)
+            sns.kdeplot(raw['count'][raw['sentiment']==0], shade=True, color='b',legend=False)
+            sns.kdeplot(raw['count'][raw['sentiment']==-1], shade=True, color='r',legend=False)
+            sns.kdeplot(raw['count'][raw['sentiment']==2], shade=True, color='orange',legend=False)
+            plt.xlabel('number of words per class', fontsize = 10)
+            plt.xlabel('Probability density function', fontsize = 10)
+            plt.legend(title='Sentiment class', loc='upper right', labels=['Pro', 'Neutral', 'Anti', 'News'])
+            plt.figtext(0.12, 0, 'figure 3: Probability distribution function for the number of words in each class',
+                    horizontalalignment='left',fontsize = 14,style='italic')
             st.pyplot()
-
-        df_analyse = raw.copy()
-        sid = SentimentIntensityAnalyzer()
-        df_analyse['compound']  =  df_analyse['message'].apply(lambda x: sid.polarity_scores(x)['compound'])
-        fig, (ax1, ax2) = plt.subplots(1, 2,figsize=(15, 4))
-        plt.figtext(.51,.95, 'Distribution of the tweets sentiment\n', fontsize=20, ha='center',fontweight='bold')
-        ax1.hist(df_analyse['compound'], bins=15, edgecolor='k',color='lightblue')
-        plt.figtext(0.23, 0.06, 'sentiment score', horizontalalignment='left',fontsize = 12)
-        fig.text(0.00001, 0.5, 'number of tweets in sentiment', va='center', rotation='vertical',fontsize=12)
-        plt.figtext(0.02, 0.0001, 'figure 1: positive, negative and neutral sentiment', horizontalalignment='left',fontsize = 14,style='italic')
-
-        bins = np.linspace(-1, 1, 30)
-        ax2.hist([df_analyse['compound'][df_analyse['compound'] > 0], df_analyse['compound'][df_analyse['compound'] < 0]], bins, label=['Positive sentiment', 'Negative sentiment'])
-        plt.xlabel('sentiment score',fontsize=12)
-        ax2.legend(loc='upper right')
-        plt.figtext(0.75, 0.0001, 'figure 2: positive and negative sentiment', horizontalalignment='right',fontsize = 14,style='italic')
-        plt.tight_layout()
-        st.pyplot()
 
 # Required to let Streamlit instantiate our web app.
 
