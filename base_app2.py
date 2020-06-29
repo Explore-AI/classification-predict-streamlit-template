@@ -181,7 +181,7 @@ def cleanup(raw):
 ' OMG ': ' Oh My God ',
 ' Pls ': ' Please ',
 ' Plz ': ' Please ',
-' Q ': ' Question ', 
+' Q ': ' Question ',
 ' QQ ': ' Quick Question ',
 ' RLY ': ' Really ',
 ' SRLSY ': ' Seriously ',
@@ -331,30 +331,40 @@ def main():
     #title and subheader
     st.image(Image.open("images/logos.PNG"))
     #creating side menu
-    options = ["About the app","Data insights","Data Visualisation","Model Perfomance","Classify tweets"]
+    options = ["About the app","Data insights","Data visualisation","Model perfomance","Classify tweets"]
     selection = st.sidebar.selectbox("Menu Options", options)
     #model Perfomance page
-    if selection == "Model Perfomance":
+    if selection == "Model perfomance":
         st.title("Classification report")
         st.markdown("A classification report measure the quality of the predictions made by a classification algorithm.it indicates how many predictions are True and how many are False. The report also uses the True Positives(TP), False Positives(FP), True Negatives(TN) and False Negatives(FN) to show the main classification metrics, i.e precision, recall and f1-score on a per-class basis. These are the same concepts used in the confusion matrix above.")
-        st.markdown("**Precision** : The ability of a classifier to not label an instance positive when it is actually negative. So it considers how                  accurate a classifier is in predicting positive cases.For each class it is defined as the ratio of true positives to the sum of true and false positives:")
-        st.markdown("precision = TP/(TP + FP)")
-        st.markdown("**Recall** : The ability of a classifier to find all positive instances. It considers the fraction of positives that were                     correctly identified. For each class it is defined as the ratio of true positives to the sum of true positives and false negatives:")
-        st.markdown("recall = TP/(TP + FN)")
+        st.markdown("**Precision** : The ability of a classifier to not label an instance positive when it is actually negative. So it considers how                  accurate a classifier is in predicting positive cases.For each class it is defined as the ratio of true positives to the sum of true and false positives.")
+        st.markdown("Precision = TP/(TP + FP)")
+        st.markdown("**Recall** : The ability of a classifier to find all positive instances. It considers the fraction of positives that were                     correctly identified. For each class it is defined as the ratio of true positives to the sum of true positives and false negatives.")
+        st.markdown("Recall = TP/(TP + FN)")
         st.markdown("**F1 Score** : A weighted harmonic mean of precision and recall such that the best score is 1.0 and the worst is 0.0. As a rule                 of thumb, the weighted average of F1 should be used to compare classifier models")
         st.markdown("F1 Score = 2 x (Recall x Precision) / (Recall + Precision)")
-        st.markdown(" ")
-        st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/lr.png"))
-        #st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/na.png"))
-        #st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/svm.png"))
-        st.markdown("**Classification Report from Random Forest Model**")
-        st.image(Image.open("images/rf.png"))
-        st.markdown("**Classification Report from Neural Networks Model**")
-        st.image(Image.open("images/nn.png"))
-        st.markdown("The `F1 score` is our main metric that we use to decide on the best model to use.")
+        st.markdown(" To get a classification report of your model of interest, select the model:")
+        report = pd.DataFrame({'report name': ['Logistic Regression', 'Naive Bayes','Support Vector Machine','Random Forest', 'K Nearest Neighbors','Neural network']})
+        model_sel=st.selectbox('Select a model', report['report name'])
+        if model_sel == 'Logistic Regression':
+            st.markdown("**Classification Report from Logistic Regression Model**")
+            st.image(Image.open("images/lr.png"))
+        if model_sel =='Naive Bayes':
+            st.markdown("**Classification Report from Naive Bayes Model**")
+            st.image(Image.open("images/na.png"))
+        if model_sel =='Support Vector Machine':
+            st.markdown("**Classification Report from Support Vector Machine Model**")
+            st.image(Image.open("images/svm.png"))
+        if model_sel =='Random Forest':
+            st.markdown("**Classification Report from Random Forest Model**")
+            st.image(Image.open("images/rf.png"))
+        if model_sel =='Neural network':
+            st.markdown("**Classification Report from Neural Networks Model**")
+            st.image(Image.open("images/nn.png"))
+        if model_sel =='K Nearest Neighbors':
+            st.markdown("**Classification Report from K Nearest Neighbors Model**")
+            st.image(Image.open("images/knn.png"))
+        st.markdown("The `F1 score` is recommended metric to use to decide on the best model to use.")
 
   #building the Information page
     if selection == "About the app":
@@ -368,8 +378,8 @@ def main():
 
 
 
-        
-       
+
+
 
     if selection == "Data insights":
         st.title("Data insights")
@@ -391,19 +401,20 @@ def main():
             st.write(raw[['sentiment','message']][raw['sentiment']==0].head(x))
         if st.checkbox('show News tweets'):
             st.write(raw[['sentiment','message']][raw['sentiment']==2].head(x))
-        
+            
+
 
 
     if selection== "Classify tweets":
         st.title("Classify tweets")
-        st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/tweets.PNG?raw=true.PNG)")
-        models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural_network']})
+        st.image(Image.open("tweets/kernel.PNG"))
+        models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Support Vector Machine','Random Forest', 'K Nearest Neighbors','Neural network']})
         model_sel=st.selectbox('Select a model', models['model name'])
 
         #building the Logistic Regression
         if model_sel == "Logistic Regression":
+            st.markdown(open('resources/lr.md').read())
             st.info("Prediction with Logistic Regression Model")
-            #st.markdown("
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Preparing text for the model
@@ -411,11 +422,13 @@ def main():
                 # Load .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/Logistic_regression.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+                st.success("Tweet is categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 76%")
+                st.success("F1 score of this model is: 0.80")           
 
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
+            st.markdown(open('resources/nb.md').read())
             st.info("Prediction with Naive Bayes Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
@@ -424,12 +437,14 @@ def main():
                 # Load .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/Naive_bayes.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+                st.success("Tweet is categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
+                st.success("F1 score of this model is: 0.75")
 
         #building the Linear SVM
-        if model_sel == "Linear SVM":
-            st.info("Prediction with Linear SVM Model")
+        if model_sel == "Support Vector Machine":
+            st.markdown(open('resources/svm.md').read())
+            st.info("Prediction with Support Vector Machine (SVM) Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
                 # Preparing text for the model
@@ -437,12 +452,17 @@ def main():
                 # Load .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/SVM.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-
+                st.success("Tweet is categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 78%")
+                st.success("F1 score of this model is: 0.82")
 
         #building the Random Forest
         if model_sel == "Random Forest":
+            st.markdown("## Random Forest")
+            st.markdown("### The basic concept")
+            st.markdown("This model fits a number of decision tree classifiers on various sub-samples of the dataset and uses averaging to improve the predictive accuracy and control over-fitting.")
+            st.markdown("- **Pro:** The predictive performance can compete with the best supervised learning algorithms.")
+            st.markdown("- **Con:**  This model requires more computational resources and is less intuitive.")
             st.info("Prediction with Random Forest Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
@@ -450,12 +470,19 @@ def main():
                 vect_text = [cleanup(tweet_text)]
                 # Load .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
-                prediction = predictor.predict(vect_text)
+                prediction = predictor.predict(vect_text
+                st.success("Tweet is categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 69%")
+                st.success("F1 score of this model is: 0.79")
 
         #building the KNN
         if model_sel == "K Nearest Neighbors":
+            st.markdown("## Nearest Neighbors")
+            st.markdown("### The basic concept")
+            st.markdown(" The K Nearest Neighbors model is a simple algorithm that stores all available cases and classifies new cases based on a similarity measure (e.g., distance functions).")
+            st.markdown("- **Pro:** The model is robust with regard to the search space; for instance, classes don't have to be linearly separable.")
+            st.markdown("- **Con:**  This model does not learn anything from the training of data and simply uses the training data itself for classification.")
             st.info("Prediction with K Nearest Neighbors Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
@@ -464,11 +491,17 @@ def main():
                 # Loading .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/KNN.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
+                st.success("Tweet is categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
+                st.success("F1 score of this model is: 0.75")
 
-        #building the KNN
-        if model_sel == "Neural_network":
+        #building the Neural network
+        if model_sel == "Neural network":
+            st.markdown("## Neural network")
+            st.markdown("### The basic concept")
+            st.markdown(" A neural network consists of units (neurons), arranged in layers, which convert an input vector into some output. Each unit takes an input, applies a (often nonlinear) function to it and then passes the output on to the next layer.")
+            st.markdown("- **Pro:** The model requires less formal statistical training")
+            st.markdown("- **Con:**  Neural networks usually require much more data than traditional machine learning algorithms.")
             st.info("Prediction with Neural_network Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
@@ -477,11 +510,33 @@ def main():
                 # Loading .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/Neural_network.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
-                st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-                st.success("Accuracy of this model is: 73%")                
+                st.success("Tweet is categorized as: {}".format(class_dict[prediction[0]]))
+                st.success("Accuracy of this model is: 73%")
+                st.success("F1 score of this model is: 0.79")
     #building the Draw
-    if selection == "Data Visualisation":
+    if selection == "Data visualisation":
         st.title("Data Visualisation")
+        st.markdown("The graphs shown below illustrate how the data that was used to train the models looks like in terms of the distribution of the predictor variables and the predicted variable. To view a particular graph you can use the buttons below.")
+        visualss= st.radio("Select a visual you would like to see",("Proportion of tweets in each class",'Number of urls per class','Kernel distribution of number of words per class','Overall distribution of sentiment scores','Distribution of the sentiment scores per class',"Most common words in Pro class","Most common words in Neutral class","Most common words in Anti class","Most common words in News class"))
+        if visualss=="Proportion of tweets in each class":
+            st.image(Image.open("images/pie.PNG"))
+        elif visualss =='Kernel distribution of number of words per class':
+            st.image(Image.open("images/kernel.PNG"))
+        elif visualss== 'Number of urls per class':
+            st.image(Image.open("images/urls.PNG"))
+        elif visualss== 'Overall distribution of sentiment scores':   
+            st.image(Image.open("images/distribution.PNG"))
+        elif visualss== 'Distribution of the sentiment scores per class':
+            st.image(Image.open("images/compound.PNG"))  
+        elif visualss=="Most common words in Pro class":
+            st.image(Image.open("images/pro.PNG"))
+        elif visualss=="Most common words in Neutral class":
+            st.image(Image.open("images/neutral.PNG"))
+        elif visualss=="Most common words in Anti class":
+            st.image(Image.open("images/anti.PNG"))
+        elif visualss=="Most common words in News class":
+            st.image(Image.open("images/news.PNG"))
+        
         st.markdown("The visuals dipicted+ below")
         visualss= st.radio("Select a visual you would like to see",("A graph of number of tweets per class","A pie chart of proportion of tweets per class","Graphs of distribution of tweets sentiment scores"))
         if visualss=="A graph of number of tweets per class":
@@ -550,7 +605,7 @@ def main():
 
         #file = joblib.load(open(os.path.join("Common_words_pro"),"rb"))
 
-# Required to let Streamlit instantiate our web app.  
+# Required to let Streamlit instantiate our web app.
 
 if __name__ == '__main__':
 	main()
