@@ -394,7 +394,8 @@ def main():
 		
 		# Classify using SVC
 		if algorithm=='Support Vector Classifier':
-			st.write("This model is good at predicting believers and factuals, but can perform poorly on neutrals.")
+			st.write("This model is good at predicting believers and factuals. For all other groups, it may falsely identify"+
+					 " the tweet as being part of that category when in fact is is part of a different category.")
 			if st.button("Predict using Support Vector Classifier"):
 
 				# Load your .pkl file with the model of your choice + make predictions
@@ -418,7 +419,8 @@ def main():
 
 		# Classify using Random Forest
 		if algorithm=='Random Forest':
-			st.write("This model has high precision but is susceptible to false positives")
+			st.write("For climate change believers and deniers, This model may identify falsely identfy a tweet as part of"+
+					 "a different group. It may incorrectly classify as part of the 'neutral' category.")
 			if st.button("Predict using Random Forest"):
 				# Load your .pkl file with the model of your choice + make predictions
 				predictor = joblib.load(open(os.path.join("resources/rf_model_resampled.pkl"),"rb"))
@@ -441,7 +443,8 @@ def main():
 		# Classify using Logistic Regression
 		if algorithm=='Logistic Regression':
 			if st.button("Predict using Logistic Regression"):
-				st.write("This model is good at predicting believers and factuals.")
+				st.write("This model is better at predicting believers and factuals, but may incorrectly classify as"+
+						 " being part of a different class when it is in fact a believer.")
 				predictor = joblib.load(open(os.path.join("resources/log_model.pkl"),"rb"))
 				tweet_text = [tweet_text]
 				prediction = predictor.predict(tweet_text)
@@ -471,7 +474,6 @@ def main():
 							'Believers', 'Factuals'])
 
 		# Most frequent individual words
-		#show_words(category, amount)
 		st.write("### Most frequently used words")
 		st.write("Most commonly-used words for this category.")
 		if st.checkbox('Show most frequent words'):
@@ -554,6 +556,46 @@ def main():
 				cat_slider = 2
 			number_to_show = st.slider('Amount of entries to show', 1, 50, 10)
 			st.write(show_hashtags(cat_slider, number_to_show))
+		
+		# Analysis
+		if category == "Deniers":
+			st.write("From this data, there seems to be a political divide between climate change supporters and deniers, "+
+					 "where climate change deniers tend to be supporters of Republican politics, whereas climate change"+
+					 " believers may either be anti-Donald Trump or may be aligned towards Democratic politics.")
+			st.write("In this dataset, climate change deniers seem to tend to retweet Donald Trump and Twitter user"+
+			 		 " @SteveSGoddard, who has since changed his username to [@Tony__Heller](https://twitter.com/Tony__Heller)."+
+					 " US President Donald Trump is generally known to not believe in climate change, and has, in the past, suggested"+
+					 " that is a hoax invented by China. This ties in with one of the other common bigrams, which is"+
+					 " 'created chinese.' Tony Heller is a conservative anti climate change activist. This data may suggest that"+
+					 " those who don't believe in climate change may be aligned towards right-wing politics.")
+
+		if category == "Neutrals":
+			st.write("From this data, there seems to be a political divide between climate change supporters and deniers, "+
+					 "where climate change deniers tend to be supporters of Republican politics, whereas climate change"+
+					 " believers may either be anti-Donald Trump or may be aligned towards Democratic politics.")
+
+		if category == "Believers":
+			st.write("From this data, there seems to be a political divide between climate change supporters and deniers, "+
+					 "where climate change deniers tend to be supporters of Republican politics, whereas climate change"+
+					 " believers may either be anti-Donald Trump or may be aligned towards Democratic politics.")
+			st.write("Tweets in this category frequently mention the idea of dying as a result of climate change."+
+			         " The tweets that are frequently mentioning Twitter user @StephenSchlegel are retweets that"
+					 " are responding to a tweet by Melania Trump. Melania posted a picture of a sea creature with "
+					 "the caption, 'What is she thinking?' and many people responded with, 'She's thinking about"
+					 " how she's going to die because your husband doesn't believe in climate change.' This may "
+					 "indicate that those who believe in climate change tend to not follow Donald Trump.")
+					 
+		if category == "Factuals":
+			st.write("From this data, there seems to be a political divide between climate change supporters and deniers, "+
+					 "where climate change deniers tend to be supporters of Republican politics, whereas climate change"+
+					 " believers may either be anti-Donald Trump or may be aligned towards Democratic politics.")
+			st.write("These tweets seem to be centered around issues relating to policy and Donald Trump and "
+					 "Scott Pruitt's (former Administrator of the U.S. Environmental Protection Agency) views on climate change.")
+			st.write("There is also mention of the "
+					 "[Paris Agreement](https://unfccc.int/process-and-meetings/the-paris-agreement/the-paris-agreement), which"
+					 " is an agreement with the United Nations Framework Convention on Climate Change which deals with"
+					 " the reduction of the impact of climate change. In 2017, President Donald Trump chose to withdraw"
+					 " the U.S.'s participation from this agreement.")
 
 	
 		
