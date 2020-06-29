@@ -426,6 +426,7 @@ def main():
 
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
+            st.markdown(open('resources/nb.md').read())
             st.info("Prediction with Naive Bayes Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
@@ -439,6 +440,7 @@ def main():
 
         #building the Linear SVM
         if model_sel == "Linear SVM":
+            st.markdown(open('resources/svm.md').read())
             st.info("Prediction with Linear SVM Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
@@ -453,6 +455,7 @@ def main():
 
         #building the Random Forest
         if model_sel == "Random Forest":
+            st.markdown(open('resources/rf.md').read())
             st.info("Prediction with Random Forest Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
@@ -467,6 +470,7 @@ def main():
 
         #building the KNN
         if model_sel == "K Nearest Neighbors":
+            st.markdown(open('resources/knn.md').read())
             st.info("Prediction with K Nearest Neighbors Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
@@ -479,7 +483,12 @@ def main():
                 st.success("Accuracy of this model is: 73%")
 
         #building the KNN
+<<<<<<< HEAD
         if model_sel == "Neural network":
+=======
+        if model_sel == "Neural_network":
+            st.markdown(open('resources/nn.md').read())
+>>>>>>> ef3b1360c5f547e6ba0299fb13dd877458ff018b
             st.info("Prediction with Neural_network Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
             if st.button("Classify"):
