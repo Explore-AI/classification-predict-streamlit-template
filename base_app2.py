@@ -401,6 +401,7 @@ def main():
             st.write(raw[['sentiment','message']][raw['sentiment']==0].head(x))
         if st.checkbox('show News tweets'):
             st.write(raw[['sentiment','message']][raw['sentiment']==2].head(x))
+            
 
 
 
@@ -502,40 +503,27 @@ def main():
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
-        visualss= st.radio("Select a visual you would like to see",("A graph of number of tweets per class","A pie chart of proportion of tweets per class",'Kernel distribution of number of words per class'))
-        if visualss=="A graph of number of tweets per class":
-            plt.figure(figsize=(8.5,5))
-            raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts().plot(kind='bar',figsize=(8.5,5), color="ForestGreen")
-            plt.xlabel('Sentiment class', fontsize = 10)
-            plt.xticks(rotation='horizontal')
-            plt.ylabel('Number of tweets', fontsize = 10)
-            plt.figtext(0.12, 0.00000000001, '', horizontalalignment='left', fontsize = 14,style='italic')
-            st.pyplot()
-        elif visualss == "A pie chart of proportion of tweets per class":
-            plt.figure(figsize=(11,11))
-            names = ['Pro','News','Neutral','Anti']
-            perc = raw['sentiment'].replace({-1: 'Anti',0:'Neutral',1:'Pro',2:'News'}).value_counts()
-            perc.name = ''
-            perc.plot(kind='pie', labels=names, autopct='%1.1f%%')
-            plt.figtext(0.12, 0.1, '', horizontalalignment='left',fontsize = 14,style='italic')
-            plt.legend(raw['sentiment'].replace({-1: 'Anti: Does not believe in manmade climate change',
-                                                      0:'Neutral: Neither believes nor refutes manmade climate change',
-                                                      1:'Pro:Believe in manmade climate change',2:'News: Factual News about climate change'}), bbox_to_anchor=(2,0.7), loc="right")
-            st.pyplot()
-        elif visualss== 'Kernel distribution of number of words per class':
-            raw['count'] = raw['message'].apply(lambda x: len(x.split()))
-            plot7 = plt.figure(figsize=(12,6))
-            sns.kdeplot(raw['count'][raw['sentiment']==1], shade=True, color='g',legend=False)
-            sns.kdeplot(raw['count'][raw['sentiment']==0], shade=True, color='b',legend=False)
-            sns.kdeplot(raw['count'][raw['sentiment']==-1], shade=True, color='r',legend=False)
-            sns.kdeplot(raw['count'][raw['sentiment']==2], shade=True, color='orange',legend=False)
-            plt.xlabel('number of words per class', fontsize = 10)
-            plt.xlabel('Probability density function', fontsize = 10)
-            plt.legend(title='Sentiment class', loc='upper right', labels=['Pro', 'Neutral', 'Anti', 'News'])
-            plt.figtext(0.12, 0, 'figure 3: Probability distribution function for the number of words in each class',
-                    horizontalalignment='left',fontsize = 14,style='italic')
-            st.pyplot()
-
+        st.markdown("The graphs shown below illustrate how the data that was used to train the models looks like in terms of the distribution of the predictor variables and the predicted variable. To view a particular graph you can use the buttons below.")
+        visualss= st.radio("Select a visual you would like to see",("Proportion of tweets in each class",'Number of urls per class','Kernel distribution of number of words per class','Overall distribution of sentiment scores','Distribution of the sentiment scores per class',"Most common words in Pro class","Most common words in Neutral class","Most common words in Anti class","Most common words in News class"))
+        if visualss=="Proportion of tweets in each class":
+            st.image(Image.open("images/pie.PNG"))
+        elif visualss =='Kernel distribution of number of words per class':
+            st.image(Image.open("images/kernel.PNG"))
+        elif visualss== 'Number of urls per class':
+            st.image(Image.open("images/urls.PNG"))
+        elif visualss== 'Overall distribution of sentiment scores':   
+            st.image(Image.open("images/distribution.PNG"))
+        elif visualss== 'Distribution of the sentiment scores per class':
+            st.image(Image.open("images/compound.PNG"))  
+        elif visualss=="Most common words in Pro class":
+            st.image(Image.open("images/pro.PNG"))
+        elif visualss=="Most common words in Neutral class":
+            st.image(Image.open("images/neutral.PNG"))
+        elif visualss=="Most common words in Anti class":
+            st.image(Image.open("images/anti.PNG"))
+        elif visualss=="Most common words in News class":
+            st.image(Image.open("images/news.PNG"))
+        
 # Required to let Streamlit instantiate our web app.
 
         #file = joblib.load(open(os.path.join("Common_words_pro"),"rb"))
