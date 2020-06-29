@@ -326,6 +326,8 @@ class_dict = {-1:'Anti',0:'Neutral',1:'Pro',2:'News'}
 
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
+#loading clean df
+clean_df=pd.read_csv("resources/clean_df.csv")
 def main():
 
     #title and subheader
@@ -391,16 +393,28 @@ def main():
         st.subheader("Raw data")
         if st.checkbox('Show'): # data is hidden if box is unchecked
             st.write(raw[['sentiment', 'message']]) # will write the df to the page
-        st.subheader("Raw data for each class")
+        st.subheader("Raw data and clean data for each class")
         x = st.slider('Choose the number of tweets to show')
         if st.checkbox('show Pro tweets'):
+            st.markdown("raw data")
             st.write(raw[['sentiment','message']][raw['sentiment']==1].head(x))
+            st.markdown("clean data")
+            st.write(clean_df[['sentiment','message']][clean_df['sentiment']==1].head(x))
         if st.checkbox('show Anti tweets'):
+            st.markdown("raw data")
             st.write(raw[['sentiment','message']][raw['sentiment']==-1].head(x))
+            st.markdown("clean data")
+            st.write(clean_df[['sentiment','message']][clean_df['sentiment']==-1].head(x))
         if st.checkbox('show Neutral tweets'):
+            st.markdown("raw data")
             st.write(raw[['sentiment','message']][raw['sentiment']==0].head(x))
+            st.markdown("clean data")
+            st.write(clean_df[['sentiment','message']][clean_df['sentiment']==0].head(x))
         if st.checkbox('show News tweets'):
+            st.markdown("raw data")
             st.write(raw[['sentiment','message']][raw['sentiment']==2].head(x))
+            st.markdown("clean data")
+            st.write(clean_df[['sentiment','message']][clean_df['sentiment']==2].head(x))
             
 
 
@@ -470,7 +484,7 @@ def main():
                 vect_text = [cleanup(tweet_text)]
                 # Load .pkl file with the model of your choice + make predictions
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
-                prediction = predictor.predict(vect_text
+                prediction = predictor.predict(vect_text)
                 st.success("Tweet is categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 69%")
