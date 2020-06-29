@@ -422,6 +422,7 @@ def main():
 
     if selection== "Classify tweets":
         st.title("Classify tweets")
+        st.image(Image.open("images/tweets.PNG"))
         models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Support Vector Machine','Random Forest', 'K Nearest Neighbors','Neural network']})
         model_sel=st.selectbox('Select a model', models['model name'])
 
