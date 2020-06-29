@@ -328,6 +328,7 @@ class_dict = {-1:'Anti',0:'Neutral',1:'Pro',2:'News'}
 raw = pd.read_csv("resources/train.csv")
 #loading clean df
 clean_df=pd.read_csv("resources/clean_df.csv")
+
 def main():
 
     #title and subheader
@@ -421,7 +422,7 @@ def main():
 
     if selection== "Classify tweets":
         st.title("Classify tweets")
-        st.image(Image.open("tweets/kernel.PNG"))
+        st.image(Image.open("images/kernel.PNG"))
         models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Support Vector Machine','Random Forest', 'K Nearest Neighbors','Neural network']})
         model_sel=st.selectbox('Select a model', models['model name'])
 
