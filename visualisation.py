@@ -41,7 +41,8 @@ def word_cloud(df,class_no,class_name):
 def visualize_data(df):
     df = df.copy()
 
-    options = st.multiselect('Select tweet category to visualize with Wordcloud:', ['Pro', 'Anti', 'Neutral', 'News'], [])
+    st.write("### **You can view WordClouds of commonly used words per category using the filter below.**")
+    options = st.multiselect('Select tweet category to visualize with Wordcloud:', ['Pro', 'Anti', 'Neutral', 'News'], ['Pro'])
     for choice in options:
         st.subheader(f'{choice} Tweets')
         word_cloud(df,choice,f'{choice} Tweets')
@@ -68,13 +69,19 @@ def visualize_data(df):
     #Combine majority class with upsampled minority class
     df_upsampled = pd.concat ([df_majority,
                               df_minority_upsampled])
-    #Display new class counts
-    st.table(df_upsampled.sentiment.value_counts())
+
+    st.write("### **The barplot below shows the message distribution over the sentiments.**")
 
     dist_class = df['sentiment'].value_counts()
     fig, (ax1 )= plt.subplots(1, figsize=(8,4))
     sns.barplot(x=dist_class.index, y=dist_class, ax=ax1).set_title("Tweet message distribution over the sentiments")
     st.pyplot()
+
+    #Display new class counts
+    st.table(df_upsampled.sentiment.value_counts())
+    st.subheader("Observations")
+    st.write("* From the above diagram we can see that there are move people who are Pro Climate Change, and the least are those who are Anti Climate Change.")
+
 
 
 

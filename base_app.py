@@ -132,23 +132,29 @@ def main():
         st.write("## **Wordcloud Visualisations**")
         visualize_data(df)
 
+        st.write("### **The barplots below shows the most common words per category**")
         options = st.multiselect('Select tweet category to visualize with BarPlot:', ['Pro', 'Anti', 'Neutral', 'News'], ['Pro'])
         for sentiment in options:
             common_words(df, sentiment, f'{sentiment} Tweets')
 
+        st.subheader("Observations")
         st.write("""
-            Investigating individual words still shows that there is an overlap of most used words between the classes.
-            However, it does become very apparent that there are themes that help formulate or form tweeters opinions on twitter.
-            Seeing words such as Trump, Obama would lead one to believe that there is a political connection to what people tweet about climate change.
-            We can also see the word 'husband' appearing as most common under the pro tweets, this shows that the climate change topic is being discussed amongst families as well, or that people do think about climate change in relation to people close to them.
-            We can then also assume that there is perhaps a social aspect to how people form their opinion on climate change.
-            We will investigate this observation further by investigating the most common hashtags.
-            Hashtags will provide more context, as people will most usually tweet under a certain hashtag as a means of making it easier to find information with a theme or specific context.
-            """)
+            * Climate Change and Global warming appear to be the most popular words amongst these tweets.
+                """)
 
         extract_hash(df)
         #plot_pie(df_pol, 'Political View')
         #plot_pie(df_pol, 'Political View')
+
+        st.subheader("Observations")
+        st.write("""
+            * Investigating individual words still shows that there is an overlap of most used words between the classes.
+            * However, it does become very apparent that there are themes that help formulate or form tweeters opinions on twitter.
+            * Seeing words such as Trump, Obama would lead one to believe that there is a political connection to what people tweet about climate change.
+            * We can also see the word 'husband' appearing as most common under the pro tweets, this shows that the climate change topic is being discussed amongst families as well, or that people do think about climate change in relation to people close to them.
+            * We can then also assume that there is perhaps a social aspect to how people form their opinion on climate change.
+            * Hashtags provide more context, as people will most usually tweet under a certain hashtag as a means of making it easier to find information with a theme or specific context.
+            """)
 
     # Building out the "Information" page
     if selection == "Information":

@@ -62,7 +62,8 @@ def extract_hash(df):
     HT_anti = sum(HT_anti, [])
     HT_neutral = sum(HT_neutral, [])
     dict = {'Pro': HT_pro,'Anti':HT_anti,'Neutral':HT_neutral}
-
+    st.write("### **You can view the most popular Hashtags on Tweets about Climate Change using the filter below.**")
     options = st.multiselect('Select tweet category to visualize hashtags:', ['Pro', 'Anti', 'Neutral'], ['Pro'])
     for choice in options:
+        st.subheader(f'{choice} Tweets Hashtags on climate change')
         common_tags(dict[choice], f'{choice} Climate Change Tweets')
