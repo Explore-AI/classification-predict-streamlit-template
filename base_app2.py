@@ -452,7 +452,6 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-
                 st.success("Accuracy of this model is: 69%")
 
         #building the KNN
@@ -483,6 +482,7 @@ def main():
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
+        st.markdown("The visuals dipicted+ below")
         visualss= st.radio("Select a visual you would like to see",("A graph of number of tweets per class","A pie chart of proportion of tweets per class","Graphs of distribution of tweets sentiment scores"))
         if visualss=="A graph of number of tweets per class":
             plt.figure(figsize=(8.5,5))
