@@ -337,24 +337,34 @@ def main():
     if selection == "Model Perfomance":
         st.title("Classification report")
         st.markdown("A classification report measure the quality of the predictions made by a classification algorithm.it indicates how many predictions are True and how many are False. The report also uses the True Positives(TP), False Positives(FP), True Negatives(TN) and False Negatives(FN) to show the main classification metrics, i.e precision, recall and f1-score on a per-class basis. These are the same concepts used in the confusion matrix above.")
-        st.markdown("**Precision** : The ability of a classifier to not label an instance positive when it is actually negative. So it considers how                  accurate a classifier is in predicting positive cases.For each class it is defined as the ratio of true positives to the sum of true and false positives:")
-        st.markdown("precision = TP/(TP + FP)")
-        st.markdown("**Recall** : The ability of a classifier to find all positive instances. It considers the fraction of positives that were                     correctly identified. For each class it is defined as the ratio of true positives to the sum of true positives and false negatives:")
-        st.markdown("recall = TP/(TP + FN)")
+        st.markdown("**Precision** : The ability of a classifier to not label an instance positive when it is actually negative. So it considers how                  accurate a classifier is in predicting positive cases.For each class it is defined as the ratio of true positives to the sum of true and false positives.")
+        st.markdown("Precision = TP/(TP + FP)")
+        st.markdown("**Recall** : The ability of a classifier to find all positive instances. It considers the fraction of positives that were                     correctly identified. For each class it is defined as the ratio of true positives to the sum of true positives and false negatives.")
+        st.markdown("Recall = TP/(TP + FN)")
         st.markdown("**F1 Score** : A weighted harmonic mean of precision and recall such that the best score is 1.0 and the worst is 0.0. As a rule                 of thumb, the weighted average of F1 should be used to compare classifier models")
         st.markdown("F1 Score = 2 x (Recall x Precision) / (Recall + Precision)")
-        st.markdown(" ")
-        st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/lr.png"))
-        #st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/na.png"))
-        #st.markdown("**Classification Report from Logistic Regression Model**")
-        st.image(Image.open("images/svm.png"))
-        st.markdown("**Classification Report from Random Forest Model**")
-        st.image(Image.open("images/rf.png"))
-        st.markdown("**Classification Report from Neural Networks Model**")
-        st.image(Image.open("images/nn.png"))
-        st.markdown("The `F1 score` is our main metric that we use to decide on the best model to use.")
+        st.markdown(" To get a classification report of your model of interest, select the model:")
+        report = pd.DataFrame({'report name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural network']})
+        model_sel=st.selectbox('Select a model', report['report name'])
+        if model_sel == 'Logistic Regression':
+            st.markdown("**Classification Report from Logistic Regression Model**")
+            st.image(Image.open("images/lr.png"))
+        if model_sel =='Naive Bayes':
+            st.markdown("**Classification Report from Naive Bayes Model**")
+            st.image(Image.open("images/na.png"))
+        if model_sel =='Linear SVM':
+            st.markdown("**Classification Report from Linear SVM Model**")
+            st.image(Image.open("images/svm.png"))
+        if model_sel =='Random Forest':
+            st.markdown("**Classification Report from Random Forest Model**")
+            st.image(Image.open("images/rf.png"))
+        if model_sel =='Neural network':
+            st.markdown("**Classification Report from Neural Networks Model**")
+            st.image(Image.open("images/nn.png"))
+        if model_sel =='K Nearest Neighbors':
+            st.markdown("**Classification Report from K Nearest Neighbors Model**")
+            st.image(Image.open("images/knn.png"))
+        st.markdown("The `F1 score` is recommended metric to use to decide on the best model to use.")
 
   #building the Information page
     if selection == "About the app":
@@ -397,7 +407,7 @@ def main():
     if selection== "Classify tweets":
         st.title("Classify tweets")
         st.markdown("![Image of Yaktocat](https://github.com/Xenaschke/classification-predict-streamlit-template/blob/master/images/tweets.PNG?raw=true.PNG)")
-        models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural_network']})
+        models = pd.DataFrame({'model name': ['Logistic Regression', 'Naive Bayes','Linear SVM','Random Forest', 'K Nearest Neighbors','Neural network']})
         model_sel=st.selectbox('Select a model', models['model name'])
 
         #building the Logistic Regression
@@ -413,6 +423,7 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 76%")
+                st.success("F1 score of this model is:0.80")           
 
         #building the Naive Bayes
         if model_sel == "Naive Bayes":
@@ -427,6 +438,7 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
+                st.success("F1 score of this model is:0.75")
 
         #building the Linear SVM
         if model_sel == "Support Vector Machine (SVM)":
@@ -440,8 +452,8 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/SVM.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-
                 st.success("Accuracy of this model is: 78%")
+                st.success("F1 score of this model is:0.82")
 
         #building the Random Forest
         if model_sel == "Random Forest":
@@ -455,8 +467,8 @@ def main():
                 predictor = joblib.load(open(os.path.join("models/Random_forest.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
-
                 st.success("Accuracy of this model is: 69%")
+                st.success("F1 score of this model is:0.79")
 
         #building the KNN
         if model_sel == "K Nearest Neighbors":
@@ -471,9 +483,10 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
+                st.success("F1 score of this model is:0.75")
 
-        #building the KNN
-        if model_sel == "Neural_network":
+        #building the Neural network
+        if model_sel == "Neural network":
             st.markdown(open('resources/nn.md').read())
             st.info("Prediction with Neural_network Model")
             tweet_text = st.text_area("Enter your tweet ","Type Here 🖊")
@@ -485,6 +498,7 @@ def main():
                 prediction = predictor.predict(vect_text)
                 st.success("Text Categorized as: {}".format(class_dict[prediction[0]]))
                 st.success("Accuracy of this model is: 73%")
+                st.success("F1 score of this model is:0.79")
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
