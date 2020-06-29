@@ -549,9 +549,7 @@ def main():
 # Required to let Streamlit instantiate our web app.
 
         #file = joblib.load(open(os.path.join("Common_words_pro"),"rb"))
-        
-        
->>>>>>> a3a1e9e9df53ec7567fe06618476c0e57ca6fc7a
+
 # Required to let Streamlit instantiate our web app.  
 
 if __name__ == '__main__':
