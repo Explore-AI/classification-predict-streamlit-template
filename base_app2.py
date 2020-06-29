@@ -502,6 +502,7 @@ def main():
     #building the Draw
     if selection == "Data Visualisation":
         st.title("Data Visualisation")
+        st.markdown("The graphs shown below illustrate how the Data that was used to train the models looks like in terms of the distribution of the predictor variable and predicted variable. To view a particular graph u can use the buttons below.")
         visualss= st.radio("Select a visual you would like to see",("A graph of number of tweets per class","A pie chart of proportion of tweets per class","Graphs of distribution of tweets sentiment scores"))
         if visualss=="A graph of number of tweets per class":
             plt.figure(figsize=(8.5,5))
