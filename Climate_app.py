@@ -201,7 +201,11 @@ df['pos_tags'] = df['stopwords_removed'].apply(nltk.tag.pos_tag)
 if st.checkbox('Speech Tagging'):
 	st.write(df['pos_tags'])
 
+st.markdown("Exploratory Data Analysis EDA")
 
+plt.figure(figsize=(12,6))
+sns.countplot(x='sentiment',data=df, palette="Blues_d")
+st.pyplot()
 # # # chart_data = pd.DataFrame(
 # # #     np.random.randn(20, 3),
 # # #     columns=['a', 'b', 'c'])
