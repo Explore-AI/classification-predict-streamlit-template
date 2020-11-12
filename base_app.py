@@ -45,6 +45,9 @@ from collections import Counter
 
 warnings.filterwarnings(action = 'ignore') 
 
+nltk.download('averaged_perceptron_tagger')
+nltk.download('wordnet')
+
 nlp = spacy.load('en')
 st.set_option('deprecation.showPyplotGlobalUse', False)
 
@@ -61,14 +64,17 @@ raw = pd.read_csv("resources/train.csv")
 retweet = 'RT'
 import streamlit.components.v1 as components
 
+st.cache(suppress_st_warning=True)
 def mentions(x):
     x = re.sub(r"(?:\@|https?\://)\S+", "", x)
     return x
 
+st.cache(suppress_st_warning=True)
 def remove_punc(x):
     x = re.sub(r"([^A-Za-z0-9]+)"," ",x)
     return x
 
+st.cache(suppress_st_warning=True)
 def StopWords():
     stop_words = set(stopwords.words('english'))
     return stop_words
@@ -97,36 +103,69 @@ def data_cleaning(df):
     df['message'] = df['wordnet_pos'].apply(lambda x: [wnl.lemmatize(word, tag) for word, tag in x])
     return df
 
+st.cache(suppress_st_warning=True)
 def pro_mostpopular(df):
     pro_popular = df[df['sentiment'] == 1]
     pro_pop = word_count(pro_popular)
     return pro_pop
 
+st.cache(suppress_st_warning=True)
 def anti_mostpopular(df):
     anti_popular = df[df['sentiment']== -1]
     anti_pop = word_count(anti_popular)
     return anti_pop
 
+st.cache(suppress_st_warning=True)
 def neutral_mostpopular(df):
     neutral = df[df['sentiment']==0]
     neutral_pop = word_count(neutral)
     return neutral_pop
+
+st.cache(suppress_st_warning=True)
 def news_mostpopular(df):
     news = df[df['sentiment']==2]
     news_pop = word_count(news)
     return news_pop
 
 st.cache(suppress_st_warning=True)
-def popularwords_visualizer(popular, title):
-    plt.bar(range(len(popular)), [val[1] for val in popular], align='center')
-    plt.xticks(range(len(popular)), [val[0] for val in popular])
-    plt.xticks(rotation=90)
-    plt.title(title)
-    plt.ylabel("# of times the word appeard")
-    plt.xlabel("Most popular word (Descending)")
-    st.pyplot()
+def popularwords_visualizer(data):
+    news = news_mostpopular(data)
+    pro = pro_mostpopular(data)
+    anti=anti_mostpopular(data)
+    neutral = neutral_mostpopular(data)
+    
+    #Creating the Subplots for Most Popular words
+    fig, axs = plt.subplots(2, 2)
+    
+    plt.setp(axs[-1, :], xlabel='Most popular word (Descending)')
+    plt.setp(axs[:, 0], ylabel='# of times the word appeard')
+    axs[0,0].bar(range(len(news)),[val[1] for val in news],align='center')
+    axs[0,0].set_xticks(range(len(news)), [val[0] for val in news])
+    #axs[0.0].set_xticks(rotation=90)
+    #axs[0.0].set_title("20 Most Popular words in the training data set")
+    #axs[0.0].set_ylabel("# of times the word appeard")
+    #axs[0.0].xlabel("Most popular word (Descending)")
+    
+    axs[0,1].bar(range(len(neutral)),[val[1] for val in neutral],align='center')
+    axs[0,1].set_xticks(range(len(neutral)), [val[0] for val in neutral])
+    #axs[0,1].set_xticks(rotation=90)
+    #axs[0,1].set_title("20 Most Popular words in the training data set")
+    #axs[0,1].set_ylabel("# of times the word appeard")
+    #axs[0,1].xlabel("Most popular word (Descending)")
+    
+    axs[1,0].bar(range(len(pro)),[val[1] for val in pro],align='center')
+    axs[1,0].set_xticks(range(len(pro)), [val[0] for val in pro])
+    #axs[1,0].set_xticks(rotation=90)
+    #axs[1,0].set_title("20 Most Popular words in the pro data set")
+    #axs[1,0].set_ylabel("# of times the word appeard")
+    #axs[1,0].xlabel("Most popular word (Descending)")
+    
+    axs[1,1].bar(range(len(anti)),[val[1] for val in anti],align='center')
+    axs[1,1].set_xticks(range(len(anti)), [val[0] for val in anti])
+    fig.tight_layout(pad=3)
+    st.pyplot(fig)
 
-
+st.cache(suppress_st_warning=True)
 def wordcloud_visualizer(df,title):
     words = df['message']
     allwords = []
@@ -137,7 +176,7 @@ def wordcloud_visualizer(df,title):
     wordcloud = WordCloud(width=1000, height=800, background_color='white').generate(str(mostcommon))
     fig = plt.figure(figsize=(30,10), facecolor='white')
     plt.imshow(wordcloud, interpolation="bilinear")
-    plt.title(title)
+    plt.title(title,fontsize='xx-large')
     plt.axis('off')
     plt.tight_layout(pad=0)
     st.pyplot(fig)
@@ -206,42 +245,37 @@ def main():
 	if selection == "Text Classification":
 		markup(selection)
 		# Creating a text box for user input
-		
-		tweet_text = st.text_area("Enter Text","Type Here")
-		if st.button("Classify"):
-			# Transforming user input with vectorizer
-			#vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/SVCpipeline.pkl"),"rb"))
-			prediction = predictor.predict([tweet_text])
-
-			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
-			models = ["en_core_web_sm",'en_core_web_md']
-			#docx = nlp(text_raw)
+		models =["Support Vector Classifier","Logisitic Regression Classifier","Optimized Support Vector Classifier"]
+		modelselection = st.selectbox("Choose Predictive Model",models)
+		if modelselection =="Support Vector Classifier":
+			tweet_text = st.text_area("Enter Text","Type Here")
+			if st.button("Classify with SVC model"):
+				predictor = joblib.load(open(os.path.join("resources/SVCpipeline.pkl"),"rb"))
+				prediction = predictor.predict([tweet_text])
+				st.success("Text Categorized as: {}".format(prediction))
+		elif modelselection == "Logisitic Regression Classifier":
+			prediction_text = st.text_area("Classify text with Logistic regression Classifer","Enter Text here")
+			if st.button("Classify with Logistic regressor"):
+				pred = joblib.load(open(os.path.join("resources/LogisticReg (1).pkl"),"rb"))
+				predict = pred.predict([prediction_text])
+				st.success("Text Categorized as: {}".format(predict))
+		elif modelselection =="Optimized Support Vector Classifier":
+			prediction_text = st.text_area("Classify text with Optimized Support Vector Classifier","Enter Text here")
+			if st.button("Classify with Logistic regressor"):
+				pred = joblib.load(open(os.path.join("resources/SVCGrid (1).pkl"),"rb"))
+				predict = pred.predict([prediction_text])
+				st.success("Text Categorized as: {}".format(predict))
+			#models = ["en_core_web_sm",'en_core_web_md']
+			#docx = nlp(tweet_text)
 			#spacy_streamlit.visualize_ner(docx,labels=nlp.get_pipe('ner').labels)
-			spacy_streamlit.visualize(models, tweet_text)
+			#spacy_streamlit.visualize(models, tweet_text)
    
 
 	if selection == "Exploratory Data Analysis":
 		markup(selection)
 		train = data_cleaning(raw)
-		train_pop = word_count(train)
-		popularwords_visualizer(train_pop," 20 Most Popular words in the training data set")
-		#Gettting popular words for pro
-		pro_popular = pro_mostpopular(train)
-		#Visualizing the 20 most popular pro tweets
-		popularwords_visualizer(pro_popular,"20 Most popular word in the pro class")
-		#Getting the Anti most popular words
-		anti_pop = anti_mostpopular(train)
-		popularwords_visualizer(anti_pop,"20 Most popular word in the anti class")
-		neutral_pop = neutral_mostpopular(train)
-		popularwords_visualizer(neutral_pop,"20 Most popular word in the neutral class")
-		news_pop = news_mostpopular(train)
-		popularwords_visualizer(news_pop,"20 Most popular word in the news class")
+		popularwords_visualizer(train)
+  
 	elif selection == "Word-clouds":
 		markup("Word Clouds")
 		clean_data = data_cleaning(raw)
@@ -259,12 +293,13 @@ def main():
 		news_data = clean_data[clean_data['sentiment']==-1]
 		wordcloud_visualizer(news_data,"Word Cloud for news sentiment class")
   
-  		
+st.cache(suppress_st_warning=True) 		
 def markup(selection):
     html_temp = """<div style="background-color:{};padding:10px;border-radius:10px; margin-bottom:15px;"><h1 style="color:{};text-align:center;">"""+selection+"""</h1></div>"""
     st.markdown(html_temp, unsafe_allow_html=True)
 
 #Getting the WordNet Parts of Speech
+st.cache(suppress_st_warning=True)
 def get_wordnet_pos(tag):
     if tag.startswith('J'):
         return wordnet.ADJ
