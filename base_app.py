@@ -65,6 +65,32 @@ retweet = 'RT'
 import streamlit.components.v1 as components
 
 st.cache(suppress_st_warning=True)
+def class_analysis(df):
+    df['sent_labels']  = df['sentiment'].map({-1: 'Anti',0:'Neutral', 1:'Pro', 2:'News'})
+    fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(20, 10), dpi=100)
+    
+    sns.countplot(df['sent_labels'], ax=axes[0])
+    code_labels=['Pro', 'News', 'Neutral', 'Anti']
+    axes[1].pie(df['sent_labels'].value_counts(),labels= code_labels,autopct='%1.0f%%',startangle=90,explode = (0.1, 0.1, 0.1, 0.1))
+    fig.suptitle('Sentiment Class Analysis', fontsize=20)
+    st.pyplot(fig)
+
+
+def class_dist(df):
+    df['sent_labels']  = df['sentiment'].map({-1: 'Anti',0:'Neutral', 1:'Pro', 2:'News'})
+    df['text_length'] = df['message'].apply(lambda x: len(x))
+    fig, axis = plt.subplots(ncols=2,nrows=1, dpi=100)
+    
+    sns.boxplot(x=df['sent_labels'],y=df['text_length'],data=df,ax=axis[0],color = 'orange')
+
+    sns.violinplot(x=df['sent_labels'], y=df['text_length'],ax=axis[1])
+    plt.xlabel('Sentiment Class')
+    plt.ylabel('Tweet Length')
+    plt.tight_layout()
+    st.pyplot(fig)
+
+
+st.cache(suppress_st_warning=True)
 def mentions(x):
     x = re.sub(r"(?:\@|https?\://)\S+", "", x)
     return x
@@ -141,45 +167,49 @@ def popularwords_visualizer(data):
     plt.setp(axs[:, 0], ylabel='# of times the word appeard')
     axs[0,0].bar(range(len(news)),[val[1] for val in news],align='center')
     axs[0,0].set_xticks(range(len(news)), [val[0] for val in news])
-    #axs[0.0].set_xticks(rotation=90)
-    #axs[0.0].set_title("20 Most Popular words in the training data set")
-    #axs[0.0].set_ylabel("# of times the word appeard")
-    #axs[0.0].xlabel("Most popular word (Descending)")
+    axs[0,0].set_title("News Class")
     
     axs[0,1].bar(range(len(neutral)),[val[1] for val in neutral],align='center')
     axs[0,1].set_xticks(range(len(neutral)), [val[0] for val in neutral])
-    #axs[0,1].set_xticks(rotation=90)
-    #axs[0,1].set_title("20 Most Popular words in the training data set")
-    #axs[0,1].set_ylabel("# of times the word appeard")
-    #axs[0,1].xlabel("Most popular word (Descending)")
+    axs[0,1].set_title("Neutral Class")
     
     axs[1,0].bar(range(len(pro)),[val[1] for val in pro],align='center')
     axs[1,0].set_xticks(range(len(pro)), [val[0] for val in pro])
-    #axs[1,0].set_xticks(rotation=90)
-    #axs[1,0].set_title("20 Most Popular words in the pro data set")
-    #axs[1,0].set_ylabel("# of times the word appeard")
-    #axs[1,0].xlabel("Most popular word (Descending)")
+    axs[1,0].set_title("Pro Class")
     
     axs[1,1].bar(range(len(anti)),[val[1] for val in anti],align='center')
     axs[1,1].set_xticks(range(len(anti)), [val[0] for val in anti])
-    fig.tight_layout(pad=3)
+    axs[1,1].set_title("Anti Class")
+    fig.tight_layout()
     st.pyplot(fig)
 
 st.cache(suppress_st_warning=True)
-def wordcloud_visualizer(df,title):
-    words = df['message']
-    allwords = []
-    for wordlist in words:
-        allwords += wordlist
-        
-    mostcommon = FreqDist(allwords).most_common(1000)
-    wordcloud = WordCloud(width=1000, height=800, background_color='white').generate(str(mostcommon))
-    fig = plt.figure(figsize=(30,10), facecolor='white')
-    plt.imshow(wordcloud, interpolation="bilinear")
-    plt.title(title,fontsize='xx-large')
-    plt.axis('off')
-    plt.tight_layout(pad=0)
+def wordcloud_visualizer(df):
+    news = df['message'][df['sentiment']==2].str.join(' ')
+    neutral = df['message'][df['sentiment']==2].str.join(' ')
+    pro = df['message'][df['sentiment']==2].str.join(' ')
+    anti = df['message'][df['sentiment']==2].str.join(' ')
+    #Visualize each sentiment class
+    fig, axis = plt.subplots(nrows=2, ncols=2, figsize=(18, 12))
+    news_wordcloud = WordCloud(width=900, height=600, background_color='white', colormap='winter').generate(str(news))
+    axis[0, 0].imshow(news_wordcloud)
+    axis[0, 0].set_title('News Class',fontsize=14)
+    axis[0, 0].axis("off") 
+    neutral_wordcloud = WordCloud(width=900, height=600, background_color='white', colormap='winter', min_font_size=10).generate(str(neutral))
+    axis[1, 0].imshow(neutral_wordcloud)
+    axis[1, 0].set_title('Neutral Class',fontsize=14)
+    axis[1, 0].axis("off") 
+    
+    pro_wordcloud = WordCloud(width=900, height=600, background_color='white', colormap='winter', min_font_size=10).generate(str(pro))
+    axis[0, 1].imshow(pro_wordcloud)
+    axis[0, 1].set_title('Pro Class',fontsize=14)
+    axis[0, 1].axis("off") 
+    anti_wordcloud = WordCloud(width=900, height=600, background_color='white', colormap='winter', min_font_size=10).generate(str(anti))
+    axis[1, 1].imshow(anti_wordcloud)
+    axis[1, 1].set_title('Anti Class',fontsize=14)
+    axis[1, 1].axis("off")
     st.pyplot(fig)
+
 # The main function where we will build the actual app
 def main():
 	"""Tweet Classifier App with Streamlit """
@@ -189,7 +219,7 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Text Classification", "Information","About Predict","Exploratory Data Analysis","Word-clouds"]
+	options = ["About Predict","Text Classification","Exploratory Data Analysis","Model Evaluation","Our Team"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 	
 	if selection == "About Predict":
@@ -235,7 +265,7 @@ def main():
   
 	
 	# Building out the "Information" page
-	if selection == "Information":
+	if selection == "Our Team":
 		markup(selection)
 		st.subheader("Raw Twitter data and label")
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
@@ -272,30 +302,35 @@ def main():
    
 
 	if selection == "Exploratory Data Analysis":
-		markup(selection)
-		train = data_cleaning(raw)
-		popularwords_visualizer(train)
-  
-	elif selection == "Word-clouds":
-		markup("Word Clouds")
-		clean_data = data_cleaning(raw)
-		wordcloud_visualizer(clean_data,"Word Cloud For the training set")
+            markup(selection)
+            print('....Cleaning the Raw data')
+            train = data_cleaning(raw)
+            visuals =["Sentiment Class Analysis","Message length for each sentiment class","Popular Words Analysis","Word Cloud Analysis"]
+            visualselection = st.selectbox("Choose EDA visuals",visuals)
+            if visualselection =="Sentiment Class Analysis":
+                print('..... Creating the sentiment class analysis visual')
+                title_tag("Sentiment Class Analysis")
+                class_analysis(train)
+            elif visualselection =="Message length for each sentiment class":
+                print('...... Creating the sentiment class message length visual')
+                title_tag('Message length for each sentiment class')
+                class_dist(train)
+            elif visualselection =="Word Cloud Analysis":
+                print('..... Creating the WordClouds for sentiment classes')
+                title_tag("Word Cloud Analysis")
+                wordcloud_visualizer(train)
+            elif visualselection =="Popular Words Analysis":
+                print('...... Creating the popular words visual')
+                title_tag("Popular Words Analysis")
+                popularwords_visualizer(train)
 
-		pro_data = clean_data[clean_data['sentiment']==1]
-		wordcloud_visualizer(pro_data,"Word Cloud for pro sentiment class")
-  
-		anit_data = clean_data[clean_data['sentiment']==-1]
-		wordcloud_visualizer(anit_data,"Word Cloud for anti sentiment class")
-
-		neut_data = clean_data[clean_data['sentiment']==0]
-		wordcloud_visualizer(neut_data,"Word Cloud for neutral sentiment class")
-  
-		news_data = clean_data[clean_data['sentiment']==-1]
-		wordcloud_visualizer(news_data,"Word Cloud for news sentiment class")
-  
 st.cache(suppress_st_warning=True) 		
 def markup(selection):
     html_temp = """<div style="background-color:{};padding:10px;border-radius:10px; margin-bottom:15px;"><h1 style="color:{};text-align:center;">"""+selection+"""</h1></div>"""
+    st.markdown(html_temp, unsafe_allow_html=True)
+
+def title_tag(title):
+    html_temp = """<div style="background-color:{};padding:10px;border-radius:10px; margin-bottom:15px;"><h2 style="color:#00ACEE;text-align:center;">"""+title+"""</h2></div>"""
     st.markdown(html_temp, unsafe_allow_html=True)
 
 #Getting the WordNet Parts of Speech
