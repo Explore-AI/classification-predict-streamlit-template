@@ -64,7 +64,7 @@ raw = pd.read_csv("resources/train.csv")
 retweet = 'RT'
 import streamlit.components.v1 as components
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def class_analysis(df):
     df['sent_labels']  = df['sentiment'].map({-1: 'Anti',0:'Neutral', 1:'Pro', 2:'News'})
     fig, axes = plt.subplots(ncols=2, nrows=1, figsize=(20, 10), dpi=100)
@@ -75,7 +75,7 @@ def class_analysis(df):
     fig.suptitle('Sentiment Class Analysis', fontsize=20)
     st.pyplot(fig)
 
-
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def class_dist(df):
     df['sent_labels']  = df['sentiment'].map({-1: 'Anti',0:'Neutral', 1:'Pro', 2:'News'})
     df['text_length'] = df['message'].apply(lambda x: len(x))
@@ -90,22 +90,22 @@ def class_dist(df):
     st.pyplot(fig)
 
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def mentions(x):
     x = re.sub(r"(?:\@|https?\://)\S+", "", x)
     return x
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def remove_punc(x):
     x = re.sub(r"([^A-Za-z0-9]+)"," ",x)
     return x
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def StopWords():
     stop_words = set(stopwords.words('english'))
     return stop_words
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def word_count(train):
     cnt = Counter()
     for message in train['message'].values:
@@ -113,7 +113,7 @@ def word_count(train):
             cnt[word] +=1
     return cnt.most_common(20)
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def data_cleaning(df):
     wnl = WordNetLemmatizer()
     df['message'] = df['message'].apply(mentions)
@@ -129,31 +129,31 @@ def data_cleaning(df):
     df['message'] = df['wordnet_pos'].apply(lambda x: [wnl.lemmatize(word, tag) for word, tag in x])
     return df
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def pro_mostpopular(df):
     pro_popular = df[df['sentiment'] == 1]
     pro_pop = word_count(pro_popular)
     return pro_pop
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def anti_mostpopular(df):
     anti_popular = df[df['sentiment']== -1]
     anti_pop = word_count(anti_popular)
     return anti_pop
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def neutral_mostpopular(df):
     neutral = df[df['sentiment']==0]
     neutral_pop = word_count(neutral)
     return neutral_pop
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def news_mostpopular(df):
     news = df[df['sentiment']==2]
     news_pop = word_count(news)
     return news_pop
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def popularwords_visualizer(data):
     news = news_mostpopular(data)
     pro = pro_mostpopular(data)
@@ -183,7 +183,7 @@ def popularwords_visualizer(data):
     fig.tight_layout()
     st.pyplot(fig)
 
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def wordcloud_visualizer(df):
     news = df['message'][df['sentiment']==2].str.join(' ')
     neutral = df['message'][df['sentiment']==2].str.join(' ')
@@ -324,17 +324,18 @@ def main():
                 title_tag("Popular Words Analysis")
                 popularwords_visualizer(train)
 
-st.cache(suppress_st_warning=True) 		
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def markup(selection):
     html_temp = """<div style="background-color:{};padding:10px;border-radius:10px; margin-bottom:15px;"><h1 style="color:{};text-align:center;">"""+selection+"""</h1></div>"""
     st.markdown(html_temp, unsafe_allow_html=True)
 
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def title_tag(title):
     html_temp = """<div style="background-color:{};padding:10px;border-radius:10px; margin-bottom:15px;"><h2 style="color:#00ACEE;text-align:center;">"""+title+"""</h2></div>"""
     st.markdown(html_temp, unsafe_allow_html=True)
 
 #Getting the WordNet Parts of Speech
-st.cache(suppress_st_warning=True)
+st.cache(suppress_st_warning=True,allow_output_mutation=True)
 def get_wordnet_pos(tag):
     if tag.startswith('J'):
         return wordnet.ADJ
