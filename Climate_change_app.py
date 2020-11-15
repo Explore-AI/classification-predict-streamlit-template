@@ -55,11 +55,11 @@ tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl f
 # st.title('Climate Changes Twitter Sentiment')
 
 # Add an Image to the web app
-image =  Image.open("img.png")
+image =  Image.open("images/img.png")
 st.image(image, use_column_width = True)
 
 # Read the train data
-train =  pd.read_csv('train1.csv')
+train =  pd.read_csv('data/train1.csv')
 # Make a copy of the data
 df = train.copy()
 
@@ -72,7 +72,7 @@ def main():
     # st.header("Tweet prediction")
     st.info("Prediction with Classification ML Models")
 
-    option1 = st.selectbox('Choose the model to make the Prediction with:',("Logistic Regression", "KNN", "SVM", "Naive Bayes", "Random Forest", "LinearSVC", "GBC", "SGDC"))
+    option1 = st.selectbox('Choose the model to make the Prediction with:',("Logistic Regression", "KNN", "SVM", "Naive Bayes",  "LinearSVC", "GBC", "SGDC"))
     st.write('You selected:', option1)
     if option1=="Logistic Regression":
       # Creating a text box for user input
@@ -156,30 +156,30 @@ def main():
           st.success("Text Categorized as: News ")
         #st.success("Text Categorized as: {}".format(prediction))
 
-    if option1=="Random Forest":
-      # Creating a text box for user input
-      tweet_text = st.text_area("Enter Text","Type Here or Copy and Paste Tweet Here")
+    # if option1=="Random Forest":
+    #   # Creating a text box for user input
+    #   tweet_text = st.text_area("Enter Text","Type Here or Copy and Paste Tweet Here")
 
-      if st.button("Classify"):
-        # Transforming user input with vectorizer
-        vect_text = tweet_cv.transform([tweet_text]).toarray()
-        # Load your .pkl file with the model of your choice + make predictions
-        # Try loading in multiple models to give the user a choice
-        predictor = joblib.load(open(os.path.join("resources/rfc_model.pkl"),"rb"))
-        prediction = predictor.predict(vect_text)
+    #   if st.button("Classify"):
+    #     # Transforming user input with vectorizer
+    #     vect_text = tweet_cv.transform([tweet_text]).toarray()
+    #     # Load your .pkl file with the model of your choice + make predictions
+    #     # Try loading in multiple models to give the user a choice
+    #     predictor = joblib.load(open(os.path.join("resources/rfc_model.pkl"),"rb"))
+    #     prediction = predictor.predict(vect_text)
 
-        # When model has successfully run, will print prediction
-        # You can use a dictionary or similar structure to make this output
-        # more human interpretable.
-        if prediction == 1 :
-          st.success("Text Categorized as: Pro ")
-        elif prediction == 0 :
-          st.success("Text Categorized as: Neutral ")
-        elif prediction == -1 :
-          st.success("Text Categorized as: Anti ")
-        else :
-          st.success("Text Categorized as: News ")
-        #st.success("Text Categorized as: {}".format(prediction))
+    #     # When model has successfully run, will print prediction
+    #     # You can use a dictionary or similar structure to make this output
+    #     # more human interpretable.
+    #     if prediction == 1 :
+    #       st.success("Text Categorized as: Pro ")
+    #     elif prediction == 0 :
+    #       st.success("Text Categorized as: Neutral ")
+    #     elif prediction == -1 :
+    #       st.success("Text Categorized as: Anti ")
+    #     else :
+    #       st.success("Text Categorized as: News ")
+    #     #st.success("Text Categorized as: {}".format(prediction))
 
     if option1=="LinearSVC":
       # Creating a text box for user input
@@ -591,7 +591,7 @@ The maximum number of passes over the training data (aka epochs). It only impact
 
   elif option=="About us":
   	st.markdown("<h1 style='text-align: center; color: blue;'>About Us</h1>", unsafe_allow_html=True)
-  	image =  Image.open("About us page.png")
+  	image =  Image.open("images/About us page.png")
   	st.image(image, use_column_width=True)
 
   	
