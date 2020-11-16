@@ -55,7 +55,7 @@ tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl f
 # st.title('Climate Changes Twitter Sentiment')
 
 # Add an Image to the web app
-image =  Image.open("images/img.png")
+image =  Image.open("images/img.PNG")
 st.image(image, use_column_width = True)
 
 # Read the train data
