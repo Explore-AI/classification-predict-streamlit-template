@@ -7,7 +7,7 @@
 
     Note:
     ---------------------------------------------------------------------
-    Plase follow the instructions provided within the README.md file
+    Please follow the instructions provided within the README.md file
     located within this directory for guidance on how to use this script
     correctly.
     ---------------------------------------------------------------------
