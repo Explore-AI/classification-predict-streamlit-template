@@ -30,9 +30,16 @@ import pandas as pd
 import streamlit as st
 
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl", "rb")
+# @st.cache
+def load_vectorizer(vectorizer):
+    news_vectorizer = open(vectorizer, "rb")
+    tweet_cv = joblib.load(news_vectorizer)
+    return news_vectorizer, tweet_cv
+
 # loading your vectorizer from the pkl file
-tweet_cv = joblib.load(news_vectorizer)
+
+
+news_vectorizer, tweet_cv = load_vectorizer("resources/tfidfvect.pkl")
 
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
@@ -52,6 +59,9 @@ def main():
     selection = st.sidebar.selectbox("Choose Option", options)
 
     # Defining model descriptions
+    model_paths = {"Random Forest": "resources/Logistic_regression.pkl",
+                   "LinearSVC":"resources/Logistic_regression.pkl", 
+                   "Logistic Regression":"resources/Logistic_regression.pkl"}
 
     model_descriptions = {"Random Forest": "A random forest is a meta estimator that fits a \
 						   					number of decision tree classifiers on various sub-samples of the \
@@ -92,19 +102,19 @@ def main():
             st.info("Prediction with a selection of ML Models")
             chosen = st.radio('Model Selection', ("Random Forest", "LinearSVC", "Logistic Regression"))
 			# Creating a text box for user input
-            tweet_text = st.text_area("Enter Tweet", "Type Here")
+            tweet_text = st.text_area("Type or paste your tweet here:", "Type Here")
             if st.button("Classify"):
                 # Transforming user input with vectorizer
                 vect_text = tweet_cv.transform([tweet_text]).toarray()
                 # Load your .pkl file with the model of your choice + make predictions
                 # Try loading in multiple models to give the user a choice
-                predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"), "rb"))
+                predictor = joblib.load(open(os.path.join(model_paths[f"{chosen}"]), "rb"))
                 prediction = predictor.predict(vect_text)
 
                 # When model has successfully run, will print prediction
                 # You can use a dictionary or similar structure to make this output
                 # more human interpretable.
-                if prediction > 0.5:
+                if prediction > 0:
                     st.success("This tweet was written by a believer of global warming")
                 else:
                     st.success("This tweet was written by a disbeliever of global warming")
