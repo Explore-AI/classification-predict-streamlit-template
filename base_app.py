@@ -21,63 +21,101 @@
 	https://docs.streamlit.io/en/latest/
 
 """
-# Streamlit dependencies
-import streamlit as st
-import joblib,os
+import os
 
+import joblib
 # Data dependencies
 import pandas as pd
+# Streamlit dependencies
+import streamlit as st
 
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl","rb")
-tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
+news_vectorizer = open("resources/tfidfvect.pkl", "rb")
+# loading your vectorizer from the pkl file
+tweet_cv = joblib.load(news_vectorizer)
 
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
 
 # The main function where we will build the actual app
+
+
 def main():
-	"""Tweet Classifier App with Streamlit """
+    """Tweet Classifier App with Streamlit """
+    # Creates a main title and subheader on your page -
+    # these are static across all pages
+    st.title("Tweet Classifer")
 
-	# Creates a main title and subheader on your page -
-	# these are static across all pages
-	st.title("Tweet Classifer")
-	st.subheader("Climate change tweet classification")
+    # Creating sidebar with selection box -
+    # you can create multiple pages this way
+    options = ["Prediction", "Tutorial"]
+    selection = st.sidebar.selectbox("Choose Option", options)
 
-	# Creating sidebar with selection box -
-	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
-	selection = st.sidebar.selectbox("Choose Option", options)
+    # Defining model descriptions
 
-	# Building out the "Information" page
-	if selection == "Information":
-		st.info("General Information")
-		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+    model_descriptions = {"Random Forest": "A random forest is a meta estimator that fits a \
+						   					number of decision tree classifiers on various sub-samples of the \
+						   					dataset and uses averaging to improve the predictive accuracy and control over-fitting.",
 
-		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+                          "LinearSVC":  "The implementation of C-Support Vector Classification is based on libsvm. The fit time scales at least quadratically with the \
+							  		 	 number of samples and may be impractical beyond tens of thousands of samples. \
+										 For large datasets consider using LinearSVC or SGDClassifier instead, \
+										 possibly after a Nystroem transformer. \
+										 The multiclass support is handled according to a one-vs-one scheme.\n\
+										 Linear Support Vector Classification is similar to SVC (C-Support Vector Classification) with parameter kernel=’linear’,\
+										 but implemented in terms of liblinear rather than libsvm, so it has more flexibility in the choice of penalties and loss \
+										 functions and should scale better to large numbers of samples.",
 
-	# Building out the predication page
-	if selection == "Prediction":
-		st.info("Prediction with ML Models")
-		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
+                          "Logistic Regression": "Logistic Regression (aka logit, MaxEnt) classifier. In the multiclass case, the training algorithm uses the\
+							  					  one-vs-rest (OvR) scheme if the ‘multi_class’ option is set to ‘ovr’, and uses the cross-entropy loss if the\
+												  ‘multi_class’ option is set to ‘multinomial’. (Currently the ‘multinomial’ option is supported only by the\
+												  ‘lbfgs’, ‘sag’, ‘saga’ and ‘newton-cg’ solvers.) This class implements regularized logistic regression using the\
+												  ‘liblinear’ library, ‘newton-cg’, ‘sag’, ‘saga’ and ‘lbfgs’ solvers. Note that regularization is applied by default.\
+												  It can handle both dense and sparse input. Use C-ordered arrays or CSR matrices containing 64-bit floats for optimal performance;\
+												  any other input format will be converted (and copied)."
+                          }
 
-		if st.button("Classify"):
-			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-			prediction = predictor.predict(vect_text)
+    # Building out the "Information" page
+    if selection == "Tutorial":
+        st.info("Tutorial")
+        # You can read a markdown file from supporting resources folder
+        st.markdown("Watch the video below to learn how to use the Tweet Classifier")
 
-			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
+        st.subheader("Raw Twitter data and label")
+        if st.checkbox('Show raw data'):  # data is hidden if box is unchecked
+            # will write the df to the page
+            st.write(raw[['sentiment', 'message']])
 
-# Required to let Streamlit instantiate our web app.  
+    # Building out the predication page
+    if selection == "Prediction":
+            st.subheader("Climate change tweet classification")
+            st.info("Prediction with a selection of ML Models")
+            chosen = st.radio('Model Selection', ("Random Forest", "LinearSVC", "Logistic Regression"))
+			# Creating a text box for user input
+            tweet_text = st.text_area("Enter Tweet", "Type Here")
+            if st.button("Classify"):
+                # Transforming user input with vectorizer
+                vect_text = tweet_cv.transform([tweet_text]).toarray()
+                # Load your .pkl file with the model of your choice + make predictions
+                # Try loading in multiple models to give the user a choice
+                predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"), "rb"))
+                prediction = predictor.predict(vect_text)
+
+                # When model has successfully run, will print prediction
+                # You can use a dictionary or similar structure to make this output
+                # more human interpretable.
+                if prediction > 0.5:
+                    st.success("This tweet was written by a believer of global warming")
+                else:
+                    st.success("This tweet was written by a disbeliever of global warming")
+            st.subheader(f"{chosen}")
+            st.markdown(f"Description from documentation: \n\n {model_descriptions[f'{chosen}']}")
+
+
+
+
+
+
+# Required to let Streamlit instantiate our web app.
 if __name__ == '__main__':
-	main()
+    main()
