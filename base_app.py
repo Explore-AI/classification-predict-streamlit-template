@@ -27,22 +27,11 @@ import joblib,os
 
 # Data dependencies
 import pandas as pd
-import numpy as np
 import re
-import inflect
-import contractions
 import string
+import inflect
 import unicodedata
-from sklearn import preprocessing
-from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import MinMaxScaler
-from nltk.stem import WordNetLemmatizer
-import urllib
-import nltk
 from nltk.corpus import stopwords
-from nltk import TreebankWordTokenizer
 
 # Vectorizer
 news_vectorizer = open("resources/vectoriser.pkl","rb")
@@ -60,16 +49,6 @@ def remove_URL(words):
     return re.sub(r"http\S+", "", words)
 
 raw['message'] = raw['message'].apply(remove_URL)
-
-        # second function
-def incomplete_words(words):
-    """
-    This function replace all incomplete word with the original version of the word
-    For example, `I'll` will become `I will` and `gng
-    """
-    return contractions.fix(words)
-
-raw['message'] = raw['message'].apply(incomplete_words)
 
        # third function
 def remove_punctuations(tokenized_words):
