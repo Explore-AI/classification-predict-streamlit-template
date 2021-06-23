@@ -111,7 +111,7 @@ def main():
     # these are static across all pages
 
     st.title("Sentiment Analysis")
-    st.subheader("You tweet, we classify!")
+    #st.subheader("You tweet, we classify!")
     st.sidebar.image("c2fea606b12a4a2ebdc4dd18e5cc9b54.png", use_column_width=True)
 
     # Creating sidebar with selection box -
@@ -120,13 +120,7 @@ def main():
     selection = st.sidebar.selectbox("Choose Option", options)
     
     # Building out the "Information" page
-<<<<<<< HEAD
-	if selection == "Introduction":
-        
-		st.info("Climate Change")
-=======
     if selection == "Introduction":
->>>>>>> 8d287e467994d25445f8fc5833a7ec73574c161f
 
         # You can read a markdown file from supporting resources folder
         st.markdown("![climate](https://images.unsplash.com/photo-1580868636775-b8a1818ca086?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&h=300&q=80)  \n\n"
@@ -134,31 +128,6 @@ def main():
                     "Are you a company planning to launch a product or offer a service that is environmentally friendly and sustainable? But you want to know how your customers perceive climate change?   \n\n"
                     "We got you! Clamassifer helps you understand how your products/service may be received so that you can come up with better marketing strategies and potentially increase your revenues.")
 
-<<<<<<< HEAD
-	# Building out the "Information" page
-	if selection == "Information":
-		st.info("General Information")
-		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
-
-		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
-
-	# Building out the predication page
-	if selection == "Prediction":
-		st.info("Prediction with ML Models")
-		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text",str("Type Here"))
-
-		if st.button("Classify"):
-			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/trained.pkl"),"rb"))
-			prediction = predictor.predict(vect_text)
-=======
     # Building out the "Information" page
     if selection == "Information":
         st.info("General Information")
@@ -171,29 +140,39 @@ def main():
 
     # Building out the predication page
     if selection == "Prediction":
-        st.info("Prediction with ML Models")
+        option = ["MultinomialNB Model", "LogisticRegresion Model"]
+        select = st.selectbox("Select Model To Use", option)
         # Creating a text box for user input
-        tweet_text = st.text_area("Enter Text",str("Type Here"))
+        tweet_text = st.text_area("Enter Text To Classify",str("Type Here"))
 
-    if st.button("Classify"):
-               # Transforming user input with vectorizer
-                vect_text = tweet_cv.transform([pre_process(tweet_text)]).toarray()
-                # Load your .pkl file with the model of your choice + make predictions
-                # Try loading in multiple models to give the user a choice
-                predictor = joblib.load(open(os.path.join("resources/trained.pkl"),"rb"))
-                prediction = predictor.predict(vect_text)
+        if select == "MultinomialNB Model":
+           predictor = joblib.load(open(os.path.join("resources/multinb.pkl"),"rb"))
+           st.button("Classify")
+           # Transforming user input with vectorizer
+           vect_text = tweet_cv.transform([pre_process(tweet_text)]).toarray()
+           # Load your .pkl file with the model of your choice + make predictions
+           # Try loading in multiple models to give the user a choice
+           prediction = predictor.predict(vect_text)
 
-                # When model has successfully run, will print prediction
-                # You can use a dictionary or similar structure to make this output
-                # more human interpretable.
-                st.success("Text Categorized as: {}".format(prediction))
->>>>>>> 8d287e467994d25445f8fc5833a7ec73574c161f
+           # When model has successfully run, will print prediction
+           # You can use a dictionary or similar structure to make this output
+           # more human interpretable.
+           st.success("Text Categorized as: {}".format(prediction))
 
-			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
+        if select == "LogisticRegresion Model":
+           predictor = joblib.load(open(os.path.join("resources/logreg.pkl"),"rb"))
+           st.button("Classify")
+           # Transforming user input with vectorizer
+           vect_text = tweet_cv.transform([pre_process(tweet_text)]).toarray()
+           # Load your .pkl file with the model of your choice + make predictions
+           # Try loading in multiple models to give the user a choice
+           prediction = predictor.predict(vect_text)
 
+           # When model has successfully run, will print prediction
+           # You can use a dictionary or similar structure to make this output
+           # more human interpretable.
+           st.success("Text Categorized as: {}".format(prediction))
+        
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
         main()
