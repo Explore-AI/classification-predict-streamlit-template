@@ -135,6 +135,8 @@ def main():
 
     # Building out the "Information" page
     if selection == "Analysis":
+        st.title("Analysis")
+        st.info("Data Visiualization")
         sns.set()
         raw['message'] = pre_process(raw)
         raw['sentiment_labels']  = raw['sentiment'].map({-1:'Negative', 0:'Neutral', 1:'Positive', 2:'News'})
