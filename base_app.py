@@ -104,13 +104,23 @@ def main():
 
 	# Creates a main title and subheader on your page
 	# these are static across all pages
-	st.title("Tweet Classifer")
-	st.subheader("Climate change tweet classification by AM1")
+	st.title("Clamassifer")
+	st.subheader("You tweet, we classify!")
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
+	options = ["Introduction", "Prediction", "Information", "Team"]
 	selection = st.sidebar.selectbox("Choose Option", options)
+    
+    # Building out the "Information" page
+	if selection == "Introduction":
+		st.info("Climate Change")
+
+		# You can read a markdown file from supporting resources folder
+		st.markdown("![climate](https://images.unsplash.com/photo-1580868636775-b8a1818ca086?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&h=300&q=80)  \n\n"
+                    "Hey there! Welcome to Clamassifer App. An app that classifies climate change tweets.  \n\n"
+                    "Are you a company planning to launch a product or offer a service that is environmentally friendly and sustainable? But you want to know how your customers perceive climate change?   \n\n"
+                    "We got you! Clamassifer helps you understand how your products/service may be received so that you can come up with better marketing strategies and potentially increase your revenues.")
 
 	# Building out the "Information" page
 	if selection == "Information":
