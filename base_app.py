@@ -124,7 +124,7 @@ def main():
 
 	# Building out the predication page
 	if selection == "Prediction":
-		st.info("Prediction with ML Models")
+		st.info("Prediction with MultinomialNB Model")
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text",str("Type Here"))
 
