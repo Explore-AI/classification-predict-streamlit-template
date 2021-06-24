@@ -22,6 +22,7 @@
 
 """
 # Streamlit dependencies
+from pandas.core.frame import DataFrame
 import streamlit as st
 import joblib
 import os
@@ -33,6 +34,8 @@ import string
 import inflect
 import unicodedata
 from nltk.corpus import stopwords
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # Vectorizer
 news_vectorizer = open("resources/vectoriser.pkl", "rb")
@@ -47,7 +50,7 @@ raw = pd.read_csv("resources/train.csv")
 
 def pre_process(text):
     # remove stpo_words
-    text = ' '.join([word for word in text.split()
+    text = ' '.join([word for word in str(text).split()
                     if word not in stopwords.words('english')])
 
     # This function take a string as an input and removes any url that are present in that string
@@ -116,8 +119,8 @@ def main():
 
     # Creating sidebar with selection box -
     # you can create multiple pages this way
-    options = ["Introduction", "Prediction", "Information", "Team"]
-    selection = st.sidebar.selectbox("Choose Option", options)
+    options = ("Introduction", "Analysis", "Prediction", "Team")
+    selection = st.sidebar.radio("Choose Option", options)
     
     # Building out the "Information" page
     if selection == "Introduction":
@@ -129,15 +132,25 @@ def main():
                     "We got you! Clamassifer helps you understand how your products/service may be received so that you can come up with better marketing strategies and potentially increase your revenues.")
 
     # Building out the "Information" page
-    if selection == "Information":
-        st.info("General Information")
-        # You can read a markdown file from supporting resources folder
-        st.markdown("Some information here")
+    if selection == "Analysis":
+        st.title("Analysis")
+        st.info("Data Visiualization")
+        sns.set()
+        raw['message'] = pre_process(raw)
+        raw['sentiment_labels']  = raw['sentiment'].map({-1:'Negative', 0:'Neutral', 1:'Positive', 2:'News'})
 
-        st.subheader("Raw Twitter data and label")
-        if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-            st.write(raw[['sentiment', 'message']]) # will write the df to the page
-
+        fig, axes = plt.subplots(ncols = 2, nrows = 1, figsize = (15, 10), dpi = 100)
+        
+        sns.countplot(raw['sentiment_labels'], ax = axes[0]).set_ylabel('Number of Tweets')
+        Sentiments_ = ['Positive', 'News', 'Neutral', 'Negative']
+        axes[1].pie(raw['sentiment_labels'].value_counts(),
+            labels = Sentiments_,
+            autopct = '%1.0f%%',
+            startangle = 90,
+            explode = (0.1, 0.1, 0.1, 0.1))
+        fig.suptitle('Count for each sentiment class', fontsize=20)
+        st.write(fig)
+        
     # Building out the predication page
     if selection == "Prediction":
         option = ["MultinomialNB Model", "LogisticRegresion Model"]
