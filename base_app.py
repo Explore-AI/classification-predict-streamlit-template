@@ -185,6 +185,13 @@ def main():
               # You can use a dictionary or similar structure to make this output
               # more human interpretable.
               st.success("Text Categorized as: {}".format(prediction))
+    #Building Team page     
+    if selection == "Team":
+            st.markdown("TEAM MEMBERS\n\n"
+                        "Wisley Ramukhuba (Team Coodinator)\n\n"
+                        "Mukovhe Lugisani (Team Member) \n\n"
+                        "Boitumelo Magakwe (Team Member) \n\n"
+                        "Onkarabile Tshele (Team Member) ")
         
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
