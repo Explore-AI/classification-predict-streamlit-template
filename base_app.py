@@ -36,6 +36,8 @@ import unicodedata
 from nltk.corpus import stopwords
 import matplotlib.pyplot as plt
 import seaborn as sns
+from wordcloud import WordCloud
+import numpy as np
 
 # Vectorizer
 news_vectorizer = open("resources/vectoriser.pkl", "rb")
@@ -134,6 +136,7 @@ def main():
 
     # Building out the "Information" page
     if selection == "Analysis":
+        raw_copy = raw.copy()
         st.title("Part of our EDA analysis")
         st.info("Data Visiualization")
         sns.set()
@@ -151,6 +154,97 @@ def main():
             explode = (0.1, 0.1, 0.1, 0.1))
         fig.suptitle('Count for each sentiment class', fontsize=20)
         st.write(fig)
+
+         # Distribution plots for the labels
+        fig,(ax1,ax2,ax3,ax4) = plt.subplots(nrows = 1, ncols = 4, figsize = (16, 8), dpi = 100)
+
+        #For Positive 
+        sns.distplot(raw[raw['sentiment'] == 1]['message'].str.len(), hist=True, kde=True, bins = int(200/25),
+                    color = 'blue', ax = ax1, hist_kws = {'edgecolor':'black'}, kde_kws = {'linewidth': 4})
+        ax1.set_title('Positive')
+        ax1.set_xlabel('message_Length')
+        ax1.set_ylabel('Density')
+
+        #For Negative 
+        sns.distplot(raw[raw['sentiment'] == -1]['message'].str.len(), hist=True, kde=True, bins = int(200/25),
+                    color = 'lightblue', ax = ax2, hist_kws = {'edgecolor':'black'}, kde_kws = {'linewidth': 4})
+        ax2.set_title('Negative ')
+        ax2.set_xlabel('message_Length')
+        ax2.set_ylabel('Density')
+
+        #For Neutral 
+        sns.distplot(raw[raw['sentiment'] == 0]['message'].str.len(), hist=True, kde=True, bins = int(200/25),
+                    color = 'purple', ax = ax3, hist_kws = {'edgecolor':'black'}, kde_kws = {'linewidth': 4})
+        ax3.set_title('Neutral ')
+        ax3.set_xlabel('message_Length')
+        ax3.set_ylabel('Density')
+
+        #For News
+        sns.distplot(raw[raw['sentiment'] == 2]['message'].str.len(), hist=True, kde=True, bins=int(200/25),
+                    color = 'green', ax = ax4, hist_kws={'edgecolor':'black'}, kde_kws={'linewidth': 4})
+        ax4.set_title('News')
+        ax4.set_xlabel('message_Length')
+        ax4.set_ylabel('Density')
+        st.write(fig)
+
+        # Visualizing text lengths for each sentiment
+        fig = plt.figure(figsize = (15, 10))
+        labels = ['Negative', 'Neutral', 'Positive', 'News']
+        sns.barplot(x = 'sentiment', y = raw_copy['message'].apply(len), data = raw_copy, palette='husl').set_xticklabels(labels)
+        plt.ylabel('Length')
+        plt.xlabel('Sentiment')
+        plt.title('Average Length of Message by Sentiment')
+        st.write(fig)
+
+
+        # Creating a column of hastags users
+        raw_copy['users'] = [''.join(re.findall(r"@\w+", sentence.lower())) if '@' in sentence else np.nan for sentence in raw_copy.message]
+
+        # Creating a column of hastags users
+        raw_copy['hashtags'] = [''.join(re.findall(r"#\w+", sentence.lower())) if '#' in sentence else np.nan for sentence in raw_copy.message]
+
+        hashtag = raw_copy[['message', 'hashtags']].groupby('hashtags', as_index=False).count().sort_values(by='message', ascending = False)
+
+        fig = plt.figure(figsize=(12, 6))
+        sns.barplot(data = hashtag.iloc[:20], y = 'hashtags', x = 'message', orient='h', color = 'blue')
+        plt.title("Top 20 most used hashtags", fontsize = 14)
+        plt.xlabel('Hashtag Count')
+        plt.ylabel('Hashtags')
+        st.write(fig)
+
+        # Number of messages per users
+        users = raw_copy[['message', 'users']].groupby('users', as_index=False).count().sort_values(by='message', ascending = False)
+
+        fig = plt.figure(figsize=(12, 6))
+        sns.countplot(data = raw_copy, y = 'users', order = raw_copy.users.value_counts().iloc[:20].index, orient='h')
+        plt.title('Top 20 Most Popular Tags', fontsize = 14)
+        plt.xlabel('Number of Tags')
+        plt.ylabel('User')
+        st.write(fig)
+
+        # Separate minority and majority classes
+        News = raw_copy[raw_copy['sentiment'] == 2]
+        Pro = raw_copy[raw_copy['sentiment'] == 1]
+        Neutral = raw_copy[raw_copy['sentiment'] == 0]
+        Anti = raw_copy[raw_copy['sentiment'] == -1]
+
+        
+        fig = plt.figure(figsize = (15,10))
+        wc = WordCloud(max_words = 200 , width = 1600 , height = 800, collocations = False).generate(" ".join(Anti['message']))
+        st.image(wc.to_array())
+
+        
+        fig = plt.figure(figsize = (15,10))
+        wc = WordCloud(max_words = 200 , width = 1600 , height = 800, collocations = False).generate(" ".join(Pro['message']))
+        st.image(wc.to_array())
+
+        fig = plt.figure(figsize = (15,10))
+        wc = WordCloud(max_words = 200 , width = 1600 , height = 800, collocations = False).generate(" ".join(Neutral['message']))
+        st.image(wc.to_array())
+
+        fig = plt.figure(figsize = (15,10))
+        wc = WordCloud(max_words = 200 , width = 1600 , height = 800, collocations = False).generate(" ".join(News['message']))
+        st.image(wc.to_array())
 
     # Building out the predication page
     if selection == "Prediction":
