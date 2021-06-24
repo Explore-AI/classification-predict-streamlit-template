@@ -59,40 +59,51 @@ raw = pd.read_csv("resources/train.csv")
 def display_prediction(input_text):
     if input_text[0]==-1:
         output="Anti"
-        st.error(f"{output} Text Sentiment Predicted")
+        st.error(f"{output} Sentiment Predicted")
+        st.error('Tweets that do not support the belief of man-made climate change.')
     elif input_text[0]==0:
         output="Neutral"
-        st.info(f"{output} Text Sentiment Predicted")
+        st.info(f"{output} Sentiment Predicted")
+        st.info("Tweets that neither support nor refuse beliefs of climate change.")
     elif input_text[0]==1:
         output ="Pro"
-        st.success(f"{output} Text Sentiment Predicted")
+        st.success(f"{output} Sentiment Predicted")
+        st.success("Tweets that support the belief of man-made climate change")
     else:
         output = "News"
-        st.warning(f"{output} Text Sentiment Predicted")
+        st.warning(f"{output} Sentiment Predicted")
+        st.warning("Tweets linked to factual news about climate change.")
     
 # The main function where we will build the actual app
 def main():
 	"""Tweet Classifier App with Streamlit """
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
+	st.title("Tweet Classifier")
 	st.subheader("Climate change tweet classification")
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["About The Project", "Prediction", "Data Visualisation", "Model Performance"]
+	options = ["About The App", "Prediction", "Data Visualisation", "Model Performance"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 
 	# Building out the "Information" page
-	if selection == "About The Project":
+	if selection == "About The App":
 		st.image('resources/imgs/changes.gif', caption='Climate Change',use_column_width=True)
 		st.subheader("About the App")
 		st.info("The entire app is built using Machine Learning models that is able to classify whether or not a person believes in climate change, based on their novel tweet data.")
 		# You can read a markdown file from supporting resources folder
 		st.markdown("Below is just the small portion of dataset that has been used to train the models")
 
+		st.subheader("Introduction")
+		st.markdown(
+			"""It is undeniable that climate change is one of the most talked topics of our times and one of the biggest challenges the world is facing today. 
+			In the past few years, we have seen a steep rise on the Earth's temperature, causing a spike in wild fires, drought, rise of sea levels due to melting glaciers, rainfall pattern shifts, flood disasters.
+			"""
+			)
+
 		st.subheader("Why App Was Created ?")
-		st.markdown('	')
+		st.markdown('The aim of this App is to gauge the public perception of climate change using twitter data')
 
 		st.subheader("Raw Twitter data and label")
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
