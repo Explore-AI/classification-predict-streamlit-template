@@ -150,7 +150,7 @@ def main():
             explode = (0.1, 0.1, 0.1, 0.1))
         fig.suptitle('Count for each sentiment class', fontsize=20)
         st.write(fig)
-        
+
     # Building out the predication page
     if selection == "Prediction":
         option = ["MultinomialNB Model", "LogisticRegresion Model"]
@@ -160,31 +160,31 @@ def main():
 
         if select == "MultinomialNB Model":
            predictor = joblib.load(open(os.path.join("resources/multinb.pkl"),"rb"))
-           st.button("Classify")
-           # Transforming user input with vectorizer
-           vect_text = tweet_cv.transform([pre_process(tweet_text)]).toarray()
-           # Load your .pkl file with the model of your choice + make predictions
-           # Try loading in multiple models to give the user a choice
-           prediction = predictor.predict(vect_text)
+           if st.button("Classify"): 
+              # Transforming user input with vectorizer
+              vect_text = tweet_cv.transform([pre_process(tweet_text)]).toarray()
+              # Load your .pkl file with the model of your choice + make predictions
+              # Try loading in multiple models to give the user a choice
+              prediction = predictor.predict(vect_text)
 
-           # When model has successfully run, will print prediction
-           # You can use a dictionary or similar structure to make this output
-           # more human interpretable.
-           st.success("Text Categorized as: {}".format(prediction))
+              # When model has successfully run, will print prediction
+              # You can use a dictionary or similar structure to make this output
+              # more human interpretable.
+              st.success("Text Categorized as: {}".format(prediction))
 
         if select == "LogisticRegresion Model":
            predictor = joblib.load(open(os.path.join("resources/logreg.pkl"),"rb"))
-           st.button("Classify")
-           # Transforming user input with vectorizer
-           vect_text = tweet_cv.transform([pre_process(tweet_text)]).toarray()
-           # Load your .pkl file with the model of your choice + make predictions
-           # Try loading in multiple models to give the user a choice
-           prediction = predictor.predict(vect_text)
+           if st.button("Classify"):
+              # Transforming user input with vectorizer
+              vect_text = tweet_cv.transform([pre_process(tweet_text)]).toarray()
+              # Load your .pkl file with the model of your choice + make predictions
+              # Try loading in multiple models to give the user a choice
+              prediction = predictor.predict(vect_text)
 
-           # When model has successfully run, will print prediction
-           # You can use a dictionary or similar structure to make this output
-           # more human interpretable.
-           st.success("Text Categorized as: {}".format(prediction))
+              # When model has successfully run, will print prediction
+              # You can use a dictionary or similar structure to make this output
+              # more human interpretable.
+              st.success("Text Categorized as: {}".format(prediction))
         
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
