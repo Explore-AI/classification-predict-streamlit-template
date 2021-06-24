@@ -113,7 +113,7 @@ def main():
     # Creates a main title and subheader on your page
     # these are static across all pages
 
-    st.title("Sentiment Analysis")
+    
     #st.subheader("You tweet, we classify!")
     st.sidebar.image("c2fea606b12a4a2ebdc4dd18e5cc9b54.png", use_column_width=True)
 
@@ -124,6 +124,7 @@ def main():
     
     # Building out the "Information" page
     if selection == "Introduction":
+        st.title("Introduction")
 
         # You can read a markdown file from supporting resources folder
         st.markdown("![climate](https://images.unsplash.com/photo-1580868636775-b8a1818ca086?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&h=300&q=80)  \n\n"
@@ -133,7 +134,7 @@ def main():
 
     # Building out the "Information" page
     if selection == "Analysis":
-        st.title("Analysis")
+        st.title("Part of our EDA analysis")
         st.info("Data Visiualization")
         sns.set()
         raw['message'] = pre_process(raw)
@@ -153,6 +154,7 @@ def main():
 
     # Building out the predication page
     if selection == "Prediction":
+        st.title("Analysing Your Tweet")
         option = ["MultinomialNB Model", "LogisticRegresion Model"]
         select = st.selectbox("Select Model To Use", option)
         # Creating a text box for user input
@@ -187,11 +189,11 @@ def main():
               st.success("Text Categorized as: {}".format(prediction))
     #Building Team page     
     if selection == "Team":
-            st.markdown("TEAM MEMBERS\n\n"
-                        "Wisley Ramukhuba (Team Coodinator)\n\n"
-                        "Mukovhe Lugisani (Team Member) \n\n"
-                        "Boitumelo Magakwe (Team Member) \n\n"
-                        "Onkarabile Tshele (Team Member) ")
+        st.title("Team Members")
+        st.markdown("Wisley Ramukhuba (Team Coodinator)\n\n"
+                    "Mukovhe Lugisani (Team Member) \n\n"
+                    "Boitumelo Magakwe (Team Member) \n\n"
+                    "Onkarabile Tshele (Team Member) ")
         
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
