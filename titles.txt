@@ -1,0 +1,24 @@
+google
+none
+403 forbidden
+file not found
+page not found
+404 not found
+404 page not found
+twitter
+youtube
+scihubbz
+tco twitter
+500 internal server error
+short url blocked
+Sorry something went wrong
+attention required
+error
+405 You have been blacklisted
+not acceptable
+facebook
+sciencedirect
+are you a robot
+just a moment
+whoops
+service unavailable
