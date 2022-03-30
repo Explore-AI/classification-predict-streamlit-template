@@ -27,6 +27,8 @@ import joblib,os
 
 # Data dependencies
 import pandas as pd
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
@@ -46,7 +48,7 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
+	options = ["Prediction", "Information", "Data Insights"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 
 	# Building out the "Information" page
@@ -77,6 +79,18 @@ def main():
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			st.success("Text Categorized as: {}".format(prediction))
+
+	# Building the EDA Page
+	if selection == "Data Insights":
+		# Generate Wordcloud imaages
+		wordcloud = WordCloud().generate(raw['message'])
+
+		# Display image
+		plt.imshow(wordcloud, interpolation='bilinear')
+		plt.axis('off')
+		plt.show()
+		st.pyplot()
+
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
