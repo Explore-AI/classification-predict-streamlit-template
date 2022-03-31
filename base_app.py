@@ -23,7 +23,10 @@
 """
 # Streamlit dependencies
 import streamlit as st
-import joblib,os
+import joblib,os 
+import matplotlib.pyplot as plt
+import plotly.express as px
+import numpy as np
 
 # Data dependencies
 import pandas as pd
@@ -33,7 +36,7 @@ news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
 # Load your raw data
-raw = pd.read_csv("resources/train.csv")
+data = pd.read_csv("data/train.csv")
 
 # The main function where we will build the actual app
 def main():
@@ -41,13 +44,40 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
+	st.title("Climate Change Sentiment Analysis")
 	st.subheader("Climate change tweet classification")
+	st.markdown('Some of the tweet sentiments')
+
+	st.sidebar.subheader('Tweets')
+	tweets = st.sidebar.radio("Sentiment Type",(-1,0,1,2))
+	st.write(data.query('sentiment==@tweets')[['message']].sample(1).iat[0,0])
+	st.write(data.query('sentiment==@tweets')[['message']].sample(1).iat[0,0])
+	st.write(data.query('sentiment==@tweets')[['message']].sample(1).iat[0,0])
+
+	
+	
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
+	options = ["Company Personel","Exploratory Data Analysis","Prediction", "Information",]
 	selection = st.sidebar.selectbox("Choose Option", options)
+	# segregating dataframe for analyzing individual sentiments
+		
+	
+		
+	
+	if selection == 'Exploratory Data Analysis':
+		select = st.sidebar.selectbox('Visualization of Tweets',['Bar graph', 'Pie Chart'], key=1)
+
+		sentiment = data['sentiment'].value_counts()
+		sentiment = pd.DataFrame({'Sentiment': sentiment.index, 'Tweets': sentiment.values})
+		st.markdown('Sentiment count')
+		if select == 'Bar graph':
+			fig = px.bar(sentiment, x='Sentiment',y='Tweets', color = 'Tweets', height = 500)
+			st.plotly_chart(fig)
+		else:
+			fig = px.pie(sentiment, values='Tweets', names = 'Sentiment')
+			st.plotly_chart(fig)
 
 	# Building out the "Information" page
 	if selection == "Information":
@@ -57,7 +87,7 @@ def main():
 
 		st.subheader("Raw Twitter data and label")
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+			st.write(data[['sentiment', 'message']]) # will write the df to the page
 
 	# Building out the predication page
 	if selection == "Prediction":
