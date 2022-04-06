@@ -1,0 +1,49 @@
+header.css-1jkb0cp.e8zbici2{
+    background-color: black !important;
+}
+
+
+.appview-container.css-1wrcr25.egzxvld4{
+    background-color: black !important;
+    display: flexbox;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+}
+
+.main.css-1v3fvcr.egzxvld3{
+    height: 85% !important;
+}
+
+.block-container.css-12oz5g7.egzxvld2{
+    max-width: 100% !important;
+    height: 85% !important;
+    padding: 0% !important;
+}
+
+.css-xvp2ki.e1tzin5v0{
+    max-width: 100% !important;
+}
+
+
+.element-container.css-8rzef5.e1tzin5v3{
+    max-width: 100% !important;
+    position: relative;
+}
+
+.my_navbar{
+    width: 100%;
+    background-color: aqua;
+    height: 20px !important;
+}
+
+.intro{
+    width: 100%;
+    background-color: green;
+    height: 20px !important;
+}
+
+
+/* .css-1jkb0cp.e8zbici2{
+    display: none;
+} */
