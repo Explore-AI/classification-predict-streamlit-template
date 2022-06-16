@@ -24,6 +24,7 @@
 # Streamlit dependencies
 import streamlit as st
 import joblib,os
+from nltk.util import ngrams
 
 # Data dependencies
 import pandas as pd
@@ -46,7 +47,7 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
+	options = ["Prediction", "Information", 'ngram']
 	selection = st.sidebar.selectbox("Choose Option", options)
 
 	# Building out the "Information" page
@@ -77,7 +78,12 @@ def main():
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			st.success("Text Categorized as: {}".format(prediction))
+	if selection == 'ngram':
+		hour = st.slider('ngram', 0, 20, 3)
+		result = '333 God is good'
+		st.subheader(f'The most popular {hour} group(s) of word in climate related tweet is {result}')
 
+		# st.text('God is good', 'type here')
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
 	main()
