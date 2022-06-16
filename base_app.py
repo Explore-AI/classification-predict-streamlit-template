@@ -22,6 +22,7 @@
 
 """
 # Streamlit dependencies
+from turtle import color
 import streamlit as st
 import joblib,os
 
@@ -46,8 +47,18 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
-	selection = st.sidebar.selectbox("Choose Option", options)
+	#New - added "model" option
+	options = ["Prediction","Information"]
+	#m_options = ["choose model","Decision_Tree ml","KNN","Random_Forrest"]
+
+	selection = st.sidebar.selectbox("Choose Option",options)
+	#m_selection = st.sidebar.selectbox("Choose Model",m_options)
+	st.sidebar.info("Model selection")
+	model1 = st.sidebar.checkbox("Decision Tree")
+	model2 = st.sidebar.checkbox("Kth Nearest Neighbour",key = 2)
+	model3 = st.sidebar.checkbox("Random Forrest",key = 3)
+	
+  
 
 	# Building out the "Information" page
 	if selection == "Information":
@@ -59,24 +70,41 @@ def main():
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 
+		
 	# Building out the predication page
 	if selection == "Prediction":
-		st.info("Prediction with ML Models")
+		st.info("Predict Sentiment of tweets using ML Models")
+			#new - #"Prediction with ML Models"-info text
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
+	
 
 		if st.button("Classify"):
-			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-			prediction = predictor.predict(vect_text)
+			while st.sidebar.checkbox("Decision Tree",key = 1):
+				# Transforming user input with vectorizer
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
+				# Load your .pkl file with the model of your choice + make predictions
+				# Try loading in multiple models to give the user a choice
+		 
+				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+				prediction = predictor.predict(vect_text)
+			
+				# When model has successfully run, will print prediction
+				# You can use a dictionary or similar structure to make this output
+				# more human interpretable.
+				status = st.success("{}".format(prediction))
+				if status == 1:
+					st.write("You believe in climate change !")
+				
+				elif status == 2:
+					st.write("News")
+				elif status == -1:
+					st.write("You do not believe in climate change")
+				elif status == 0:
+					st.write("You have a neutral opinion on climate change")
 
-			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
+		
+
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
