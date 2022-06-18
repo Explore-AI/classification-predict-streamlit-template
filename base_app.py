@@ -44,19 +44,22 @@ def main():
 	# these are static across all pages
 	st.title("Tweet Classifer")
 	st.subheader("Climate change tweet classification")
+	
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
+
 	#New - added "model" option
+	
 	options = ["Prediction","Information"]
-	#m_options = ["choose model","Decision_Tree ml","KNN","Random_Forrest"]
+	m_options = ["Decision_Tree ml","KNN","Random_Forrest"]
 
 	selection = st.sidebar.selectbox("Choose Option",options)
-	#m_selection = st.sidebar.selectbox("Choose Model",m_options)
-	st.sidebar.info("Model selection")
-	model1 = st.sidebar.checkbox("Decision Tree")
-	model2 = st.sidebar.checkbox("Kth Nearest Neighbour",key = 2)
-	model3 = st.sidebar.checkbox("Random Forrest",key = 3)
+	m_selection = st.sidebar.selectbox("Choose Model",m_options)
+	#st.sidebar.info("Model selection")
+	#model1 = st.sidebar.checkbox("Decision Tree",key = 1)
+	#model2 = st.sidebar.checkbox("Kth Nearest Neighbour",key = 2)
+	#model3 = st.sidebar.checkbox("Random Forrest",key = 3)
 	
   
 
@@ -71,41 +74,127 @@ def main():
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 
 		
-	# Building out the predication page
-	if selection == "Prediction":
-		st.info("Predict Sentiment of tweets using ML Models")
-			#new - #"Prediction with ML Models"-info text
+	# Building out the predication page 
+	# Using the "Decision tree" ML Model
+
+	if selection == "Prediction" and m_selection == "Decision_Tree ml":
+	
 		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
+		tweet_text = st.text_area("Enter Text Below","Type Here")
+		st.write("(Prediction with ML Models)")
+	
+        
+		if st.button("Classify"):
+			
+			# Transforming user input with vectorizer
+			vect_text = tweet_cv.transform([tweet_text]).toarray()
+			# Load your .pkl file with the model of your choice + make predictions
+			# Try loading in multiple models to give the user a choice
+		 
+			predictor = joblib.load(open(os.path.join("resources/CW3.pkl"),"rb"))
+			prediction = predictor.predict(vect_text)
+			
+			# When model has successfully run, will print prediction
+			# You can use a dictionary or similar structure to make this output
+			# more human interpretable.
+			#status = st.success("{}".format(prediction))
+			status = '{}'.format(prediction)
+			
+			if status == '[1]':
+				st.write("You believe in climate change!")
+			elif status == '[-1]':
+				st.write("you don't believe in climate change")
+			elif status == '[0]':
+				st.write("You have a neutral opinion on climate change")
+
+	##_##_##_##_
+
+
+	# Making the same predictions
+	# Using the "KNN" Model
+
+	elif selection == "Prediction" and m_selection == "KNN":
+	
+		# Creating a text box for user input
+		tweet_text = st.text_area("Enter Text Below","Type Here")
+		st.write("(Prediction with ML Models)")
+	
+        
+		if st.button("Classify"):
+			
+			# Transforming user input with vectorizer
+			vect_text = tweet_cv.transform([tweet_text]).toarray()
+			# Load your .pkl file with the model of your choice + make predictions
+			# Try loading in multiple models to give the user a choice
+		 
+			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			prediction = predictor.predict(vect_text)
+			
+			# When model has successfully run, will print prediction
+			# You can use a dictionary or similar structure to make this output
+			# more human interpretable.
+			#status = st.success("{}".format(prediction))
+			status = '{}'.format(prediction)
+			
+			if status == '[1]':
+				st.write("You in climate change!")
+			elif status == '[-1]':
+				st.write("you don't believe in climate change")
+			elif status == '[0]':
+				st.write("You have a neutral opinion on climate change")
+	
+	##_##_##_##_
+				
+
+
+
+	# Making the same prediction
+	# Using the "Random_Forrest" ML Model
+
+	elif selection == "Prediction" and m_selection == "Random_Forrest":
+	
+		# Creating a text box for user input
+		tweet_text = st.text_area("Enter Text Below","Type Here")
+		st.write("(Prediction with ML Models)")
+	
+        
+		if st.button("Classify"):
+			
+			# Transforming user input with vectorizer
+			vect_text = tweet_cv.transform([tweet_text]).toarray()
+			# Load your .pkl file with the model of your choice + make predictions
+			# Try loading in multiple models to give the user a choice
+		 
+			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			prediction = predictor.predict(vect_text)
+			
+			# When model has successfully run, will print prediction
+			# You can use a dictionary or similar structure to make this output
+			# more human interpretable.
+			#status = st.success("{}".format(prediction))
+			status = '{}'.format(prediction)
+			
+			if status == '[1]':
+				st.subheader("You believe climate change!")
+			elif status == '[-1]':
+				st.write("you don't believe in climate change")
+			elif status == '[0]':
+				st.write("You have a neutral opinion on climate change")
+
+
+
 	
 
-		if st.button("Classify"):
-			while st.sidebar.checkbox("Decision Tree",key = 1):
-				# Transforming user input with vectorizer
-				vect_text = tweet_cv.transform([tweet_text]).toarray()
-				# Load your .pkl file with the model of your choice + make predictions
-				# Try loading in multiple models to give the user a choice
-		 
-				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction = predictor.predict(vect_text)
-			
-				# When model has successfully run, will print prediction
-				# You can use a dictionary or similar structure to make this output
-				# more human interpretable.
-				status = st.success("{}".format(prediction))
-				if status == 1:
-					st.write("You believe in climate change !")
+	##_##_##_##_
 				
-				elif status == 2:
-					st.write("News")
-				elif status == -1:
-					st.write("You do not believe in climate change")
-				elif status == 0:
-					st.write("You have a neutral opinion on climate change")
+				
+				
+			
+
+
 
 		
-
-
+		
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
 	main()
