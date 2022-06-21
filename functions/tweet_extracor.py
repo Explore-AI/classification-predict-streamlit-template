@@ -1,5 +1,4 @@
-# from tweepy import *
- 
+# importing neccessary modules and packages
 import pandas as pd
 import csv
 import re 

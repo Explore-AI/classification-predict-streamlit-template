@@ -5,6 +5,11 @@ from nltk import pos_tag
 from nlppreprocess import NLP as nlp
 
 def cleaner(line):
+
+    '''This function takes raw text as input, cleans it by removing any noise added to it.
+       This includes: punctuation, "#", "@" , digits, ...
+       The function will also find the root form of each word, and return the clean tweet'''
+
     line = re.sub(r'^RT ','', re.sub(r'https://t.co/\w+', '', line).strip()) 
     punctuation = re.compile("[.;:!\'’‘“”?,\"()\[\]]")
     tweet = punctuation.sub("", line.lower()) 
