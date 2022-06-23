@@ -87,16 +87,89 @@ def main():
 	# Building out the "Model" page
 	if selection == "Model":
 		st.title("Model")
-		st.info("General Information")
+		st.subheader("What is Logistic Regression?")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+		st.markdown("Logistic regression estimates the probability of an event occurring, such as voted or didn’t vote, based on a given dataset of independent variables. It is often used for classification and predictive analytics. ")
+		st.markdown("There are algebraically equivalent ways to write the logistic regression model:")
+		st.markdown("The first is")
+		st.latex(r'''
+		P(X) = \displaystyle \frac{e^{\beta_0 + \beta_1 X}}{1+e^{\beta_0 + \beta_1 X}}
+     	''')
+		st.markdown("which is an equation that describes the odds of being in the current category of interest. By definition, the odds for an event is π / (1 - π) such that P is the probability of the event.")
+		st.markdown("The second is")
+		st.latex(r'''
+		\begin{align}
+		1 - P(X) &= \displaystyle \frac{1}{1+e^{\beta_0 + \beta_1 X}} \\
+		\therefore \log \left( \frac{P(X)}{1-P(X)} \right) &= {\beta_0 + \beta_1 X}
+		\end{align}
+     	''')
+		st.markdown("which states that the (natural) logarithm of the odds is a linear function of the X variables (and is often called the log odds). This is also referred to as the logit transformation of the probability of success, π.")
+		st.subheader("Types of Logistic Regression")
+		st.markdown("- Binary logistic regression")
+		st.markdown("- Multinomial logistic regression")
+		st.markdown("- Ordinal logistic regression")
+		st.subheader("Advantages")
+		st.markdown("- Logistic regression is much easier to implement than other methods, especially in the context of machine learning.")
+		st.markdown("- Logistic regression works well for cases where the dataset is linearly separable.")
+		st.markdown("- Logistic regression provides useful insights.")
+		st.subheader("Disadvantages")
+		st.markdown("- Logistic regression fails to predict a continuous outcome.")
+		st.markdown("- Logistic regression assumes linearity between the predicted (dependent) variable and the predictor (independent) variables.")
+		st.markdown("- Logistic regression may not be accurate if the sample size is too small.")
 
 	# Building out the "Contact Us" page
 	if selection == "Contact Us":
 		st.title("Contact Us")
-		st.info("General Information")
+		st.subheader("Our Company")
+		st.markdown("Solid Solutions is an innovation tech company with a key focus on creating up to date technological products designed to make light of any problem thrown our way. We are extremely passionate about giving back to the community. Strengthening Today for a Stronger Tomorrow!")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+		col1, col2, col3, col4, col5, col6 = st.columns(6)
+		with col1:
+			st.caption("Elizabeth Pata Matlala")
+
+		with col2:
+			st.caption("Hendrick Makau")
+
+		with col3:
+			st.caption("Mokgadi Precious Makgothoma")
+
+		with col4:
+			st.caption("Morema Moloisi")
+
+		with col5:
+			st.caption("Njabulo Mudau")
+
+		with col6:
+			st.caption("Robyn van der Merwe")
+
+
+		st.subheader("Message Us")
+		with st.form("form", clear_on_submit=True):
+			name = st.text_input("Enter Full Name")
+			email = st.text_input("Enter Email Address")
+			message = st.text_area("Message")
+
+			submit = st.form_submit_button("Submit")
+
+		col1, col2, col3 = st.columns(3)
+		with col1:
+			st.subheader("Address")
+			st.markdown("1004 Otto du Plesis")
+			st.markdown("Cape Town")
+			st.markdown("8001")
+
+		with col2:
+			st.subheader("Phone")
+			st.markdown("Monday - Friday")
+			st.markdown("08h00 - 17h00 GMT+2")
+			st.markdown("(+27) 021 554 1091")
+			st.markdown("(+27) 084 553 4721")
+
+		with col3:
+			st.subheader("Email")
+			st.markdown("robynvandermerwe@gmail.com")
+			st.markdown("robynvandermerwe@yahoo.com")
+
 
 	# Building out the Home page
 	if selection == "Home":
