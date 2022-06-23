@@ -50,7 +50,7 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Home", "About", "Features", "Model", "Contact Us"]
+	options = ["Home", "About", "Exploratory Data Analysis", "Model", "Contact Us"]
 	selection = st.sidebar.selectbox("",options)
 
 	# Building out the "About" page
@@ -62,9 +62,9 @@ def main():
 		st.subheader("How to Make a Prediction")
 		st.markdown("The following steps will provide you with a seamless interaction with our tweet classifiction app.")
 
-	# Building out the "Features" page
-	if selection == "Features":
-		st.title("Features")
+	# Building out the "Exploratory Data Analysis" page
+	if selection == "Exploratory Data Analysis":
+		st.title("Exploratory Data Analysis")
 		st.subheader("Sentiments")
 		# You can read a markdown file from supporting resources folder
 		st.markdown("2 = News : Tweets linked to factual news about climate change.")
@@ -125,24 +125,43 @@ def main():
 		st.markdown("Solid Solutions is an innovation tech company with a key focus on creating up to date technological products designed to make light of any problem thrown our way. We are extremely passionate about giving back to the community. Strengthening Today for a Stronger Tomorrow!")
 		# You can read a markdown file from supporting resources folder
 		col1, col2, col3, col4, col5, col6 = st.columns(6)
+		img1 = Image.open("Robyn2.jpg")
+		img2 = Image.open("Robyn3.jpg")
+		img3 = Image.open("Robyn4.jpg")
+		img4 = Image.open("Morema.jpg")
+		img5 = Image.open("Robyn6.jpg")
+		img6 = Image.open("Robyn1.jpg")
+		
 		with col1:
+			st.caption("Market Technologist")
+			st.image(img1)
 			st.caption("Elizabeth Pata Matlala")
 
 		with col2:
+			st.caption("Software Developer")
+			st.image(img2)
 			st.caption("Hendrick Makau")
 
 		with col3:
+			st.caption("CEO")
+			st.image(img3)
 			st.caption("Mokgadi Precious Makgothoma")
 
 		with col4:
+			st.caption("Full-stack Developer")
+			st.image(img4)
 			st.caption("Morema Moloisi")
 
 		with col5:
+			st.caption("Information Architect")
+			st.image(img5)
 			st.caption("Njabulo Mudau")
 
 		with col6:
+			st.caption("UI/UX Designer")
+			st.image(img6)
 			st.caption("Robyn van der Merwe")
-
+			
 
 		st.subheader("Message Us")
 		with st.form("form", clear_on_submit=True):
