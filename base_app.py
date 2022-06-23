@@ -25,6 +25,7 @@
 import streamlit as st
 import joblib,os
 import matplotlib.pyplot as plt
+from PIL import Image
 
 # Data dependencies
 import pandas as pd
@@ -154,6 +155,8 @@ def main():
 		col1, col2, col3 = st.columns(3)
 		with col1:
 			st.subheader("Address")
+			img = Image.open("map.png")
+			st.image(img)
 			st.markdown("1004 Otto du Plesis")
 			st.markdown("Cape Town")
 			st.markdown("8001")
