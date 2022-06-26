@@ -29,6 +29,8 @@ from PIL import Image
 
 # Data dependencies
 import pandas as pd
+import re
+#import nltk
 
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl", "rb")
@@ -38,7 +40,32 @@ tweet_cv = joblib.load(news_vectorizer)
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
 sentiment = ["1", "2", "0", "-1"]
+raw_pro = raw[raw['sentiment'] == 1]
+raw_neutral = raw[raw['sentiment'] == 0]
+raw_anti = raw[raw['sentiment'] == -1]
+raw_news = raw[raw['sentiment'] == 2]
 
+# Functions for data extraction
+def hashtag_extractor(tweet):
+    
+    hashtag_list = []
+    for i in tweet:
+        
+    	#the regular expression
+        regex = "#(\w+)"
+
+        #extracting the hashtags and adding them to the hashtag list
+        tag = re.findall(regex, i)
+        hashtag_list.append(tag)
+        
+    return hashtag_list
+
+# Raw data according to Home page selection
+raw_hash = hashtag_extractor(raw[['message']])
+#raw_pro = hashtag_extractor(raw['message'][raw['sentiment'] == '1'])
+#raw_neutral = hashtag_extractor(raw["message"][raw["sentiment"] == '0'])
+#raw_anti = hashtag_extractor(raw['message'][raw["sentiment"] == '-1'])
+#raw_news = hashtag_extractor(raw["message"][raw["sentiment"] == '2'])
 # The main function where we will build the actual app
 
 
@@ -214,48 +241,61 @@ def main():
 	if selection == "Home":
 		st.title("Tweet Classifer")
 
-		option = st.sidebar.multiselect(
-     	'Sentiment:',
-     	('Pro', 'News', 'Neutral', 'Anti'))
+		col1, col2 = st.columns(2)
+		img1 = Image.open("Morema.jpg")
+		with col1:
+			st.image(img1)
 
-		tweet = st.sidebar.radio(
-     	"Tweet:",
-     	('All', 'Original', 'Re-Tweet'))
-		if tweet == 'All':
-			st.write('You selected All tweets.')
+		with col2:
+			st.info("Try your own Prediction Here")
+			# Creating a text box for user input
+			tweet_text = st.text_area("","Enter Text Here")
 
-		if tweet == 'Original':
-			st.write('You selected Original tweets.')
-
-		if tweet == 'Re-Tweet':
-			st.write('You selected Re-Tweets.')
-
-		container = st.container()
-		container.write("")
-		
-		logo = Image.open('logo.jpg')
-		st.sidebar.image(logo, use_column_width=True)
-		
-		st.info("Prediction with ML Models")
-		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
-
-		if st.button("Classify"):
-			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
+			if st.button("Classify"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-			prediction = predictor.predict(vect_text)
+				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+				prediction = predictor.predict(vect_text)
 
+				#sentiment_word = []
+				#for i in prediction :
+				    #if i == 1 :
+       	  				#sentiment_word.append('Pro')
+     				#elif i == 0 :
+         				#sentiment_word.append('Neutral')
+     				#elif i == -1 :
+         				#sentiment_word.append('Anti')
+     				#else :
+         				#sentiment_word.append('News')
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
+				st.success("Your sentiment is: {}".format(prediction))
 
-		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+		st.subheader("Twitter data")
+
+		tweet = st.sidebar.radio(
+     	"Tweet sentiment:",
+     	('All', 'Pro', 'Neutral','Anti','News'))
+		if tweet == 'All':
+			st.write(raw[['message']])
+
+		if tweet == 'Pro':
+			st.write(raw_pro[['message']])
+
+		if tweet == 'Neutral':
+			st.write(raw_neutral[['message']])
+
+		if tweet == 'Anti':
+			st.write(raw_anti[['message']])
+
+		if tweet == 'News':
+			st.write(raw_news[['message']])
+		
+		logo = Image.open('logo.jpg')
+		st.sidebar.image(logo, use_column_width=True)
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
