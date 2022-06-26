@@ -50,12 +50,17 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
+	
 	options = ["Home", "About", "Exploratory Data Analysis", "Model", "Contact Us"]
 	selection = st.sidebar.selectbox("",options)
 
 	# Building out the "About" page
 	if selection == "About":
 		st.title("About")
+
+		logo = Image.open('logo.jpg')
+		st.sidebar.image(logo, use_column_width=True)
+
 		# You can read a markdown file from supporting resources folder
 		st.subheader("Background")
 		st.markdown("Many companies are built around lessening one’s environmental impact or carbon footprint. They offer products and services that are environmentally friendly and sustainable, in line with their values and ideals. They would like to determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. ")
@@ -65,6 +70,10 @@ def main():
 	# Building out the "Exploratory Data Analysis" page
 	if selection == "Exploratory Data Analysis":
 		st.title("Exploratory Data Analysis")
+
+		logo = Image.open('logo.jpg')
+		st.sidebar.image(logo, use_column_width=True)
+
 		st.subheader("Sentiments")
 		# You can read a markdown file from supporting resources folder
 		st.markdown("2 = News : Tweets linked to factual news about climate change.")
@@ -88,6 +97,10 @@ def main():
 	# Building out the "Model" page
 	if selection == "Model":
 		st.title("Model")
+
+		logo = Image.open('logo.jpg')
+		st.sidebar.image(logo, use_column_width=True)
+
 		st.subheader("What is Logistic Regression?")
 		# You can read a markdown file from supporting resources folder
 		st.markdown("Logistic regression estimates the probability of an event occurring, such as voted or didn’t vote, based on a given dataset of independent variables. It is often used for classification and predictive analytics. ")
@@ -121,12 +134,16 @@ def main():
 	# Building out the "Contact Us" page
 	if selection == "Contact Us":
 		st.title("Contact Us")
+
+		logo = Image.open('logo.jpg')
+		st.sidebar.image(logo, use_column_width=True)
+		
 		st.subheader("Our Company")
 		st.markdown("Solid Solutions is an innovation tech company with a key focus on creating up to date technological products designed to make light of any problem thrown our way. We are extremely passionate about giving back to the community. Strengthening Today for a Stronger Tomorrow!")
 		# You can read a markdown file from supporting resources folder
 		col1, col2, col3, col4, col5, col6 = st.columns(6)
-		img1 = Image.open("Robyn2.jpg")
-		img2 = Image.open("Robyn3.jpg")
+		img1 = Image.open("Robyn1.jpg")
+		img2 = Image.open("Hendrick.jpg")
 		img3 = Image.open("Robyn4.jpg")
 		img4 = Image.open("Morema.jpg")
 		img5 = Image.open("Robyn6.jpg")
@@ -201,6 +218,24 @@ def main():
      	'Sentiment:',
      	('Pro', 'News', 'Neutral', 'Anti'))
 
+		tweet = st.sidebar.radio(
+     	"Tweet:",
+     	('All', 'Original', 'Re-Tweet'))
+		if tweet == 'All':
+			st.write('You selected All tweets.')
+
+		if tweet == 'Original':
+			st.write('You selected Original tweets.')
+
+		if tweet == 'Re-Tweet':
+			st.write('You selected Re-Tweets.')
+
+		container = st.container()
+		container.write("")
+		
+		logo = Image.open('logo.jpg')
+		st.sidebar.image(logo, use_column_width=True)
+		
 		st.info("Prediction with ML Models")
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
