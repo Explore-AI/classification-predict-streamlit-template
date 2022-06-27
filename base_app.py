@@ -251,13 +251,13 @@ def main():
 			# Creating a text box for user input
 			tweet_text = st.text_area("","Enter Text Here")
 
-			if st.button("Classify"):
+			if st.button("K-Nearest Neighbor Classify"):
 				# Transforming user input with vectorizer
 				vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction = predictor.predict(vect_text)
+				predictor1 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+				prediction1 = predictor1.predict(vect_text)
 
 				#sentiment_word = []
 				#for i in prediction :
@@ -272,7 +272,27 @@ def main():
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
-				st.success("Your sentiment is: {}".format(prediction))
+				st.success("Your sentiment is: {}".format(prediction1))
+
+			if st.button("Logistic Regression Classify"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
+			# Load your .pkl file with the model of your choice + make predictions
+			# Try loading in multiple models to give the user a choice
+				predictor2 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+				prediction2 = predictor2.predict(vect_text)
+
+				st.success("Your sentiment is: {}".format(prediction2))
+
+			if st.button("Naives Bayes Classify"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
+			# Load your .pkl file with the model of your choice + make predictions
+			# Try loading in multiple models to give the user a choice
+				predictor3 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+				prediction3 = predictor3.predict(vect_text)
+
+				st.success("Your sentiment is: {}".format(prediction3))
 
 		st.subheader("Twitter data")
 
