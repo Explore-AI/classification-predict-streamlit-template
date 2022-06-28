@@ -89,27 +89,27 @@ clean_news = clean[clean['sentiment'] == 2]
 #vectorizer = CountVectorizer(ngram_range = (1,2))
 
 # Word cloud
-tweet_mask = np.array(Image.open("twitterl1.png"))
+#tweet_mask = np.array(Image.open("twitterl1.png"))
 
-words =' '.join([text for text in clean['message']])
-tweet_ = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-tweet_.generate(words)
+#words =' '.join([text for text in clean['message']])
+#tweet_ = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
+#tweet_.generate(words)
 
-pro_words =' '.join([text for text in clean_pro['message']])
-tweet_p = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-tweet_p.generate(pro_words)
+#pro_words =' '.join([text for text in clean_pro['message']])
+#tweet_p = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
+#tweet_p.generate(pro_words)
 
-neutral_words =' '.join([text for text in clean_neutral['message']])
-tweet_nt = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-tweet_nt.generate(neutral_words)
+#neutral_words =' '.join([text for text in clean_neutral['message']])
+#tweet_nt = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
+#tweet_nt.generate(neutral_words)
 
-anti_words =' '.join([text for text in clean_anti['message']])
-tweet_a = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-tweet_a.generate(anti_words)
+#anti_words =' '.join([text for text in clean_anti['message']])
+#tweet_a = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
+#tweet_a.generate(anti_words)
 
-news_words =' '.join([text for text in clean_news['message']])
-tweet_nw = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-tweet_nw.generate(news_words)
+#news_words =' '.join([text for text in clean_news['message']])
+#tweet_nw = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
+#tweet_nw.generate(news_words)
 
 # The main function where we will build the actual app
 def main():
@@ -284,47 +284,52 @@ def main():
 	if selection == "Home":
 		st.title("Tweet Classifer")
 
-		tweet = st.sidebar.selectbox(
-     	"Tweet sentiment:",
-     	('All', 'Pro', 'Neutral','Anti','News'))
 
-		col1, col2 = st.columns(2)
-		
+			#if tweet == 'All':
+				#fig, ax = plt.subplots(figsize = (12, 8))
+				#ax.imshow(tweet_)
+				#plt.axis("off")
+				#st.pyplot(fig)
+
+			#if tweet == 'Pro':
+				#fig, ax = plt.subplots(figsize = (12, 8))
+				#ax.imshow(tweet_p)
+				#plt.axis("off")
+				#st.pyplot(fig)
+
+			#if tweet == 'Neutral':
+				#fig, ax = plt.subplots(figsize = (12, 8))
+				#ax.imshow(tweet_nt)
+				#plt.axis("off")
+				#st.pyplot(fig)
+
+			#if tweet == 'Anti':
+				#fig, ax = plt.subplots(figsize = (12, 8))
+				#ax.imshow(tweet_a)
+				#plt.axis("off")
+				#st.pyplot(fig)
+
+			#if tweet == 'News':
+				#fig, ax = plt.subplots(figsize = (12, 8))
+				#ax.imshow(tweet_nw)
+				#plt.axis("off")
+				#st.pyplot(fig)
+
+		col1,col2 = st.columns(2)
 		with col1:
-			if tweet == 'All':
-				fig, ax = plt.subplots(figsize = (12, 8))
-				ax.imshow(tweet_)
-				plt.axis("off")
-				st.pyplot(fig)
-
-			if tweet == 'Pro':
-				fig, ax = plt.subplots(figsize = (12, 8))
-				ax.imshow(tweet_p)
-				plt.axis("off")
-				st.pyplot(fig)
-
-			if tweet == 'Neutral':
-				fig, ax = plt.subplots(figsize = (12, 8))
-				ax.imshow(tweet_nt)
-				plt.axis("off")
-				st.pyplot(fig)
-
-			if tweet == 'Anti':
-				fig, ax = plt.subplots(figsize = (12, 8))
-				ax.imshow(tweet_a)
-				plt.axis("off")
-				st.pyplot(fig)
-
-			if tweet == 'News':
-				fig, ax = plt.subplots(figsize = (12, 8))
-				ax.imshow(tweet_nw)
-				plt.axis("off")
-				st.pyplot(fig)
-
+			st.info('"Hello there! I am Twitzilla - your personal tweet sentiment prediction bird."')
+		
+			st.write('Watch Twitzilla\'s words change when you select a different sentiment.')
+			tweet = st.selectbox(
+     		"Tweet sentiment:",
+     		('All', 'Pro', 'Neutral','Anti','News'))
+			
 		with col2:
-			st.info("Try your own tweet here!")
+			img_twit = Image.open('twitter_mask.png')
+			st.image(img_twit) 
+	
 			# Creating a text box for user input
-			tweet_text = st.text_area("","Type Here")
+		tweet_text = st.text_area("Try your own tweet here!","Type Here")
 
 			#clean_text = tweet_text
 			#clean_text = clean_text.str.lower()
@@ -334,13 +339,13 @@ def main():
 			#clean_text = clean_text.apply(remove_stop_words)
 			#clean_text = vectorizer.transform(clean_text)
 
-			if st.button("Classify"):
+		if st.button("Classify"):
 				# Transforming user input with vectorizer
-				vect_text = tweet_cv.transform([tweet_text]).toarray()
+			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-				predictor1 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction1 = predictor1.predict(vect_text)
+			predictor1 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			prediction1 = predictor1.predict(vect_text)
 
 				#sentiment_word = []
 				#for i in prediction :
@@ -355,8 +360,8 @@ def main():
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
-				st.success("Your sentiment is: {}".format(prediction1))
-
+			
+			st.success("Your sentiment is: {}".format(prediction1))
 
 		st.subheader("Twitter data")
 
