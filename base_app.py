@@ -87,10 +87,8 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title ("DPD AI model Co.")
-	st.image(logo)
-	st.text("Welcome, we are glad to have you here. Kindly use the \
-		Navigation on the side to find your way aroud... Enjoy your stay")
+	st.title ("AIORIGIN")
+	
 	
 
 	# Creating sidebar with selection box -
@@ -100,6 +98,10 @@ def main():
 
 	#Building the "About us" page
 	if selection== "About Us":
+		st.image(logo)
+		st.text("Welcome, we are glad to have you here.")
+		st.text("Kindly use Navigation on the side to find your way aroud")
+		st.text("Enjoy your stay")
 		st.button("Go to classifier")
 		st.info("Meet the Team")
 		st.text("Oluyemi Alabi")
@@ -133,19 +135,42 @@ def main():
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
 
+
 		if st.button("Classify"):
 			#tweet_text= preprocess(tweet_text)
 			# Transforming user input with vectorizer
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/gridmnb.pickle"),"rb"))
+			predictor = joblib.load(open(os.path.join("resources/mnb.pickle"),"rb"))
 			prediction = predictor.predict(vect_text)
 
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			st.success("Text Categorized as: {}".format(prediction))
+		upload_file= st.button.file_uploader(
+			label="Upload the csv file containing the time series:",
+    		type="csv",
+   			accept_multiple_files=False,
+    		help='''Upload a csv file that contains your time series.     
+        	required structure:     
+        	first column = index;        
+        	second column = tweets;      
+        	first row = column headers;     
+        	length = max. 5,000 rows
+        	''')   
+		if upload_file is not None:
+			tweet_df = pd.read_csv(upload_file)
+			vect_df = tweet_cv.transform(tweet_df['tweets']).toarray()
+			predictor = joblib.load(open(os.path.join("resources/mnb.pickle"),"rb"))
+			prediction = predictor.predict(vect_df)
+			result = pd.DataFrame(prediction, columns = ['sentiment'])
+			result['tweeets'] = tweet_df['tweets']
+			result = result[['tweets', 'sentiment']]
+			st.sucess(result.to_csv('submission_lrtw_balanced.csv', index=False))
+			
+
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
