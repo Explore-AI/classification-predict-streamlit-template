@@ -317,9 +317,9 @@ def main():
 
 		col1,col2 = st.columns(2)
 		with col1:
-			st.info('"Hello there! I am Twitzilla - your personal tweet sentiment prediction bird."')
+			st.info('"Hello there! I am Tweetzilla - your personal tweet sentiment prediction bird."')
 		
-			st.write('Watch Twitzilla\'s words change when you select a different sentiment.')
+			st.write('Watch Tweetzilla\'s words change when you select a different sentiment.')
 			tweet = st.selectbox(
      		"Tweet sentiment:",
      		('All', 'Pro', 'Neutral','Anti','News'))
