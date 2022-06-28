@@ -29,6 +29,7 @@ from PIL import Image
 
 # Data dependencies
 import pandas as pd
+import numpy as np
 import re
 import string
 #import nltk
@@ -37,6 +38,9 @@ from nltk.tokenize import TreebankWordTokenizer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer
+from wordcloud import WordCloud
+FILE = os.path.dirname(__file__)
+#STOPWORDS = set(map(str.strip, open(os.path.join(FILE, 'stopwords')).readlines()))
 
 
 # Vectorizer
@@ -47,56 +51,67 @@ tweet_cv = joblib.load(news_vectorizer)
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
 sentiment = ["1", "2", "0", "-1"]
+sentiment_class = {
+    -1: "Anti",
+     0: "Neutral",
+     1: "Pro",
+     2: "News",
+}
 raw_pro = raw[raw['sentiment'] == 1]
 raw_neutral = raw[raw['sentiment'] == 0]
 raw_anti = raw[raw['sentiment'] == -1]
 raw_news = raw[raw['sentiment'] == 2]
 
 # Functions for data extraction
-def hashtag_extractor(tweet):
-    
-    hashtag_list = []
-    for i in tweet:
-        
-    	#the regular expression
-        regex = "#(\w+)"
+def hashtag_extract(tweet):
 
-        #extracting the hashtags and adding them to the hashtag list
-        tag = re.findall(regex, i)
-        hashtag_list.append(tag)
-        
-    return hashtag_list
+    hashtags = []
+    # Loop over the words in the tweet
+    for word in tweet:
+        tag = re.findall(r"#(\w+)", word)
+        hashtags.append(tag)
+
+    return hashtags
 
 # Raw data according to Home page selection
-raw_hash = hashtag_extractor(raw[['message']])
-#raw_pro = hashtag_extractor(raw['message'][raw['sentiment'] == '1'])
-#raw_neutral = hashtag_extractor(raw["message"][raw["sentiment"] == '0'])
-#raw_anti = hashtag_extractor(raw['message'][raw["sentiment"] == '-1'])
-#raw_news = hashtag_extractor(raw["message"][raw["sentiment"] == '2'])
+news_hash = hashtag_extract(raw_news['message'])
+pro_hash = hashtag_extract(raw_pro['message'])
+neutral_hash = hashtag_extract(raw_neutral['message'])
+anti_hash = hashtag_extract(raw_anti['message'])
+
 
 # Cleaning the raw data
-#clean = raw[['sentiment','message']]
-#clean["message"] = clean['message'].str.lower()
+clean = raw[['sentiment','message']]
+clean["message"] = clean['message'].str.lower()
 
 def remove_punctuation(tweet):
     return ''.join([l for l in tweet if l not in string.punctuation])
 
-#clean["message"] = clean['message'].apply(remove_punctuation)
+clean["message"] = clean['message'].apply(remove_punctuation)
 tokeniser = TreebankWordTokenizer()
-#clean['tokens'] = clean['message'].apply(tokeniser.tokenize)
+clean['tokens'] = clean['message'].apply(tokeniser.tokenize)
 #nltk.download('wordnet')
 lemmatizer = WordNetLemmatizer()
 def df_copy_lemma(words, lemmatizer):
     return [lemmatizer.lemmatize(word) for word in words]
 
-#clean['lemma'] = clean['tokens'].apply(df_copy_lemma, args=(lemmatizer, ))
+clean['lemma'] = clean['tokens'].apply(df_copy_lemma, args=(lemmatizer, ))
 def remove_stop_words(tokens):    
     return [t for t in tokens if t not in stopwords.words('english')]
 
-#clean['lemma'] = clean['tokens'].apply(remove_stop_words)
+clean['lemma'] = clean['tokens'].apply(remove_stop_words)
 #x_test = clean.message
 vectorizer = CountVectorizer(ngram_range = (1,2))
 #x_test = vectorizer.transform(x_test)
+
+# Word cloud
+tweet_mask = np.array(Image.open("twitterl.png"))
+
+pro_words =' '.join([text for text in raw_pro['message']])
+tweet_p = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
+tweet_p.generate(pro_words)
+
+
 
 # The main function where we will build the actual app
 def main():
@@ -272,9 +287,13 @@ def main():
 		st.title("Tweet Classifer")
 
 		col1, col2 = st.columns(2)
-		img1 = Image.open("Morema.jpg")
+		
 		with col1:
-			st.image(img1)
+			fig, ax = plt.subplots(figsize = (12, 8))
+			ax.imshow(tweet_p)
+			plt.axis("off")
+			st.pyplot(fig)
+
 
 		with col2:
 			st.info("Try your own tweet here!")
