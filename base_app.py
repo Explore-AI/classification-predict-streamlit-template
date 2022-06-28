@@ -30,7 +30,14 @@ from PIL import Image
 # Data dependencies
 import pandas as pd
 import re
+import string
 #import nltk
+#nltk.download()
+from nltk.tokenize import TreebankWordTokenizer
+from nltk.stem import WordNetLemmatizer
+from nltk.corpus import stopwords
+from sklearn.feature_extraction.text import CountVectorizer
+
 
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl", "rb")
@@ -66,9 +73,32 @@ raw_hash = hashtag_extractor(raw[['message']])
 #raw_neutral = hashtag_extractor(raw["message"][raw["sentiment"] == '0'])
 #raw_anti = hashtag_extractor(raw['message'][raw["sentiment"] == '-1'])
 #raw_news = hashtag_extractor(raw["message"][raw["sentiment"] == '2'])
+
+# Cleaning the raw data
+#clean = raw[['sentiment','message']]
+#clean["message"] = clean['message'].str.lower()
+
+def remove_punctuation(tweet):
+    return ''.join([l for l in tweet if l not in string.punctuation])
+
+#clean["message"] = clean['message'].apply(remove_punctuation)
+tokeniser = TreebankWordTokenizer()
+#clean['tokens'] = clean['message'].apply(tokeniser.tokenize)
+#nltk.download('wordnet')
+lemmatizer = WordNetLemmatizer()
+def df_copy_lemma(words, lemmatizer):
+    return [lemmatizer.lemmatize(word) for word in words]
+
+#clean['lemma'] = clean['tokens'].apply(df_copy_lemma, args=(lemmatizer, ))
+def remove_stop_words(tokens):    
+    return [t for t in tokens if t not in stopwords.words('english')]
+
+#clean['lemma'] = clean['tokens'].apply(remove_stop_words)
+#x_test = clean.message
+vectorizer = CountVectorizer(ngram_range = (1,2))
+#x_test = vectorizer.transform(x_test)
+
 # The main function where we will build the actual app
-
-
 def main():
 	"""Tweet Classifier App with Streamlit """
 
@@ -247,9 +277,17 @@ def main():
 			st.image(img1)
 
 		with col2:
-			st.info("Try your own Prediction Here")
+			st.info("Try your own tweet here!")
 			# Creating a text box for user input
-			tweet_text = st.text_area("","Enter Text Here")
+			tweet_text = st.text_area("","Type Here")
+
+			#clean_text = tweet_text
+			#clean_text = clean_text.str.lower()
+			#clean_text = clean_text.apply(remove_punctuation)
+			#clean_text = clean_text.apply(tokeniser.tokenize)
+			#clean_text = clean_text.apply(df_copy_lemma, args=(lemmatizer, ))
+			#clean_text = clean_text.apply(remove_stop_words)
+			#clean_text = vectorizer.transform(clean_text)
 
 			if st.button("K-Nearest Neighbor Classify"):
 				# Transforming user input with vectorizer
@@ -296,7 +334,7 @@ def main():
 
 		st.subheader("Twitter data")
 
-		tweet = st.sidebar.radio(
+		tweet = st.sidebar.selectbox(
      	"Tweet sentiment:",
      	('All', 'Pro', 'Neutral','Anti','News'))
 		if tweet == 'All':
@@ -313,9 +351,21 @@ def main():
 
 		if tweet == 'News':
 			st.write(raw_news[['message']])
+
+		tweet_type = st.sidebar.radio(
+		"Tweet Type:",
+		('All','#','RT'))
+		if tweet_type == 'All':
+			st.write(raw[['message']])
+
+		if tweet_type == 'Hashtag #':
+			st.write(raw[['message']])
 		
+		if tweet_type == 'Re-Tweet RT':
+			st.write(raw[['message']])
+
 		logo = Image.open('logo.jpg')
-		st.sidebar.image(logo, use_column_width=True)
+		st.sidebar.image(logo)
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
