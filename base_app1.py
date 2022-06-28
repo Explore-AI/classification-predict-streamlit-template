@@ -24,6 +24,7 @@
 # Streamlit dependencies
 import streamlit as st
 import joblib,os
+from annotated_text import annotated_text
 
 # Data dependencies
 import pandas as pd
@@ -41,13 +42,14 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
+	st.title("Welcome to the Climate Protectors")
 	st.subheader("Climate change tweet classification")
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
+	options = ["Introduction", "Prediction", "Information"]
 	selection = st.sidebar.selectbox("Choose Option", options)
+
 
 	# Building out the "Information" page
 	if selection == "Information":
@@ -56,12 +58,12 @@ def main():
 		st.markdown("Some information here")
 
 		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
+	    if st.checkbox('Show raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 
 	# Building out the predication page
 	if selection == "Prediction":
-		st.info("Prediction with ML Models")
+	    st.info("Prediction with ML Models")
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
 
@@ -72,6 +74,9 @@ def main():
 			# Try loading in multiple models to give the user a choice
 			predictor = joblib.load(open(os.path.join("resources/model_5.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
+
+            #predictor_1 = joblib.load(open(os.path.join("resources/tfidvect.pkl"),"rb"))
+			#prediction_1 = predictor.predict(vect_text)
 
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
