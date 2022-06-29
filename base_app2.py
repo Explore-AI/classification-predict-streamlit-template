@@ -134,8 +134,24 @@ def main():
 		# You can read a markdown file from supporting resources folder
 		st.subheader("Background")
 		st.markdown("Many companies are built around lessening one’s environmental impact or carbon footprint. They offer products and services that are environmentally friendly and sustainable, in line with their values and ideals. They would like to determine how people perceive climate change and whether or not they believe it is a real threat. This would add to their market research efforts in gauging how their product/service may be received. ")
-		st.subheader("How to Make a Prediction")
-		st.markdown("The following steps will provide you with a seamless interaction with our tweet classifiction app.")
+		st.subheader("Our Values")
+		st.markdown("""
+		- We believe with the experience that we have, we can do more,as we are the best and nothing less.
+	    - We provide our clients with the best predictions of their database system.""")
+		st.subheader("Our Aims")
+		st.markdown("""
+		- We want to give our clients the best services ever,improve their lifestyle.
+		- To provide good quality solutions and services to our customers.
+		- To enhance the quality of our company.
+		- To secure the good business relationship with other parties.
+		- Help establish a framework for ethical behavior.
+		- To honor all promises and commitments""")
+		st.subheader("Our Vision")
+		st.markdown("""
+		- Expanding our branches throughout the world.
+		- Help define performance standards.
+		- Help establish a framework for ethical behavior
+		""")
 
 	# Building out the "Exploratory Data Analysis" page
 	if selection == "Exploratory Data Analysis":
@@ -212,12 +228,12 @@ def main():
 		st.markdown("Solid Solutions is an innovation tech company with a key focus on creating up to date technological products designed to make light of any problem thrown our way. We are extremely passionate about giving back to the community. Strengthening Today for a Stronger Tomorrow!")
 		# You can read a markdown file from supporting resources folder
 		col1, col2, col3, col4, col5, col6 = st.columns(6)
-		img1 = Image.open("Robyn1.jpg")
+		img1 = Image.open("Lizzy.jpeg")
 		img2 = Image.open("Hendrick.jpg")
-		img3 = Image.open("Robyn4.jpg")
+		img3 = Image.open("Mokgadi.jpg")
 		img4 = Image.open("Morema.jpg")
-		img5 = Image.open("Robyn6.jpg")
-		img6 = Image.open("Robyn1.jpg")
+		img5 = Image.open("Njabulo.jpg")
+		img6 = Image.open("Robyn.jpeg")
 		
 		with col1:
 			st.caption("Market Technologist")
