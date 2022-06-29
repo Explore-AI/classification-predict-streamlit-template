@@ -345,7 +345,6 @@ def main():
 				img_twit = Image.open('news_dark.png')
 				st.image(img_twit) 
 
-	
 			# Creating a text box for user input
 		tweet_text = st.text_area("Try your own tweet here!","Type Here")
 
@@ -431,6 +430,9 @@ def main():
 
 		if tweet == 'News' and tweet_type == 'RT':
 			st.write(raw_news[['message']])
+
+		st.sidebar.subheader('   ')
+		st.sidebar.title('   ')
 
 		logo = Image.open('logo.jpg')
 		st.sidebar.image(logo)
