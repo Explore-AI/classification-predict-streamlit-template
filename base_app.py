@@ -26,6 +26,9 @@
 import streamlit as st
 import joblib,os
 from PIL import Image
+import io
+from streamlit_option_menu import option_menu
+
 
 # Data dependencies
 import pandas as pd
@@ -33,6 +36,8 @@ from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 import re
 import contractions
+import matplotlib.pyplot as plt
+#import seaborn as sns
 
 # Vectorizer
 news_vectorizer = open("resources/vectoriser-ngram-(1,2).pickle","rb")
@@ -40,6 +45,7 @@ tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl f
 
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
+##define function to preprocess data
 def preprocess(textdata):
     processedTweet = []
     
@@ -78,8 +84,28 @@ def preprocess(textdata):
 
 		
         return ' '.join(word for word in processedTweet)
+#define function to export csv file
+def convert_df(df):
+   	return df.to_csv().encode('utf-8')
+#define function to format graph
+def my_fmt(x):
+    return '{:.4f}%\n({:.0f})'.format(x, total*x/100)
 
-logo = Image.open("resources/imgs/classification_logo-removebg-preview.png")
+logo = Image.open("resources/imgs/default_edited.png")
+oluyemi_new= Image.open('resources/imgs/yemi edsa picture.JPG')
+oluyemi=oluyemi_new.resize((180,250))
+joshua_new= Image.open('resources/imgs/Eujosh_pic_new.JPEG')
+joshua=joshua_new.resize((180,250))
+abiola_new= Image.open('resources/imgs/Abiola_pic.JPEG')
+abiola=abiola_new.resize((180,250))
+ifeoluwa_new= Image.open('resources/imgs/ifeoluwa_pic_new.JPEG')
+ifeoluwa=ifeoluwa_new.resize((180,250))
+lawson_new=Image.open('resources/imgs/Lawson_pic.JPEG')
+lawson=lawson_new.resize((180,250))
+stephen_new=Image.open('resources/imgs/Stephen_pic_new.JPEG')
+stephen=stephen_new.resize((180,250))
+welcome_message='<p style="font-family:sans-serif; color:Black; font-size: 20px;">Welcome, we are glad to have you here.\
+			Kindly use Navigation on the side to find your way around. Enjoy your stay</p>'
 
 # The main function where we will build the actual app
 def main():
@@ -87,29 +113,23 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title ("AIORIGIN")
+	#st.title ("AIORIGIN")
 	
 	
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["About Us", "Prediction", "Information"]
-	selection = st.sidebar.selectbox("Choose Option", options)
+	Navigation = ["About Us", "Classifier", "Information"]
+	selection = st.sidebar.selectbox("Navigation path", Navigation)
 
 	#Building the "About us" page
 	if selection== "About Us":
 		st.image(logo)
-		st.text("Welcome, we are glad to have you here.")
-		st.text("Kindly use Navigation on the side to find your way aroud")
-		st.text("Enjoy your stay")
-		st.button("Go to classifier")
+		st.markdown(welcome_message,unsafe_allow_html=True)
 		st.info("Meet the Team")
-		st.text("Oluyemi Alabi")
-		st.text("Joshua Umukoro")
-		st.text("Stephen Tshiani")
-		st.text("Lawson Iduku")
-		st.text("Abiola Akinwale")
-		st.text("Ifeoluwa Adeoti")
+		st.image(image=[oluyemi, joshua,abiola,ifeoluwa,lawson,stephen,],
+		caption=['Oluyemi Alabi','Joshua Umukoro', 'Abiola Akinwale',
+		'Ifeoluwa Adeoti','Lawson Umukoro','Stephen Tshiani'])
 		#if st.button("Go to classifier"):
 			#open sidebar.selectbox("Make Prediction")
 
@@ -117,23 +137,26 @@ def main():
 	if selection == "Information":
 		st.info("Classifier Information")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("The classifier used is Logistic Regression model which")
+		st.markdown("The Multinomial Naive-Bayes model was used in the development of the application\
+			it uses the bayes principle. You can have a look at the raw data used and also the model\
+				 performace as compared to other models.")
 
 		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
+		if st.checkbox('Show sample of raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+		st.checkbox('View model Perfomance graph')
+
 
 	# Building out the predication page
-	if selection == "Prediction":
+	if selection == "Classifier":
 		st.title("Tweet Classifer")
 		st.subheader("Climate change tweet classification")
-		st.info("Classification Description")
-		st.text('class 0- Neutral tweets')
-		st.text('class 1- Pro-Climate change tweets')
-		st.text('class 2- Climate change News tweets')
-		st.text('class -1 - Anti-climate change tweets')
+		st.info("NOTE: If you would like to analyse large amount of tweets at a go, kindly use the upload button on the side.  \
+			File to be uploaded must be '.csv' and have two columns. First column \
+				should be named 'index' while second column named 'tweets'. Maximum number of rows is '15,000' ")
+		st.info("For single tweets, enter the tweet to be analysed in the text area below")
 		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
+		tweet_text = st.text_area("Enter Tweet","Type Here")
 
 
 		if st.button("Classify"):
@@ -144,21 +167,26 @@ def main():
 			# Try loading in multiple models to give the user a choice
 			predictor = joblib.load(open(os.path.join("resources/mnb.pickle"),"rb"))
 			prediction = predictor.predict(vect_text)
+			#dict={'sentiment':{1:'Pro-climate change', 2: 'Climate change news', 
+			#0:'Neutral', -1: 'Anti-climate change'}}
+			#prediction=prediction.replace(dict)
 
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			st.success("Text Categorized as: {}".format(prediction))
-		upload_file= st.button.file_uploader(
-			label="Upload the csv file containing the time series:",
+		
+			## for the large test file, option to upload the file
+		upload_file= st.sidebar.file_uploader(
+			label="Upload the csv file containing tweets here",
     		type="csv",
    			accept_multiple_files=False,
-    		help='''Upload a csv file that contains your time series.     
+    		help='''Upload a csv file that contains tweet.     
         	required structure:     
         	first column = index;        
         	second column = tweets;      
         	first row = column headers;     
-        	length = max. 5,000 rows
+        	length = max. 15,000 rows
         	''')   
 		if upload_file is not None:
 			tweet_df = pd.read_csv(upload_file)
@@ -166,9 +194,26 @@ def main():
 			predictor = joblib.load(open(os.path.join("resources/mnb.pickle"),"rb"))
 			prediction = predictor.predict(vect_df)
 			result = pd.DataFrame(prediction, columns = ['sentiment'])
-			result['tweeets'] = tweet_df['tweets']
+			result['tweets'] = tweet_df['tweets']
 			result = result[['tweets', 'sentiment']]
-			st.sucess(result.to_csv('submission_lrtw_balanced.csv', index=False))
+			m={'sentiment':{1:'Pro-climate change', 2: 'Climate change news', 
+			0:'Neutral', -1: 'Anti-climate change'}}
+			result.replace(m, inplace=True)
+			classified=convert_df(result)
+			st.download_button("Press to Download result file",
+			classified,"file.csv","text/csv",
+			key='download-csv')
+			graph=result['sentiment'].value_counts().plot(kind='pie')
+			graph= 'pie.png'
+			img = io.BytesIO()
+			plt.savefig(img, format='png')
+			st.download_button(
+				label="Download chart",
+        		data=img,
+        		file_name=graph,
+        		mime="image/png"
+    )
+
 			
 
 
