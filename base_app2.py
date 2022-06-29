@@ -325,8 +325,26 @@ def main():
      		('All', 'Pro', 'Neutral','Anti','News'))
 			
 		with col2:
-			img_twit = Image.open('twitter_mask.png')
-			st.image(img_twit) 
+			if tweet == 'All':
+				img_twit = Image.open('pro_dark.png')
+				st.image(img_twit) 
+			
+			if tweet == 'Pro':
+				img_twit = Image.open('pro_dark.png')
+				st.image(img_twit) 
+
+			if tweet == 'Neutral':
+				img_twit = Image.open('neutral_dark.png')
+				st.image(img_twit) 
+
+			if tweet == 'Anti':
+				img_twit = Image.open('anti_dark.png')
+				st.image(img_twit) 
+
+			if tweet == 'News':
+				img_twit = Image.open('news_dark.png')
+				st.image(img_twit) 
+
 	
 			# Creating a text box for user input
 		tweet_text = st.text_area("Try your own tweet here!","Type Here")
