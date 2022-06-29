@@ -51,8 +51,8 @@ def main():
 	col_1, mid, col_2 = st.columns([1, 1, 20])
 	with col_1:
 		st.image('Logo_b.jpeg', width=60)
-	with col_2:
-		st.write('AI Origins')
+	#with col_2:
+		#st.write('AI Origins')
 
 
 	#st.subheader("Climate change tweet classification")
@@ -134,7 +134,7 @@ def main():
 				predictor = joblib.load(open(os.path.join("resources/lr.pkl"),"rb"))
 				prediction = predictor.predict(vect_text)
 
-			elif model_selection == "Multinomial Naive Bayes":
+			elif model_selection == "Multinomial Naive Bayes (Recommended)":
 				predictor = joblib.load(open(os.path.join("resources/mnb.pickle"),"rb"))
 				prediction = predictor.predict(vect_text)
 
