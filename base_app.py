@@ -71,7 +71,7 @@ def preprocess(textdata):
         tweet = re.sub(sequencePattern, seqReplacePattern, tweet)
 
         tweetwords = ''
-        for word in textdata.split():
+        for word in tweet.split():
             # Checking if the word is a stopword.
             #if word not in stopwordlist:
             if word not in stopwords.words('english'):
@@ -83,10 +83,14 @@ def preprocess(textdata):
         processedTweet.append(tweetwords)
 
 		
-        return ' '.join(word for word in processedTweet)
+        return   processedTweet
 #define function to export csv file
 def convert_df(df):
    	return df.to_csv().encode('utf-8')
+def predict(path, model, feature):
+	predictor = joblib.load(open(os.path.join(path,model),"rb"))
+	prediction = predictor.predict(feature)
+	return prediction
 #define function to format graph
 def my_fmt(x):
     return '{:.4f}%\n({:.0f})'.format(x, total*x/100)
@@ -151,6 +155,9 @@ def main():
 	if selection == "Classifier":
 		st.title("Tweet Classifer")
 		st.subheader("Climate change tweet classification")
+		model_selection = st.radio("Please choose a model", ["Logistic Regression" ,"Multinomial Naive Bayes (Recommended)",\
+			"Linear Support Vector Classifier"], help= 'Select a model that will be used for prediction')
+
 		st.info("NOTE: If you would like to analyse large amount of tweets at a go, kindly use the upload button on the side.  \
 			File to be uploaded must be '.csv' and have two columns. First column \
 				should be named 'index' while second column named 'tweets'. Maximum number of rows is '15,000' ")
@@ -163,18 +170,38 @@ def main():
 			#tweet_text= preprocess(tweet_text)
 			# Transforming user input with vectorizer
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
+			#predictor = joblib.load(open(os.path.join("resources/model_5.pkl"),"rb"))
+			#prediction = predictor.predict(vect_text)
+
+			if model_selection == "Logistic Regression":				
+				# Load your .pkl file with the model of your choice + make predictions
+				# Try loading in multiple models to give the user a choice
+				prediction= predict('resources','Sentiment-LR.pickle', vect_text)
+				output = {-1: "an Anti-climate tweet", 0: "a Neutral tweet", 1: "a Pro-climate tweet", 2: "Climate change News"}
+				f = output.get(prediction[0])	
+			# When model has successfully run, will print prediction
+				st.success("Tweet is Categorized as: {}".format(f))
+
+			elif model_selection == "Multinomial Naive Bayes (Recommended)":
+				prediction=predict('resources','mnb.pickle', vect_text)
+				output = {-1: "an Anti-climate tweet", 0: "a Neutral tweet", 1: "a Pro-climate tweet", 2: "Climate change News"}
+				f = output.get(prediction[0])	
+			# When model has successfully run, will print prediction
+				st.success("Tweet is Categorized as: {}".format(f))
+
+			elif model_selection == "Linear Support Vector Classifier":
+				prediction=predict('resources','svc_model.pickle', vect_text)
+				output = {-1: "an Anti-climate tweet", 0: "a Neutral tweet", 1: "a Pro-climate tweet", 2: "Climate change News"}
+				f = output.get(prediction[0])	
+			# When model has successfully run, will print prediction
+				st.success("Tweet is Categorized as: {}".format(f))
+			
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/mnb.pickle"),"rb"))
-			prediction = predictor.predict(vect_text)
-			#dict={'sentiment':{1:'Pro-climate change', 2: 'Climate change news', 
-			#0:'Neutral', -1: 'Anti-climate change'}}
-			#prediction=prediction.replace(dict)
-
+			#output = {-1: "an Anti-climate tweet", 0: "a Neutral tweet", 1: "a Pro-climate tweet", 2: "Climate change News"}
+			#f = output.get(prediction[0])	
 			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
+			#st.success("Tweet is Categorized as: {}".format(f))
 		
 			## for the large test file, option to upload the file
 		upload_file= st.sidebar.file_uploader(
@@ -190,10 +217,31 @@ def main():
         	''')   
 		if upload_file is not None:
 			tweet_df = pd.read_csv(upload_file)
+			preprocess(tweet_df['tweets'])
 			vect_df = tweet_cv.transform(tweet_df['tweets']).toarray()
-			predictor = joblib.load(open(os.path.join("resources/mnb.pickle"),"rb"))
-			prediction = predictor.predict(vect_df)
-			result = pd.DataFrame(prediction, columns = ['sentiment'])
+
+			if model_selection =="Multinomial Naive Bayes (Recommended)":
+				#tweet_df = pd.read_csv(upload_file)
+				#vect_df = tweet_cv.transform(tweet_df['tweets']).toarray()
+				classification=predict('resources','mnb.pickle', vect_df)
+				#predicted = joblib.load(open(os.path.join("resources/mnb.pickle"),"rb"))
+				#classification = predicted.predict(vect_df)
+
+			elif model_selection == "Logistic Regression":
+				#vect_df = tweet_cv.transform(tweet_df['tweets']).toarray()
+				classification=predict('resources','Sentiment-LR.pickle', vect_df)
+				#predicted = joblib.load(open(os.path.join("resources/Sentiment-LR.pickle"),"rb"))
+				#classification = predicted.predict(vect_df)
+
+			elif model_selection == "Linear Support Vector Classifier":
+				#tweet_df = pd.read_csv(upload_file)
+				#vect_df = tweet_cv.transform(tweet_df['tweets']).toarray()
+				classification=predict('resources','svc_model.pickle', vect_df)
+				#predicted = joblib.load(open(os.path.join("resources/svc_model.pickle"),"rb"))
+				#classification = predicted.predict(vect_df)
+
+
+			result = pd.DataFrame(classification, columns = ['sentiment'])
 			result['tweets'] = tweet_df['tweets']
 			result = result[['tweets', 'sentiment']]
 			m={'sentiment':{1:'Pro-climate change', 2: 'Climate change news', 
