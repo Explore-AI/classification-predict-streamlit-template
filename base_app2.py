@@ -120,6 +120,7 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
+	st.set_page_config(page_title='Tweetzilla', page_icon='🖖')
 	
 	options = ["Home", "About", "Exploratory Data Analysis", "Model", "Contact Us"]
 	selection = st.sidebar.selectbox("",options)
@@ -400,7 +401,7 @@ def main():
 
 		tweet_type = st.sidebar.radio(
 		"Tweet Type:",
-		('All','#','RT'))
+		('All','@','#','RT'))
 
 		if tweet == 'All' and tweet_type == 'All':
 			st.write(raw[['message']])
@@ -415,6 +416,21 @@ def main():
 			st.write(raw_anti[['message']])
 
 		if tweet == 'News' and tweet_type == 'All':
+			st.write(raw_news[['message']])
+
+		if tweet == 'All' and tweet_type == '@':
+			st.write(raw[['message']])
+
+		if tweet == 'Pro' and tweet_type == '@':
+			st.write(raw_pro[['message']])
+
+		if tweet == 'Neutral' and tweet_type == '@':
+			st.write(raw_neutral[['message']])
+
+		if tweet == 'Anti' and tweet_type == '@':
+			st.write(raw_anti[['message']])
+
+		if tweet == 'News' and tweet_type == '@':
 			st.write(raw_news[['message']])
 
 		if tweet == 'All' and tweet_type == '#':
@@ -450,7 +466,7 @@ def main():
 		st.sidebar.subheader('   ')
 		st.sidebar.title('   ')
 
-		logo = Image.open('logo.jpg')
+		logo = Image.open('Logo1-removebg-preview.png')
 		st.sidebar.image(logo)
 
 # Required to let Streamlit instantiate our web app.  
