@@ -164,10 +164,10 @@ def main():
 
 		st.subheader("Sentiments")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("2 = News : Tweets linked to factual news about climate change.")
-		st.markdown("1 = Pro : Tweets that support the belief of man-made climate change.")
-		st.markdown("0 = Neutral : Tweets that neither support nor refuse beliefs of climate change.")
-		st.markdown("-1 = Anti : Tweets that do not support the belief of man-made climate change.")
+		st.markdown("News : Tweets linked to factual news about climate change.")
+		st.markdown("Pro : Tweets that support the belief of man-made climate change.")
+		st.markdown("Neutral : Tweets that neither support nor refuse beliefs of climate change.")
+		st.markdown("Anti : Tweets that do not support the belief of man-made climate change.")
 
 		st.subheader("Pie chart distribution of sentiments in percentage")
         

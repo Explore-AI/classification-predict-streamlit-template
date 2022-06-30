@@ -182,6 +182,10 @@ def main():
 
 		st.pyplot(fig1)
 
+		st.info('Hashtag Distribution per Sentiment')
+		haspic = Image.open('resources/Hashpic.png')
+		st.image(haspic)
+
 	# Building out the "Model" page
 	if selection == "Model":
 		st.title("Model")
@@ -447,8 +451,7 @@ def main():
 			st.write(rt_nw[['message']])
 
 		st.sidebar.subheader('   ')
-		st.sidebar.title('   ')
-
+		
 		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo)
 
