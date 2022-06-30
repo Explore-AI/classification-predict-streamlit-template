@@ -45,7 +45,7 @@ FILE = os.path.dirname(__file__)
 
 
 # Vectorizer
-T_vectorizer = open("resources/tfidfvect.pkl", "rb")
+T_vectorizer = open("resources/Vectorizer.pkl", "rb")
 # loading your vectorizer from the pkl file
 tweet_Vect = joblib.load(T_vectorizer)
 
@@ -130,7 +130,7 @@ def main():
 	if selection == "About":
 		st.title("About")
 
-		logo = Image.open('Logo1-removebg-preview.png')
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 
 		# You can read a markdown file from supporting resources folder
@@ -159,15 +159,15 @@ def main():
 	if selection == "Exploratory Data Analysis":
 		st.title("Exploratory Data Analysis")
 
-		logo = Image.open('Logo1-removebg-preview.png')
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 
 		st.subheader("Sentiments")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("News : Tweets linked to factual news about climate change.")
-		st.markdown("Pro : Tweets that support the belief of man-made climate change.")
-		st.markdown("Neutral : Tweets that neither support nor refuse beliefs of climate change.")
-		st.markdown("Anti : Tweets that do not support the belief of man-made climate change.")
+		st.markdown("2 = News : Tweets linked to factual news about climate change.")
+		st.markdown("1 = Pro : Tweets that support the belief of man-made climate change.")
+		st.markdown("0 = Neutral : Tweets that neither support nor refuse beliefs of climate change.")
+		st.markdown("-1 = Anti : Tweets that do not support the belief of man-made climate change.")
 
 		st.subheader("Pie chart distribution of sentiments in percentage")
         
@@ -182,11 +182,15 @@ def main():
 
 		st.pyplot(fig1)
 
+		st.info('Hashtag Distribution per Sentiment')
+		haspic = Image.open('resources/Hashpic.png')
+		st.image(haspic)
+
 	# Building out the "Model" page
 	if selection == "Model":
 		st.title("Model")
 
-		logo = Image.open('Logo1-removebg-preview.png')
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 
 		st.subheader("What is Logistic Regression?")
@@ -223,19 +227,19 @@ def main():
 	if selection == "Contact Us":
 		st.title("Contact Us")
 
-		logo = Image.open('Logo1-removebg-preview.png')
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 		
 		st.subheader("Our Company")
 		st.markdown("Solid Solutions is an innovation tech company with a key focus on creating up to date technological products designed to make light of any problem thrown our way. We are extremely passionate about giving back to the community. Strengthening Today for a Stronger Tomorrow!")
 		# You can read a markdown file from supporting resources folder
 		col1, col2, col3, col4, col5, col6 = st.columns(6)
-		img1 = Image.open("Lizzy.jpeg")
-		img2 = Image.open("Hendrick.jpg")
-		img3 = Image.open("Mokgadi.jpg")
-		img4 = Image.open("Morema.jpg")
-		img5 = Image.open("Njabulo.jpg")
-		img6 = Image.open("Robyn.jpeg")
+		img1 = Image.open("resources/Lizzy.jpeg")
+		img2 = Image.open("resources/Hendrick.jpg")
+		img3 = Image.open("resources/Mokgadi.jpg")
+		img4 = Image.open("resources/Morema.jpg")
+		img5 = Image.open("resources/Njabulo.jpg")
+		img6 = Image.open("resources/Robyn.jpeg")
 		
 		with col1:
 			st.caption("Market Technologist")
@@ -279,9 +283,9 @@ def main():
 		col1, col2, col3 = st.columns(3)
 		with col1:
 			st.subheader("Address")
-			img = Image.open("map.png")
+			img = Image.open("resources/map.png")
 			st.image(img)
-			st.markdown("1004 Otto du Plesis")
+			st.markdown("106 Loop")
 			st.markdown("Cape Town")
 			st.markdown("8001")
 
@@ -290,12 +294,12 @@ def main():
 			st.markdown("Monday - Friday")
 			st.markdown("08h00 - 17h00 GMT+2")
 			st.markdown("(+27) 021 554 1091")
-			st.markdown("(+27) 084 553 4721")
+			st.markdown("(+27) 081 579 4965")
 
 		with col3:
 			st.subheader("Email")
-			st.markdown("robynvandermerwe@gmail.com")
-			st.markdown("robynvandermerwe@yahoo.com")
+			st.markdown("robyn@agrotech.com")
+			st.markdown("morema@agrotech.com")
 
 
 	# Building out the Home page
@@ -313,23 +317,23 @@ def main():
 			
 		with col2:
 			if tweet == 'All':
-				img_twit = Image.open('pro_dark.png')
+				img_twit = Image.open('resources/anti_dark.png')
 				st.image(img_twit) 
 			
 			if tweet == 'Pro':
-				img_twit = Image.open('pro_dark.png')
+				img_twit = Image.open('resources/pro_dark.png')
 				st.image(img_twit) 
 
 			if tweet == 'Neutral':
-				img_twit = Image.open('neutral_dark.png')
+				img_twit = Image.open('resources/neutral_dark.png')
 				st.image(img_twit) 
 
 			if tweet == 'Anti':
-				img_twit = Image.open('anti_dark.png')
+				img_twit = Image.open('resources/anti_dark.png')
 				st.image(img_twit) 
 
 			if tweet == 'News':
-				img_twit = Image.open('news_dark.png')
+				img_twit = Image.open('resources/news_dark.png')
 				st.image(img_twit) 
 
 			# Creating a text box for user input
@@ -362,7 +366,7 @@ def main():
 			user_input = tweet_Vect.transform(user_input)
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor1 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			predictor1 = joblib.load(open(os.path.join("resources/LR_model.pkl"),"rb"))
 			prediction1 = predictor1.predict(user_input)
 
 			def tweet_classifier(user_input):
@@ -447,9 +451,8 @@ def main():
 			st.write(rt_nw[['message']])
 
 		st.sidebar.subheader('   ')
-		st.sidebar.title('   ')
-
-		logo = Image.open('Logo1-removebg-preview.png')
+		
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo)
 
 # Required to let Streamlit instantiate our web app.  
