@@ -32,11 +32,12 @@ import pandas as pd
 import numpy as np
 import re
 import string
-#import nltk
+import nltk
 #nltk.download()
 from nltk.tokenize import TreebankWordTokenizer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
+stop_words = set(stopwords.words('english'))
 from sklearn.feature_extraction.text import CountVectorizer
 from wordcloud import WordCloud
 FILE = os.path.dirname(__file__)
@@ -51,17 +52,38 @@ tweet_cv = joblib.load(news_vectorizer)
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
 #sentiment = ["1", "2", "0", "-1"]
-clean = pd.read_csv("dataframes.csv")
+clean = pd.read_csv("dataframe.csv")
 sentiment_class = {
     -1: "Anti",
      0: "Neutral",
      1: "Pro",
      2: "News",
 }
+# All
 raw_pro = raw[raw['sentiment'] == 1]
 raw_neutral = raw[raw['sentiment'] == 0]
 raw_anti = raw[raw['sentiment'] == -1]
 raw_news = raw[raw['sentiment'] == 2]
+# Hashtags
+hasht = clean[clean['hasht'].notna()]
+hasht_p = hasht[hasht['sentiment'] == 1]
+hasht_nt = hasht[hasht['sentiment'] == 0]
+hasht_a = hasht[hasht['sentiment'] == -1]
+hasht_nw = hasht[hasht['sentiment'] == 2]
+
+# At@@@
+at = clean[clean['at'].notna()]
+at_p = at[at['sentiment'] == 1]
+at_nt = at[at['sentiment'] == 0]
+at_a = at[at['sentiment'] == -1]
+at_nw = at[at['sentiment'] == 2]
+
+# RT
+rt = clean[clean['RT'].notna()]
+rt_p = rt[rt['sentiment'] == 1]
+rt_nt = rt[rt['sentiment'] == 0]
+rt_a = rt[rt['sentiment'] == -1]
+rt_nw = rt[rt['sentiment'] == 2]
 
 clean_pro = clean[clean['sentiment'] == 1]
 clean_neutral = clean[clean['sentiment'] == 0]
@@ -73,20 +95,20 @@ clean_news = clean[clean['sentiment'] == 2]
 # Raw data according to Home page selection
 
 # Cleaning the raw data
-#def remove_punctuation(tweet):
-    #return ''.join([l for l in tweet if l not in string.punctuation])
+def remove_punctuation(tweet):
+    return ''.join([l for l in tweet if l not in string.punctuation])
 
-#tokeniser = TreebankWordTokenizer()
+tokeniser = TreebankWordTokenizer()
 
-#lemmatizer = WordNetLemmatizer()
+lemmatizer = WordNetLemmatizer()
 
-#def df_copy_lemma(words, lemmatizer):
-    #return [lemmatizer.lemmatize(word) for word in words]
+def df_copy_lemma(words, lemmatizer):
+    return [lemmatizer.lemmatize(word) for word in words]
 
-#def remove_stop_words(tokens):    
-    #return [t for t in tokens if t not in stopwords.words('english')]
+def remove_stop_words(tokens):    
+    return [t for t in tokens if t not in stopwords.words('english')]
 
-#vectorizer = CountVectorizer(ngram_range = (1,2))
+vectorizer = CountVectorizer(ngram_range = (1,2))
 
 # Word cloud
 #tweet_mask = np.array(Image.open("twitterl1.png"))
@@ -120,10 +142,11 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	st.set_page_config(page_title='Tweetzilla', page_icon='🖖')
+	st.set_page_config(page_title='Tweetzilla', page_icon='🐤')
 	
+
 	options = ["Home", "About", "Exploratory Data Analysis", "Model", "Contact Us"]
-	selection = st.sidebar.selectbox("",options)
+	selection = st.sidebar.selectbox("Menu",options)
 
 	# Building out the "About" page
 	if selection == "About":
@@ -299,7 +322,7 @@ def main():
 
 	# Building out the Home page
 	if selection == "Home":
-		st.title("Tweet Classifer")
+		st.title("🐤 TWEETZILLA")
 
 
 			#if tweet == 'All':
@@ -365,21 +388,33 @@ def main():
 			# Creating a text box for user input
 		tweet_text = st.text_area("Try your own tweet here!","Type Here")
 
-			#clean_text = tweet_text
-			#clean_text = clean_text.str.lower()
-			#clean_text = clean_text.apply(remove_punctuation)
-			#clean_text = clean_text.apply(tokeniser.tokenize)
-			#clean_text = clean_text.apply(df_copy_lemma, args=(lemmatizer, ))
-			#clean_text = clean_text.apply(remove_stop_words)
-			#clean_text = vectorizer.transform(clean_text)
-
 		if st.button("Classify"):
 				# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
+			user_input_cleaned = tweet_text.lower()
+    	
+			user_input_cleaned = user_input_cleaned.replace('http\S+|www.\S+', '')
+    	
+			user_input_cleaned = user_input_cleaned.replace('#', '')
+    	
+			user_input_cleaned = ' '.join([word for word in user_input_cleaned.split() if word[0] != '#'])
+    	
+			user_input_cleaned = user_input_cleaned.replace(r'[^\w\s]', '')
+    	
+			user_input_cleaned = ' '.join([word for word in user_input_cleaned.split() if word not in (stop_words)])
+    	
+			user_input_cleaned = ' '.join([word for word in user_input_cleaned.split() if word.isalpha()])
+    	
+			lemmatizer = WordNetLemmatizer()
+    	
+			user_input_cleaned = ' '.join([lemmatizer.lemmatize(word) for word in user_input_cleaned.split()])
+
+			user_input = [user_input_cleaned]
+			user_input = np.array(user_input)
+			user_input = tweet_cv.transform(user_input)
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
 			predictor1 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-			prediction1 = predictor1.predict(vect_text)
+			prediction1 = predictor1.predict(user_input)
 
 				#sentiment_word = []
 				#for i in prediction :
@@ -419,49 +454,49 @@ def main():
 			st.write(raw_news[['message']])
 
 		if tweet == 'All' and tweet_type == '@':
-			st.write(raw[['message']])
+			st.write(at[['message']])
 
 		if tweet == 'Pro' and tweet_type == '@':
-			st.write(raw_pro[['message']])
+			st.write(at_p[['message']])
 
 		if tweet == 'Neutral' and tweet_type == '@':
-			st.write(raw_neutral[['message']])
+			st.write(at_nt[['message']])
 
 		if tweet == 'Anti' and tweet_type == '@':
-			st.write(raw_anti[['message']])
+			st.write(at_a[['message']])
 
 		if tweet == 'News' and tweet_type == '@':
-			st.write(raw_news[['message']])
+			st.write(at_nw[['message']])
 
 		if tweet == 'All' and tweet_type == '#':
-			st.write(raw[['message']])
+			st.write(hasht[['message']])
 
 		if tweet == 'Pro' and tweet_type == '#':
-			st.write(raw_pro[['message']])
+			st.write(hasht_p[['message']])
 
 		if tweet == 'Neutral' and tweet_type == '#':
-			st.write(raw_neutral[['message']])
+			st.write(hasht_nt[['message']])
 
 		if tweet == 'Anti' and tweet_type == '#':
-			st.write(raw_anti[['message']])
+			st.write(hasht_a[['message']])
 
 		if tweet == 'News' and tweet_type == '#':
-			st.write(raw_news[['message']])
+			st.write(hasht_nw[['message']])
 
 		if tweet == 'All' and tweet_type == 'RT':
-			st.write(raw[['message']])
+			st.write(rt[['message']])
 
 		if tweet == 'Pro' and tweet_type == 'RT':
-			st.write(raw_pro[['message']])
+			st.write(rt_p[['message']])
 
 		if tweet == 'Neutral' and tweet_type == 'RT':
-			st.write(raw_neutral[['message']])
+			st.write(rt_nt[['message']])
 
 		if tweet == 'Anti' and tweet_type == 'RT':
-			st.write(raw_anti[['message']])
+			st.write(rt_a[['message']])
 
 		if tweet == 'News' and tweet_type == 'RT':
-			st.write(raw_news[['message']])
+			st.write(rt_nw[['message']])
 
 		st.sidebar.subheader('   ')
 		st.sidebar.title('   ')
