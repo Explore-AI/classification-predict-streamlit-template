@@ -26,7 +26,7 @@ import streamlit as st
 import joblib,os
 import matplotlib.pyplot as plt
 from PIL import Image
-
+from textblob import TextBlob
 # Data dependencies
 import pandas as pd
 import numpy as np
@@ -45,9 +45,9 @@ FILE = os.path.dirname(__file__)
 
 
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl", "rb")
+T_vectorizer = open("resources/Vectorizer.pkl", "rb")
 # loading your vectorizer from the pkl file
-tweet_cv = joblib.load(news_vectorizer)
+tweet_Vect = joblib.load(T_vectorizer)
 
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
@@ -59,6 +59,7 @@ sentiment_class = {
      1: "Pro",
      2: "News",
 }
+
 # All
 raw_pro = raw[raw['sentiment'] == 1]
 raw_neutral = raw[raw['sentiment'] == 0]
@@ -110,29 +111,6 @@ def remove_stop_words(tokens):
 
 vectorizer = CountVectorizer(ngram_range = (1,2))
 
-# Word cloud
-#tweet_mask = np.array(Image.open("twitterl1.png"))
-
-#words =' '.join([text for text in clean['message']])
-#tweet_ = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-#tweet_.generate(words)
-
-#pro_words =' '.join([text for text in clean_pro['message']])
-#tweet_p = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-#tweet_p.generate(pro_words)
-
-#neutral_words =' '.join([text for text in clean_neutral['message']])
-#tweet_nt = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-#tweet_nt.generate(neutral_words)
-
-#anti_words =' '.join([text for text in clean_anti['message']])
-#tweet_a = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-#tweet_a.generate(anti_words)
-
-#news_words =' '.join([text for text in clean_news['message']])
-#tweet_nw = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-#tweet_nw.generate(news_words)
-
 # The main function where we will build the actual app
 def main():
 	"""Tweet Classifier App with Streamlit """
@@ -152,7 +130,7 @@ def main():
 	if selection == "About":
 		st.title("About")
 
-		logo = Image.open('logo.jpg')
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 
 		# You can read a markdown file from supporting resources folder
@@ -181,7 +159,7 @@ def main():
 	if selection == "Exploratory Data Analysis":
 		st.title("Exploratory Data Analysis")
 
-		logo = Image.open('logo.jpg')
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 
 		st.subheader("Sentiments")
@@ -208,7 +186,7 @@ def main():
 	if selection == "Model":
 		st.title("Model")
 
-		logo = Image.open('logo.jpg')
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 
 		st.subheader("What is Logistic Regression?")
@@ -245,19 +223,19 @@ def main():
 	if selection == "Contact Us":
 		st.title("Contact Us")
 
-		logo = Image.open('logo.jpg')
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 		
 		st.subheader("Our Company")
 		st.markdown("Solid Solutions is an innovation tech company with a key focus on creating up to date technological products designed to make light of any problem thrown our way. We are extremely passionate about giving back to the community. Strengthening Today for a Stronger Tomorrow!")
 		# You can read a markdown file from supporting resources folder
 		col1, col2, col3, col4, col5, col6 = st.columns(6)
-		img1 = Image.open("Lizzy.jpeg")
-		img2 = Image.open("Hendrick.jpg")
-		img3 = Image.open("Mokgadi.jpg")
-		img4 = Image.open("Morema.jpg")
-		img5 = Image.open("Njabulo.jpg")
-		img6 = Image.open("Robyn.jpeg")
+		img1 = Image.open("resources/Lizzy.jpeg")
+		img2 = Image.open("resources/Hendrick.jpg")
+		img3 = Image.open("resources/Mokgadi.jpg")
+		img4 = Image.open("resources/Morema.jpg")
+		img5 = Image.open("resources/Njabulo.jpg")
+		img6 = Image.open("resources/Robyn.jpeg")
 		
 		with col1:
 			st.caption("Market Technologist")
@@ -301,7 +279,7 @@ def main():
 		col1, col2, col3 = st.columns(3)
 		with col1:
 			st.subheader("Address")
-			img = Image.open("map.png")
+			img = Image.open("resources/map.png")
 			st.image(img)
 			st.markdown("1004 Otto du Plesis")
 			st.markdown("Cape Town")
@@ -324,37 +302,6 @@ def main():
 	if selection == "Home":
 		st.title("🐤 TWEETZILLA")
 
-
-			#if tweet == 'All':
-				#fig, ax = plt.subplots(figsize = (12, 8))
-				#ax.imshow(tweet_)
-				#plt.axis("off")
-				#st.pyplot(fig)
-
-			#if tweet == 'Pro':
-				#fig, ax = plt.subplots(figsize = (12, 8))
-				#ax.imshow(tweet_p)
-				#plt.axis("off")
-				#st.pyplot(fig)
-
-			#if tweet == 'Neutral':
-				#fig, ax = plt.subplots(figsize = (12, 8))
-				#ax.imshow(tweet_nt)
-				#plt.axis("off")
-				#st.pyplot(fig)
-
-			#if tweet == 'Anti':
-				#fig, ax = plt.subplots(figsize = (12, 8))
-				#ax.imshow(tweet_a)
-				#plt.axis("off")
-				#st.pyplot(fig)
-
-			#if tweet == 'News':
-				#fig, ax = plt.subplots(figsize = (12, 8))
-				#ax.imshow(tweet_nw)
-				#plt.axis("off")
-				#st.pyplot(fig)
-
 		col1,col2 = st.columns(2)
 		with col1:
 			st.info('"Hello there! I am Tweetzilla - your personal tweet sentiment prediction bird."')
@@ -366,23 +313,23 @@ def main():
 			
 		with col2:
 			if tweet == 'All':
-				img_twit = Image.open('pro_dark.png')
+				img_twit = Image.open('resources/anti_dark.png')
 				st.image(img_twit) 
 			
 			if tweet == 'Pro':
-				img_twit = Image.open('pro_dark.png')
+				img_twit = Image.open('resources/pro_dark.png')
 				st.image(img_twit) 
 
 			if tweet == 'Neutral':
-				img_twit = Image.open('neutral_dark.png')
+				img_twit = Image.open('resources/neutral_dark.png')
 				st.image(img_twit) 
 
 			if tweet == 'Anti':
-				img_twit = Image.open('anti_dark.png')
+				img_twit = Image.open('resources/anti_dark.png')
 				st.image(img_twit) 
 
 			if tweet == 'News':
-				img_twit = Image.open('news_dark.png')
+				img_twit = Image.open('resources/news_dark.png')
 				st.image(img_twit) 
 
 			# Creating a text box for user input
@@ -409,28 +356,29 @@ def main():
 			user_input_cleaned = ' '.join([lemmatizer.lemmatize(word) for word in user_input_cleaned.split()])
 
 			user_input = [user_input_cleaned]
+			
 			user_input = np.array(user_input)
-			user_input = tweet_cv.transform(user_input)
+
+			user_input = tweet_Vect.transform(user_input)
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor1 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			predictor1 = joblib.load(open(os.path.join("resources/LR_model.pkl"),"rb"))
 			prediction1 = predictor1.predict(user_input)
 
-				#sentiment_word = []
-				#for i in prediction :
-				    #if i == 1 :
-       	  				#sentiment_word.append('Pro')
-     				#elif i == 0 :
-         				#sentiment_word.append('Neutral')
-     				#elif i == -1 :
-         				#sentiment_word.append('Anti')
-     				#else :
-         				#sentiment_word.append('News')
+			def tweet_classifier(user_input):
+				if prediction1 < 0:
+					return "Anti"
+				elif prediction1 == 0:
+					return "Neutral"
+				elif 0 < prediction1 <= 1:
+					return "Pro"
+				elif 1 < prediction1 <= 2:
+					return "News"
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			
-			st.success("Your sentiment is: {}".format(prediction1))
+			st.success("Your sentiment is: " + tweet_classifier(prediction1))
 
 		st.subheader("Twitter data")
 
@@ -501,7 +449,7 @@ def main():
 		st.sidebar.subheader('   ')
 		st.sidebar.title('   ')
 
-		logo = Image.open('Logo1-removebg-preview.png')
+		logo = Image.open('resources/Logo1-removebg-preview.png')
 		st.sidebar.image(logo)
 
 # Required to let Streamlit instantiate our web app.  

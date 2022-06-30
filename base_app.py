@@ -26,17 +26,18 @@ import streamlit as st
 import joblib,os
 import matplotlib.pyplot as plt
 from PIL import Image
-
+from textblob import TextBlob
 # Data dependencies
 import pandas as pd
 import numpy as np
 import re
 import string
-#import nltk
+import nltk
 #nltk.download()
 from nltk.tokenize import TreebankWordTokenizer
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
+stop_words = set(stopwords.words('english'))
 from sklearn.feature_extraction.text import CountVectorizer
 from wordcloud import WordCloud
 FILE = os.path.dirname(__file__)
@@ -44,74 +45,71 @@ FILE = os.path.dirname(__file__)
 
 
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl", "rb")
+T_vectorizer = open("resources/tfidfvect.pkl", "rb")
 # loading your vectorizer from the pkl file
-tweet_cv = joblib.load(news_vectorizer)
+tweet_Vect = joblib.load(T_vectorizer)
 
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
-sentiment = ["1", "2", "0", "-1"]
+#sentiment = ["1", "2", "0", "-1"]
+clean = pd.read_csv("dataframe.csv")
 sentiment_class = {
     -1: "Anti",
      0: "Neutral",
      1: "Pro",
      2: "News",
 }
+
+# All
 raw_pro = raw[raw['sentiment'] == 1]
 raw_neutral = raw[raw['sentiment'] == 0]
 raw_anti = raw[raw['sentiment'] == -1]
 raw_news = raw[raw['sentiment'] == 2]
+# Hashtags
+hasht = clean[clean['hasht'].notna()]
+hasht_p = hasht[hasht['sentiment'] == 1]
+hasht_nt = hasht[hasht['sentiment'] == 0]
+hasht_a = hasht[hasht['sentiment'] == -1]
+hasht_nw = hasht[hasht['sentiment'] == 2]
+
+# At@@@
+at = clean[clean['at'].notna()]
+at_p = at[at['sentiment'] == 1]
+at_nt = at[at['sentiment'] == 0]
+at_a = at[at['sentiment'] == -1]
+at_nw = at[at['sentiment'] == 2]
+
+# RT
+rt = clean[clean['RT'].notna()]
+rt_p = rt[rt['sentiment'] == 1]
+rt_nt = rt[rt['sentiment'] == 0]
+rt_a = rt[rt['sentiment'] == -1]
+rt_nw = rt[rt['sentiment'] == 2]
+
+clean_pro = clean[clean['sentiment'] == 1]
+clean_neutral = clean[clean['sentiment'] == 0]
+clean_anti = clean[clean['sentiment'] == -1]
+clean_news = clean[clean['sentiment'] == 2]
 
 # Functions for data extraction
-def hashtag_extract(tweet):
-
-    hashtags = []
-    # Loop over the words in the tweet
-    for word in tweet:
-        tag = re.findall(r"#(\w+)", word)
-        hashtags.append(tag)
-
-    return hashtags
 
 # Raw data according to Home page selection
-news_hash = hashtag_extract(raw_news['message'])
-pro_hash = hashtag_extract(raw_pro['message'])
-neutral_hash = hashtag_extract(raw_neutral['message'])
-anti_hash = hashtag_extract(raw_anti['message'])
-
 
 # Cleaning the raw data
-clean = raw[['sentiment','message']]
-clean["message"] = clean['message'].str.lower()
-
 def remove_punctuation(tweet):
     return ''.join([l for l in tweet if l not in string.punctuation])
 
-clean["message"] = clean['message'].apply(remove_punctuation)
 tokeniser = TreebankWordTokenizer()
-clean['tokens'] = clean['message'].apply(tokeniser.tokenize)
-#nltk.download('wordnet')
+
 lemmatizer = WordNetLemmatizer()
+
 def df_copy_lemma(words, lemmatizer):
     return [lemmatizer.lemmatize(word) for word in words]
 
-clean['lemma'] = clean['tokens'].apply(df_copy_lemma, args=(lemmatizer, ))
 def remove_stop_words(tokens):    
     return [t for t in tokens if t not in stopwords.words('english')]
 
-clean['lemma'] = clean['tokens'].apply(remove_stop_words)
-#x_test = clean.message
 vectorizer = CountVectorizer(ngram_range = (1,2))
-#x_test = vectorizer.transform(x_test)
-
-# Word cloud
-tweet_mask = np.array(Image.open("twitterl.png"))
-
-pro_words =' '.join([text for text in raw_pro['message']])
-tweet_p = WordCloud(font_path='CabinSketch-Bold.ttf', background_color="black",random_state=23, collocations=False, max_font_size=5000, contour_width=1, stopwords=None, colormap="Greens", mask = tweet_mask)
-tweet_p.generate(pro_words)
-
-
 
 # The main function where we will build the actual app
 def main():
@@ -122,15 +120,17 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
+	st.set_page_config(page_title='Tweetzilla', page_icon='🐤')
 	
+
 	options = ["Home", "About", "Exploratory Data Analysis", "Model", "Contact Us"]
-	selection = st.sidebar.selectbox("",options)
+	selection = st.sidebar.selectbox("Menu",options)
 
 	# Building out the "About" page
 	if selection == "About":
 		st.title("About")
 
-		logo = Image.open('logo.jpg')
+		logo = Image.open('Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 
 		# You can read a markdown file from supporting resources folder
@@ -154,11 +154,12 @@ def main():
 		- Help define performance standards.
 		- Help establish a framework for ethical behavior
 		""")
+
 	# Building out the "Exploratory Data Analysis" page
 	if selection == "Exploratory Data Analysis":
 		st.title("Exploratory Data Analysis")
 
-		logo = Image.open('logo.jpg')
+		logo = Image.open('Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 
 		st.subheader("Sentiments")
@@ -185,7 +186,7 @@ def main():
 	if selection == "Model":
 		st.title("Model")
 
-		logo = Image.open('logo.jpg')
+		logo = Image.open('Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 
 		st.subheader("What is Logistic Regression?")
@@ -222,7 +223,7 @@ def main():
 	if selection == "Contact Us":
 		st.title("Contact Us")
 
-		logo = Image.open('logo.jpg')
+		logo = Image.open('Logo1-removebg-preview.png')
 		st.sidebar.image(logo, use_column_width=True)
 		
 		st.subheader("Our Company")
@@ -299,106 +300,156 @@ def main():
 
 	# Building out the Home page
 	if selection == "Home":
-		st.title("Tweet Classifer")
+		st.title("🐤 TWEETZILLA")
 
-		col1, col2 = st.columns(2)
-		
+		col1,col2 = st.columns(2)
 		with col1:
-			fig, ax = plt.subplots(figsize = (12, 8))
-			ax.imshow(tweet_p)
-			plt.axis("off")
-			st.pyplot(fig)
-
-
+			st.info('"Hello there! I am Tweetzilla - your personal tweet sentiment prediction bird."')
+		
+			st.write('Watch Tweetzilla\'s words change when you select a different sentiment.')
+			tweet = st.selectbox(
+     		"Tweet sentiment:",
+     		('All', 'Pro', 'Neutral','Anti','News'))
+			
 		with col2:
-			st.info("Try your own tweet here!")
+			if tweet == 'All':
+				img_twit = Image.open('pro_dark.png')
+				st.image(img_twit) 
+			
+			if tweet == 'Pro':
+				img_twit = Image.open('pro_dark.png')
+				st.image(img_twit) 
+
+			if tweet == 'Neutral':
+				img_twit = Image.open('neutral_dark.png')
+				st.image(img_twit) 
+
+			if tweet == 'Anti':
+				img_twit = Image.open('anti_dark.png')
+				st.image(img_twit) 
+
+			if tweet == 'News':
+				img_twit = Image.open('news_dark.png')
+				st.image(img_twit) 
+
 			# Creating a text box for user input
-			tweet_text = st.text_area("","Type Here")
+		tweet_text = st.text_area("Try your own tweet here!","Type Here")
 
-			#clean_text = tweet_text
-			#clean_text = clean_text.str.lower()
-			#clean_text = clean_text.apply(remove_punctuation)
-			#clean_text = clean_text.apply(tokeniser.tokenize)
-			#clean_text = clean_text.apply(df_copy_lemma, args=(lemmatizer, ))
-			#clean_text = clean_text.apply(remove_stop_words)
-			#clean_text = vectorizer.transform(clean_text)
-
-			if st.button("K-Nearest Neighbor Classify"):
+		if st.button("Classify"):
 				# Transforming user input with vectorizer
-				vect_text = tweet_cv.transform([tweet_text]).toarray()
+			user_input_cleaned = tweet_text.lower()
+    	
+			user_input_cleaned = user_input_cleaned.replace('http\S+|www.\S+', '')
+    	
+			user_input_cleaned = user_input_cleaned.replace('#', '')
+    	
+			user_input_cleaned = ' '.join([word for word in user_input_cleaned.split() if word[0] != '#'])
+    	
+			user_input_cleaned = user_input_cleaned.replace(r'[^\w\s]', '')
+    	
+			user_input_cleaned = ' '.join([word for word in user_input_cleaned.split() if word not in (stop_words)])
+    	
+			user_input_cleaned = ' '.join([word for word in user_input_cleaned.split() if word.isalpha()])
+    	
+			lemmatizer = WordNetLemmatizer()
+    	
+			user_input_cleaned = ' '.join([lemmatizer.lemmatize(word) for word in user_input_cleaned.split()])
+
+			user_input = [user_input_cleaned]
+			
+			user_input = np.array(user_input)
+
+			user_input = tweet_Vect.transform(user_input)
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-				predictor1 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction1 = predictor1.predict(vect_text)
+			predictor1 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			prediction1 = predictor1.predict(user_input)
 
-				#sentiment_word = []
-				#for i in prediction :
-				    #if i == 1 :
-       	  				#sentiment_word.append('Pro')
-     				#elif i == 0 :
-         				#sentiment_word.append('Neutral')
-     				#elif i == -1 :
-         				#sentiment_word.append('Anti')
-     				#else :
-         				#sentiment_word.append('News')
+			def tweet_classifier(user_input):
+				if prediction1 < 0:
+					return "Anti"
+				elif prediction1 == 0:
+					return "Neutral"
+				elif 0 < prediction1 <= 1:
+					return "Pro"
+				elif 1 < prediction1 <= 2:
+					return "News"
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
-				st.success("Your sentiment is: {}".format(prediction1))
-
-			if st.button("Logistic Regression Classify"):
-				# Transforming user input with vectorizer
-				vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-				predictor2 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction2 = predictor2.predict(vect_text)
-
-				st.success("Your sentiment is: {}".format(prediction2))
-
-			if st.button("Naives Bayes Classify"):
-				# Transforming user input with vectorizer
-				vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-				predictor3 = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction3 = predictor3.predict(vect_text)
-
-				st.success("Your sentiment is: {}".format(prediction3))
+			
+			st.success("Your sentiment is: " + tweet_classifier(prediction1))
 
 		st.subheader("Twitter data")
 
-		tweet = st.sidebar.selectbox(
-     	"Tweet sentiment:",
-     	('All', 'Pro', 'Neutral','Anti','News'))
-		if tweet == 'All':
-			st.write(raw[['message']])
-
-		if tweet == 'Pro':
-			st.write(raw_pro[['message']])
-
-		if tweet == 'Neutral':
-			st.write(raw_neutral[['message']])
-
-		if tweet == 'Anti':
-			st.write(raw_anti[['message']])
-
-		if tweet == 'News':
-			st.write(raw_news[['message']])
-
 		tweet_type = st.sidebar.radio(
 		"Tweet Type:",
-		('All','#','RT'))
-		if tweet_type == 'All':
+		('All','@','#','RT'))
+
+		if tweet == 'All' and tweet_type == 'All':
 			st.write(raw[['message']])
 
-		if tweet_type == 'Hashtag #':
-			st.write(raw[['message']])
-		
-		if tweet_type == 'Re-Tweet RT':
-			st.write(raw[['message']])
+		if tweet == 'Pro' and tweet_type == 'All':
+			st.write(raw_pro[['message']])
 
-		logo = Image.open('logo.jpg')
+		if tweet == 'Neutral' and tweet_type == 'All':
+			st.write(raw_neutral[['message']])
+
+		if tweet == 'Anti' and tweet_type == 'All':
+			st.write(raw_anti[['message']])
+
+		if tweet == 'News' and tweet_type == 'All':
+			st.write(raw_news[['message']])
+
+		if tweet == 'All' and tweet_type == '@':
+			st.write(at[['message']])
+
+		if tweet == 'Pro' and tweet_type == '@':
+			st.write(at_p[['message']])
+
+		if tweet == 'Neutral' and tweet_type == '@':
+			st.write(at_nt[['message']])
+
+		if tweet == 'Anti' and tweet_type == '@':
+			st.write(at_a[['message']])
+
+		if tweet == 'News' and tweet_type == '@':
+			st.write(at_nw[['message']])
+
+		if tweet == 'All' and tweet_type == '#':
+			st.write(hasht[['message']])
+
+		if tweet == 'Pro' and tweet_type == '#':
+			st.write(hasht_p[['message']])
+
+		if tweet == 'Neutral' and tweet_type == '#':
+			st.write(hasht_nt[['message']])
+
+		if tweet == 'Anti' and tweet_type == '#':
+			st.write(hasht_a[['message']])
+
+		if tweet == 'News' and tweet_type == '#':
+			st.write(hasht_nw[['message']])
+
+		if tweet == 'All' and tweet_type == 'RT':
+			st.write(rt[['message']])
+
+		if tweet == 'Pro' and tweet_type == 'RT':
+			st.write(rt_p[['message']])
+
+		if tweet == 'Neutral' and tweet_type == 'RT':
+			st.write(rt_nt[['message']])
+
+		if tweet == 'Anti' and tweet_type == 'RT':
+			st.write(rt_a[['message']])
+
+		if tweet == 'News' and tweet_type == 'RT':
+			st.write(rt_nw[['message']])
+
+		st.sidebar.subheader('   ')
+		st.sidebar.title('   ')
+
+		logo = Image.open('Logo1-removebg-preview.png')
 		st.sidebar.image(logo)
 
 # Required to let Streamlit instantiate our web app.  
