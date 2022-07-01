@@ -97,19 +97,20 @@ def my_fmt(x):
 
 logo = Image.open("resources/imgs/default_edited.png")
 oluyemi_new= Image.open('resources/imgs/yemi edsa picture.JPG')
-oluyemi=oluyemi_new.resize((180,250))
+oluyemi=oluyemi_new.resize((160,250))
 joshua_new= Image.open('resources/imgs/Eujosh_pic_new.JPEG')
-joshua=joshua_new.resize((180,250))
+joshua=joshua_new.resize((160,250))
 abiola_new= Image.open('resources/imgs/Abiola_pic.JPEG')
-abiola=abiola_new.resize((180,250))
+abiola=abiola_new.resize((160,250))
 ifeoluwa_new= Image.open('resources/imgs/ifeoluwa_pic_new.JPEG')
-ifeoluwa=ifeoluwa_new.resize((180,250))
+ifeoluwa=ifeoluwa_new.resize((160,250))
 lawson_new=Image.open('resources/imgs/Lawson_pic.JPEG')
-lawson=lawson_new.resize((180,250))
+lawson=lawson_new.resize((160,250))
 stephen_new=Image.open('resources/imgs/Stephen_pic_new.JPEG')
-stephen=stephen_new.resize((180,250))
-welcome_message='<p style="font-family:sans-serif; color:Black; font-size: 20px;">Welcome, we are glad to have you here.\
+stephen=stephen_new.resize((160,250))
+welcome_message='<p style="font-family:Mono space; color:black; font-size: 20px;">Welcome, we are glad to have you here.\
 			Kindly use Navigation on the side to find your way around. Enjoy your stay</p>'
+purpose='<p style="font-family:Mono space; color:black; font-size: 15px; ">The Purpose of Our Organization</p>'
 
 # The main function where we will build the actual app
 def main():
@@ -130,25 +131,78 @@ def main():
 	if selection== "About Us":
 		st.image(logo)
 		st.markdown(welcome_message,unsafe_allow_html=True)
+		with st.expander("Read about us"):
+			st.markdown(""" At AIORIGIN we make use of the wealth of knowledge of experts from different fields to \
+				provide cutting-edge solutions for businesses of all sizes.\
+					We analyse each situation and select the most appropriate innovative tools and \
+						proprietary technologies for the job at hand. \
+							The end result is a set of machine learning models and solutions tailored to the specific\
+								 needs and objectives of each of our clients.""")
+			st. markdown(purpose, unsafe_allow_html=True)
+			st.write("Our goal is to help our clients become more competitive and achieve results \
+					they coulld only have imagined. Innovative and proprietary development technologies,\
+						 exceptional services, and top-notch professional expertise are the means we \
+							use to achieve these objectives")
 		st.info("Meet the Team")
-		st.image(image=[oluyemi, joshua,abiola,ifeoluwa,lawson,stephen,],
-		caption=['Oluyemi Alabi','Joshua Umukoro', 'Abiola Akinwale',
-		'Ifeoluwa Adeoti','Lawson Umukoro','Stephen Tshiani'])
-		#if st.button("Go to classifier"):
-			#open sidebar.selectbox("Make Prediction")
+		col1, col2, col3 = st.columns(3) #create images side by side
+		ife = Image.open("resources/imgs/ifeoluwa_pic_new.JPEG")
+		ife =ife.resize((160,250))
+		col1.write("Ifeoluwa Adeoti")
+		col1.image(ife)
+		col1.caption("Ife is the founder and CEO.")
+
+		yemi = Image.open('resources/imgs/yemi edsa picture.JPG')
+		yemi= yemi.resize((160,250))
+		col2.write("Oluyemi Alabi")
+		col2.image(yemi)
+		col2.caption("Yemi is the Chief Technical Officer.")
+
+		abiola = Image.open("resources/imgs/Abiola_pic.JPEG")
+		abiola=abiola.resize((160,250))
+		col3.write("Abiola Akinwale")
+		col3.image(abiola)
+		col3.caption("Abiola is the Creative Director.")
+
+		col4, col5, col6 = st.columns(3) #create images side by side
+
+		joshua = Image.open('resources/imgs/Eujosh_pic_new.JPEG')
+		joshua= joshua.resize((160,250))
+		col4.write("Joshua Umukoro")
+		col4.image(joshua)
+		col4.caption("Joshua is the Financial Head")
+
+		lawson = Image.open('resources/imgs/Lawson_pic.JPEG')
+		lawson= lawson.resize((160,250))
+		col5.write("Lawson Iduku")
+		col5.image(lawson)
+		col5.caption("Lawson is the Head of Human Resources")
+
+		stephen = Image.open('resources/imgs/Stephen_pic_new.JPEG')
+		stephen= stephen.resize((160,250))
+		col6.write("Stephen Tshiani ")
+		col6.image(stephen)
+		col6.caption("Stephen is the Sales Manager")
+
 
 	# Building out the "Information" page
 	if selection == "Information":
 		st.info("Classifier Information")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("The Multinomial Naive-Bayes model was used in the development of the application\
-			it uses the bayes principle. You can have a look at the raw data used and also the model\
-				 performace as compared to other models.")
-
+		st.markdown("3 different models")
+		st.write("1. Logistic Regression model")
+		st.write("2. Support Vector Classifier (SVC) model")
+		st.write("3. Naive-Bayes Model-Multinomial (MNB)")
+		st.markdown(" Accuracy metric used is the F1_Score which takes into account of Precision and Recall score")
 		st.subheader("Raw Twitter data and label")
 		if st.checkbox('Show sample of raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
-		st.checkbox('View model Perfomance graph')
+		elif st.checkbox('View model Perfomance graph'):
+			st.image("resources\imgs\chart.PNG")
+			with st.expander("See explanation"):
+				st.markdown("""The chart above shows model performance comparism. The chart on the left\
+					shows the F1_score for each model with SVC, Logistic Regression and Multinomial \
+						Naive-Bayes performing the best, while the chart on the right shows the comparism between training time, with SVC \
+							taking the longest time """)
 
 
 	# Building out the predication page
@@ -157,6 +211,7 @@ def main():
 		st.subheader("Climate change tweet classification")
 		model_selection = st.radio("Please choose a model", ["Logistic Regression" ,"Multinomial Naive Bayes (Recommended)",\
 			"Linear Support Vector Classifier"], help= 'Select a model that will be used for prediction')
+		#graph_selection = st.radio("Please choose preferred graph", ["Bar chart" ,"Pie chart"], help= 'Select type of graph output')
 
 		st.info("NOTE: If you would like to analyse large amount of tweets at a go, kindly use the upload button on the side.  \
 			File to be uploaded must be '.csv' and have two columns. First column \
@@ -224,6 +279,8 @@ def main():
 				#tweet_df = pd.read_csv(upload_file)
 				#vect_df = tweet_cv.transform(tweet_df['tweets']).toarray()
 				classification=predict('resources','mnb.pickle', vect_df)
+				
+
 				#predicted = joblib.load(open(os.path.join("resources/mnb.pickle"),"rb"))
 				#classification = predicted.predict(vect_df)
 
@@ -234,10 +291,12 @@ def main():
 				#classification = predicted.predict(vect_df)
 
 			elif model_selection == "Linear Support Vector Classifier":
+				classification=predict('resources','svc_model.pickle', vect_df)
 				#tweet_df = pd.read_csv(upload_file)
 				#vect_df = tweet_cv.transform(tweet_df['tweets']).toarray()
-				classification=predict('resources','svc_model.pickle', vect_df)
+					#classification=predict('resources','svc_model.pickle', vect_df)
 				#predicted = joblib.load(open(os.path.join("resources/svc_model.pickle"),"rb"))
+				
 				#classification = predicted.predict(vect_df)
 
 
@@ -251,16 +310,18 @@ def main():
 			st.download_button("Press to Download result file",
 			classified,"file.csv","text/csv",
 			key='download-csv')
-			graph=result['sentiment'].value_counts().plot(kind='pie')
+
+			graph=result['sentiment'].value_counts().plot(kind='pie', annotate=True)
 			graph= 'pie.png'
 			img = io.BytesIO()
 			plt.savefig(img, format='png')
+
 			st.download_button(
 				label="Download chart",
-        		data=img,
+				data=img,
         		file_name=graph,
-        		mime="image/png"
-    )
+        		mime="image/png")
+
 
 			
 
