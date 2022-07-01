@@ -188,11 +188,14 @@ def main():
 	if selection == "Information":
 		st.info("Classifier Information")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("3 different models")
+		st.markdown("The models below were initially used in training our data.")
 		st.write("1. Logistic Regression model")
 		st.write("2. Support Vector Classifier (SVC) model")
 		st.write("3. Naive-Bayes Model-Multinomial (MNB)")
+		st.write("4. K-Nearest Neighbour model (KNN)")
+		st.write("5. Random Forest model")
 		st.markdown(" Accuracy metric used is the F1_Score which takes into account of Precision and Recall score")
+		st.markdown(" Select *View model Performance graph* to see how they perform")
 		st.subheader("Raw Twitter data and label")
 		if st.checkbox('Show sample of raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
