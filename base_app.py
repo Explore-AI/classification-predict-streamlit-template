@@ -49,6 +49,10 @@ def main():
 	options = ["Prediction","Data Insights", "Information"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 
+	#Building on the "data insights" page
+	if selection == "Data Insights":
+		st.info("Exploratory Data Analysis")
+		st.markdown("This page contains insights derived from data analysis")
 	# Building out the "Information" page
 	if selection == "Information":
 		st.info("General Information")
