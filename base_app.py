@@ -73,7 +73,7 @@ def main():
 		sentiment_dist = pd.DataFrame(raw['sentiment'].value_counts()).head()
 		st.bar_chart(sentiment_dist)
 
-		st.subheader("A wide column with a chart")
+		st.subheader("A wide column with a line chart")
 		st.line_chart(raw['sentiment'])
 
 		st.subheader("A narrow column with the data")
@@ -90,7 +90,7 @@ def main():
 
 		values = st.slider(
 		'Select sentiment',
-    	-1, 2, (0, 1))
+    	-1, 2, (0, 2))
 		st.write('Values:', values)
 
 
@@ -147,12 +147,12 @@ def main():
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-			prediction = predictor.predict(vect_text)
+			#predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			#prediction = predictor.predict(vect_text)
 
 			# rfc model
-			#predictor = joblib.load(open(os.path.join("resources/rfc_model.pkl"),"rb"))
-			#prediction = predictor.predict(vect_text)
+			predictor = joblib.load(open(os.path.join("resources/rfc_model.pkl"),"rb"))
+			prediction = predictor.predict(vect_text)
 
 
 			# When model has successfully run, will print prediction
