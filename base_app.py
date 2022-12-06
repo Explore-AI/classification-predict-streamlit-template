@@ -24,6 +24,7 @@
 # Streamlit dependencies
 import streamlit as st
 import joblib,os
+import base64
 
 # Data dependencies
 import pandas as pd
@@ -32,7 +33,7 @@ import pydeck as pdk
 import matplotlib.pyplot as plt
 
 
-
+ 
 
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
@@ -52,7 +53,7 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information", "Visualization", "Dashboard"]
+	options = ["Information", "Prediction", "RFC_Model", "Visualization", "Dashboard"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 
 	# Building out the "Information" page
@@ -150,6 +151,15 @@ def main():
 			#predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
 			#prediction = predictor.predict(vect_text)
 
+			# Random classifier model
+	if selection == "RFC_Model":
+			st.markdown("You can enter text or upload file ")
+			# Creating a text box for user input
+			tweet_text = st.text_area("Enter Text","Type Here")
+
+	if st.button("Classify"):
+			# Transforming user input with vectorizer
+			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# rfc model
 			predictor = joblib.load(open(os.path.join("resources/rfc_model.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
