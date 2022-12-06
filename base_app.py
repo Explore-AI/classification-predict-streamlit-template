@@ -22,6 +22,7 @@
 
 """
 # Streamlit dependencies
+#tired
 import streamlit as st
 import joblib,os
 from PIL import Image
