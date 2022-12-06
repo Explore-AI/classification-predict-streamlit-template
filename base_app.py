@@ -39,18 +39,29 @@ raw = pd.read_csv("resources/train.csv")
 def main():
 	"""Tweet Classifier App with Streamlit """
 
+	# This is our company logo
+	st.image("resources/imgs/logo.jpg")
+	
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
-	st.subheader("Climate change tweet classification")
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
+	options = ["About Us", "Prediction", "Information"]
 	selection = st.sidebar.selectbox("Choose Option", options)
+
+	# Building out the "About Us" page
+	if selection == "About Us":
+
+		# You can read a markdown file from supporting resources folder
+		st.title("Who Are We?")
+		st.markdown("Some information here")
+
 
 	# Building out the "Information" page
 	if selection == "Information":
+		st.title("Tweet Classifer")
+		st.subheader("Climate change tweet classification")
 		st.info("General Information")
 		# You can read a markdown file from supporting resources folder
 		st.markdown("Some information here")
@@ -61,6 +72,8 @@ def main():
 
 	# Building out the predication page
 	if selection == "Prediction":
+		st.title("Tweet Classifer")
+		st.subheader("Climate change tweet classification")
 		st.info("Prediction with ML Models")
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
