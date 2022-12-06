@@ -24,6 +24,7 @@
 # Streamlit dependencies
 import streamlit as st
 import joblib,os
+from PIL import Image
 
 # Data dependencies
 import pandas as pd
@@ -41,13 +42,12 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
 	st.subheader("Climate change tweet classification")
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
-	selection = st.sidebar.selectbox("Choose Option", options)
+	options = ["Prediction", "Information", "Random Forest Classifier"]
+	selection = st.sidebar.selectbox("Lets interact", options)
 
 	# Building out the "Information" page
 	if selection == "Information":
@@ -71,6 +71,27 @@ def main():
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
 			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			prediction = predictor.predict(vect_text)
+
+			# When model has successfully run, will print prediction
+			# You can use a dictionary or similar structure to make this output
+			# more human interpretable.
+			st.success("Text Categorized as: {}".format(prediction))
+	#Building out the predication page
+	if selection == "Random Forest Classifier":
+		st.info("Just a little bit about the random classifyer model")
+		
+		image = Image.open(os.path.join("resources/imgs/twitter_logo.jpg"))
+		st.image(image, caption='Sunrise by the mountains')
+		# Creating a text box for user input
+		tweet_text = st.text_area("Enter Text","Type Here")
+
+		if st.button("Classify"):
+			# Transforming user input with vectorizer
+			vect_text = tweet_cv.transform([tweet_text]).toarray()
+			# Load your .pkl file with the model of your choice + make predictions
+			# Try loading in multiple models to give the user a choice
+			predictor = joblib.load(open(os.path.join("resources/randomfc_model.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
 
 			# When model has successfully run, will print prediction
