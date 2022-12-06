@@ -24,6 +24,7 @@
 # Streamlit dependencies
 import streamlit as st
 import joblib,os
+from PIL import Image
 
 # Data dependencies
 import pandas as pd
@@ -41,15 +42,21 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
-	st.subheader("Climate change tweet classification")
+	
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction","Data Insights", "Information"]
+	options = ['About the company','About the project',"Data Insights","Prediction", "Information"]
 	selection = st.sidebar.selectbox("Choose Option", options)
 
 	#Building on the "data insights" page
+	if selection == "About the project":
+		st.title("Climate change tweet classification")
+		st.write("Climate action, is the goal 13 of the sustainable development goals. It calls for urgent actions to combact climate change and its impact. To address climate change, countries adopt the paris agreement to limit global temperature rise to well below 2 degree celsius. People are experiencing the significant impacts of climate change, which include changing weather patterns, rising sea level, and more extreme weather events. The greenhouse gas emissions from human activities are driving climate change and continue to rise. ")
+		image = Image.open('climate action.jpeg')
+		st.image(image, caption='SDG Goal 13: Climate action')
+		st.write("The South African government has pledged to continue contributing positively to adresssing the climate emergency and is planning on long term efforts to  change the attitude of people towards climate change. But in order to do that, there is a need to know  what people's opinion would be regarding climate change, in the future.")
+		st.write("In this project, various machine learning models were utilised to predict people's sentiment regarding climate change.The machines were trained using messages from twitter.")
 	if selection == "Data Insights":
 		st.info("Exploratory Data Analysis")
 		st.markdown("This page contains insights derived from data analysis")
@@ -65,6 +72,8 @@ def main():
 
 	# Building out the predication page
 	if selection == "Prediction":
+		st.title("Tweet Classifer")
+		st.subheader("Climate change tweet classification")
 		st.info("Prediction with ML Models")
 		# Creating a text box for user input
 		tweet_text = st.text_area("Enter Text","Type Here")
