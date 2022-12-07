@@ -63,7 +63,7 @@ def main():
 		st.markdown("Some information here")
 		image = Image.open(os.path.join("resources/imgs/twitter_logo.jpg"))
 		st.image(image, caption='Sunrise by the mountains')
-		
+
 		st.subheader("Raw Twitter data and label")
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
@@ -88,18 +88,27 @@ def main():
 		if model == 'Random Forest Classifier' :
 			if st.button("Classify"):
 				# Transforming user input with vectorizer
-				rfc_text = tweet_rfc.transform([tweet_text]).toarray()
-				rfc_file = tweet_rfc.transform([upload_file]).toarray()
+				if data == 'Upload tweets samples' :
+					rfc_file = tweet_rfc.transform([upload_file]).toarray()
+				else:
+					rfc_text = tweet_rfc.transform([tweet_text]).toarray()
+				
 				# Load your randomfc_model.pkl file 
 				predictor = joblib.load(open(os.path.join("resources/randomfc_model.pkl"),"rb"))
-				prediction = predictor.predict(rfc_text)
+				if data == 'Upload tweets samples' :
+					prediction_file  = predictor.predict(rfc_file)
+				else:
+					prediction = predictor.predict(rfc_text)
 				# When model has successfully run, will print prediction
 				st.success("Text Categorized as: {}".format(prediction))
 	
 		if model == 'Logistic_regression' :
 			if st.button("Classify"):
 				# Transforming user input with vectorizer
-				vect_text = tweet_cv.transform([tweet_text]).toarray()
+				if data == 'Upload tweets samples' :
+					vect_file = tweet_cv.transform([upload_file]).toarray()
+				else:
+					vect_text = tweet_cv.transform([tweet_text]).toarray()
 				# Load your Logistic_regression.pkl file 
 				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
 				prediction = predictor.predict(vect_text)
