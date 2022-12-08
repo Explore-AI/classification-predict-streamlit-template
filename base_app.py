@@ -58,8 +58,13 @@ def main():
 		st.write("South Africa’s National Climate Change Response Policy (NCCRP) (DEA 2011) commits the Department of Environmental Affairs (DEA) in Section 12 to publish annual progress reports on monitoring climate change responses.The South African government has also pledged to continue contributing positively to adresssing the climate emergency and is planning on long term efforts to  change the attitude of people towards climate change. But in order to do that, there is a need to know  what people's opinion are regarding climate change")
 		st.write("In this project, various machine learning models were utilised to predict people's sentiment regarding climate change. The machines were trained using messages and known sentiments from twitter. Through that, we can predict,  what sentiment an individaul has, based on their tweet. This would enable  the govermnent ascertain people's current opionion regarding climate change and how much effort is required to positively influence that" )
 	if selection == "Data Insights":
-		st.info("Exploratory Data Analysis")
-		st.markdown("This page contains insights derived from data analysis")
+		st.title("Exploratory Data Analysis")
+		st.write('In this section, we will be discussing insights from the Tweet classification dataset')
+		st.subheader('Hashtag analysis')
+		st.write('People use the hashtag symbol (#) before a relevant keyword or phrase in their Tweet to categorize those Tweets and help them show more easily in Twitter search. Clicking or tapping on a hashtagged word in any message shows you other Tweets that include that hashtag. Hashtags can be included anywhere in a Tweet. Hashtagged words that become very popular are often trending topics.')
+		image = Image.open('hashtag analysis.png')
+		st.image(image, caption='Hashtag analysis of Tweets')
+
 	# Building out the "Information" page
 	if selection == "Information":
 		st.info("General Information")
