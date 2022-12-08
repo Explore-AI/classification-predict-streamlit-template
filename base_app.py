@@ -89,23 +89,83 @@ def main():
 	"""Tweet Classifier App with Streamlit """
 
 	# This is our company logo
-	st.image("resources/imgs/LeafLogo.png")
+	st.image("resources/imgs/LeafLogo.png", caption='Our company logo')
 	
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["About Us", "Prediction", "Information"]
-	selection = st.sidebar.selectbox("Choose Option", options)
+	st.sidebar.markdown('<div style="text-align: center; color:White; font-size: 20px;">SELECT A PAGE BELOW</div>', unsafe_allow_html=True)
+	options = ["🏠Home", "❔❓About Us", "📈Prediction", "ℹ️Information", "📧☎️Contact Us"]
+	selection = st.sidebar.selectbox("", options)
+	st.sidebar.info("General Information")
 
 	# Building out the "About Us" page
-	if selection == "About Us":
+	if selection == "❔❓About Us":
 
 		# You can read a markdown file from supporting resources folder
 		st.title("Who Are We?")
 		st.subheader("Enviro")
-		st.markdown("Some information here")
+		st.markdown("Meet The Team")
+		
+		col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns(10)
+		
+		with col1:
+			st.header("A cat")
+			st.image("resources/imgs/Caron_Sathekge2.jpg")
+
+		with col2:
+			st.header("A dog")
+			st.image("https://static.streamlit.io/examples/dog.jpg")
+
+		with col3:
+			st.header("An owl")
+			st.image("https://static.streamlit.io/examples/owl.jpg")
+
+		with col4:
+			st.header("A cat")
+			st.image("https://static.streamlit.io/examples/cat.jpg")
+
+		with col5:
+			st.header("A dog")
+			st.image("https://static.streamlit.io/examples/dog.jpg")
+
+		with col6:
+			st.header("An owl")
+			st.image("https://static.streamlit.io/examples/owl.jpg")
+		
+
+		with col7:
+			st.image('resources/imgs/Caron_Sathekge.jpg', width=100)
+		with col8:
+			st.markdown('<h5 style="color: purple; padding:20px">CEO</h5>', unsafe_allow_html=True)
+
+		with col9:
+			st.image('resources/imgs/Caron_Sathekge.jpg', width=100)
+		with col10:
+			st.markdown('<h5 style="color: purple; padding:25px">CEO</h5>', unsafe_allow_html=True)
+
+
+		# Using Tabs
+		tab1, tab2, tab3 = st.tabs(["Cat", "Dog", "Owl"])
+
+		with tab1:
+			st.header("A Lion")
+			st.image("resources/imgs/Caron_Sathekge.jpg", width=200)
+			st.markdown("cd jcad cdk cd cdkv dvk dkv dv dvk dvkd vkdv dvk ")
+
+		with tab2:
+			st.header("A dog")
+			st.image("https://static.streamlit.io/examples/dog.jpg", width=200)		
+
+		st.image("resources/imgs/LeafLogo.png")
+		st.image("resources/imgs/LeafLogo.png")
+		st.image("resources/imgs/LeafLogo.png")
+		st.image("resources/imgs/LeafLogo.png")
+		st.image("resources/imgs/LeafLogo.png")
+		st.image("resources/imgs/LeafLogo.png")
+
 
 
 	# Building out the "Information" page
@@ -128,9 +188,10 @@ def main():
 		#st.markdown('<div style="text-align: center;">Prediction with ML Models</div>', unsafe_allow_html=True)
 
 		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Enter any text here")
+		tweet_text = st.text_area(label="Enter Text", height= 250, help="Enter a text, then click on 'Classify' below", placeholder="Enter any text here")
 
-		if st.button("Classify"):
+		#if st.button("Click Me To Classify 👈"):
+		if st.button("Classify 👈"):
 			# Transforming user input with vectorizer
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
