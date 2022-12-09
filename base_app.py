@@ -117,34 +117,34 @@ def main():
 
 		with col2:
 			st.header("A dog")
-			st.image("https://static.streamlit.io/examples/dog.jpg")
+			st.image("resources/imgs/Hlengiwe.jpg")
 
 		with col3:
 			st.header("An owl")
-			st.image("https://static.streamlit.io/examples/owl.jpg")
+			st.image("resources/imgs/Jade.jpg")
 
 		with col4:
 			st.header("A cat")
-			st.image("https://static.streamlit.io/examples/cat.jpg")
+			st.image("resources/imgs/Palesa.jpg")
 
 		with col5:
 			st.header("A dog")
-			st.image("https://static.streamlit.io/examples/dog.jpg")
+			st.image("resources/imgs/Kgotlelelo.jpg")
 
 		with col6:
 			st.header("An owl")
 			st.image("https://static.streamlit.io/examples/owl.jpg")
 		
+		
+		#with col7:
+		#	st.image('resources/imgs/Caron_Sathekge.jpg', width=100)
+		#with col8:
+		#	st.markdown('<h5 style="color: purple; padding:20px">CEO</h5>', unsafe_allow_html=True)
 
-		with col7:
-			st.image('resources/imgs/Caron_Sathekge.jpg', width=100)
-		with col8:
-			st.markdown('<h5 style="color: purple; padding:20px">CEO</h5>', unsafe_allow_html=True)
-
-		with col9:
-			st.image('resources/imgs/Caron_Sathekge.jpg', width=100)
-		with col10:
-			st.markdown('<h5 style="color: purple; padding:25px">CEO</h5>', unsafe_allow_html=True)
+		#with col9:
+		#	st.image('resources/imgs/Caron_Sathekge.jpg', width=100)
+		#with col10:
+		#	st.markdown('<h5 style="color: purple; padding:25px">CEO</h5>', unsafe_allow_html=True)
 
 
 		# Using Tabs
@@ -169,7 +169,7 @@ def main():
 
 
 	# Building out the "Information" page
-	if selection == "Information":
+	if selection == "ℹ️Information":
 		st.title("Tweet Classifer")
 		st.subheader("Climate change tweet classification")
 		st.info("General Information")
@@ -181,7 +181,7 @@ def main():
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 
 	# Building out the predication page
-	if selection == "Prediction":
+	if selection == "📈Prediction":
 		st.title("Tweet Classifer")
 		st.subheader("Climate change tweet classification")
 		st.info("Prediction with ML Models")
@@ -207,9 +207,9 @@ def main():
 			if st.checkbox('See Category Meanings'):
 				st.markdown(f"""
 						**THE MEANING OF THESE CATEGORIES?**
-						- Category **-1** = Negative
+						- Category **-1** = Anti-climate change
 						- Category **0** = Neutral
-						- Category **1** = Pro
+						- Category **1** = Pro climate change
 						- Category **2** = Factual News
 						""")
 	
