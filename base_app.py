@@ -222,12 +222,12 @@ def main():
 		with st.form(key='form1'):
 			firstname = st.text_input("Username")
 			lastname = st.text_input("Lastname")
-			email = st.text_input("Firstname")
+			email = st.text_input("Email")
 			message = st.text_area("Insert text here")
 
 			submitted = st.form_submit_button()
 		if submitted:
-			st.success("Hello {} your infomation has been captured ".format(firstname))
+			st.success("Hello {}, your infomation has been captured ".format(firstname))
 
 	
 
