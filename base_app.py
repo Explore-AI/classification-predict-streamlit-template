@@ -109,8 +109,20 @@ def main():
 	# Building out the "About Us" page
 	if selection == "Home":
 		# This is our company logo
-		st.image("resources/imgs/LeafLogo.png", caption='Our company logo')
+		#st.image("resources/imgs/LeafLogo.png", caption='Our company logo')
+		#st.image("resources/imgs/LogoBanner.png", caption='Our company logo', width= 1100)
+		
+		# Centering the logo image
+		col1, col2, col3 = st.columns([1,6,1])
 
+		with col1:
+			st.write("")
+
+		with col2:
+			st.image("resources/imgs/LeafLogo.png")
+
+		with col3:
+			st.write("")
 		st.info("Climate Change")
 
 		st.markdown("Climate change refers to long-term shifts in temperatures and weather patterns. \
@@ -133,10 +145,27 @@ def main():
 	# Building out the "About Us" page
 	if selection == "About Us":
 		# This is our company logo
-		st.image("resources/imgs/LeafLogo.png", caption='Our company logo')
+		#st.image("resources/imgs/LeafLogo.png", caption='Our company logo')
+
+		# Centering the logo image
+		col1, col2, col3 = st.columns([1,6,1])
+
+		with col1:
+			st.write("")
+
+		with col2:
+			st.image("resources/imgs/LeafLogo.png")
+
+		with col3:
+			st.write("")
 
 		# You can read a markdown file from supporting resources folder
-		st.title("Who Are We?")
+		#st.title("Who Are We?")
+		st.markdown("")
+		st.markdown("")
+
+		st.markdown('<div style="text-align: center; color:Black; font-weight: bold; font-size: 30px;">Who Are We?</br></br></div>', unsafe_allow_html=True)
+
 		st.subheader("Enviro Co.")
 		st.markdown('We are a company that deals with recycable products and materials. \
 					We are naturally concerned about `climate change` and how we can help the public lead and live a greener lifestyle. \
@@ -182,7 +211,7 @@ def main():
 		with col6:
 			#st.subheader("Nakedi")
 			st.markdown('Nakedi')
-			st.image("https://static.streamlit.io/examples/owl.jpg")
+			st.image("resources/imgs/Nakedi2.jpg")
 
 	# Building out the predication page
 	if selection == "Prediction":
@@ -240,7 +269,7 @@ def main():
 
 		st.subheader("Raw Twitter data")
 		if st.checkbox('View the raw data represented by the bar chart above'): # data is hidden if box is unchecked
-			st.write(df_train[['sentiment', 'message']]) # will write the df to the page
+			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 		st.markdown("")
 		st.markdown("")
 		st.markdown("")
