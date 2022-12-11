@@ -38,6 +38,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import LinearSVC
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score, precision_score, recall_score
+from streamlit_option_menu import option_menu
 
 #from nltk.stem import WordNetLemmatizer
 #from nltk.corpus import stopwords
@@ -96,13 +97,16 @@ def main():
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	st.sidebar.markdown('<div style="text-align: center; color:White; font-size: 20px;">SELECT A PAGE BELOW</div>', unsafe_allow_html=True)
-	options = ["🏠Home", "❔❓About Us", "📈Prediction", "ℹ️Information", "📧☎️Contact Us"]
-	selection = st.sidebar.selectbox("", options)
-	st.sidebar.info("General Information")
-
+	#st.sidebar.markdown('<div style="text-align: center; color:White; font-size: 20px;">SELECT A PAGE BELOW</div>', unsafe_allow_html=True)
+	#options = ["🏠Home ", "❔❓About Us", "📈Prediction", "ℹ️Information", "📧☎️Contact Us"]
+	#selection = st.sidebar.selectbox("", options)
+	#st.sidebar.info("General Information")
+	with st.sidebar:
+		selection = option_menu("Main Menu", ["Home", "About Us","Prediction", "Information", "Contact Us"], 
+        icons=['house', 'people-group','chart-line','info','address-book'], menu_icon="cast", default_index=1)
+    	
 	# Building out the "About Us" page
-	if selection == "❔❓About Us":
+	if selection == "About Us":
 
 		# You can read a markdown file from supporting resources folder
 		st.title("Who Are We?")
@@ -169,7 +173,7 @@ def main():
 
 
 	# Building out the "Information" page
-	if selection == "ℹ️Information":
+	if selection == "Information":
 		st.title("Tweet Classifer")
 		st.subheader("Climate change tweet classification")
 		st.info("General Information")
@@ -181,7 +185,7 @@ def main():
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 
 	# Building out the predication page
-	if selection == "📈Prediction":
+	if selection == "Prediction":
 		st.title("Tweet Classifer")
 		st.subheader("Climate change tweet classification")
 		st.info("Prediction with ML Models")
@@ -212,6 +216,19 @@ def main():
 						- Category **1** = Pro climate change
 						- Category **2** = Factual News
 						""")
+    #A form for the Contact Us page
+	if selection == "Contact Us":
+		st.subheader("Contact")
+		with st.form(key='form1'):
+			firstname = st.text_input("Username")
+			lastname = st.text_input("Lastname")
+			email = st.text_input("Firstname")
+			message = st.text_area("Insert text here")
+
+			submitted = st.form_submit_button()
+		if submitted:
+			st.success("Hello {} your infomation has been captured ".format(firstname))
+
 	
 
 # Required to let Streamlit instantiate our web app.  
