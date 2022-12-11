@@ -89,8 +89,7 @@ def main():
 		image_twitter = Image.open(os.path.join("resources/imgs/Twitter_tweet.jpg"))
 		image_twitter = image_twitter.resize((300,450))
 		st.image(image_twitter)
-
-		
+		# pulling to main
 		
 		#st.image(image, caption='Sunrise by the mountains')
 		#st.info("Twitter is a Social media platform where people express their opions using tweets (a message) about anything hapennig around the world. sit tight as the team take you through on how you can collect data, process it and extract meaningful information that can be used to make future predictions about curent products and services.")
