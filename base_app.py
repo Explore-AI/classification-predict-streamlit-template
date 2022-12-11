@@ -27,20 +27,21 @@ import streamlit as st
 import joblib,os
 from PIL import Image
 from sklearn.feature_extraction.text import TfidfVectorizer
+import model_app
+import base64
+
 
 # Data dependencies
 import pandas as pd
 
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl","rb")
-tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
-rfc_vectorizer = open("resources/rfc_TfidfVectorizer.pkl","rb")
-tweet_rfc = joblib.load(rfc_vectorizer)
-
+news_vectorizer = open("resources/Count_Vectorizer.pkl","rb")
+tweet_vect = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
+#upload_file 
 
 
 # Load your raw data
-raw = pd.read_csv("resources/train.csv")
+#raw = pd.read_csv("resources/train.csv")
 
 # The main function where we will build the actual app
 def main():
@@ -48,95 +49,159 @@ def main():
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.subheader("Climate change tweet classification")
+	#st.subheader("Climate change tweet classification")
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
+	#with open("resources/imgs/testing_bck.jpg","rb") as background_img:
+	#	encoded_string = base64.b64encode(background_img.read())
 
-	options = ["Background","Know your file","Prediction"]
+	#st.markdown(
+    #f"""
+    #<style>
+    #.stApp {{
+    #   background-image: url(data:image/{"jpg"};base64,{encoded_string.decode()});
+	#	background-attachment: fixed;
+    #    background-size: cover
+    #}}
+  # </style>
+   # """,
+   # unsafe_allow_html=True
+   # )
+	
+	options = ["Background","Know your file","Text tweet prediction","File tweet classification"]
 	selection = st.sidebar.selectbox("Lets interact", options)
-
+# file stuffies.........
 	# Building out the "Information" page
 	if selection == "Background":
-		st.info("General Information")
+		st.subheader("Background")
+		st.info("Twitter is a Social media platform where people express their opions using tweets (a message) about anything hapennig around the world. sit tight as the team take you through on how you can collect data, process it and extract meaningful information that can be used to make future predictions about curent products and services.")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
-		image = Image.open(os.path.join("resources/imgs/twitter_logo.jpg"))
-		st.image(image, caption='Sunrise by the mountains')
+		
+		image_twitter = Image.open(os.path.join("resources/imgs/Twitter_tweet.jpg"))
+		image_twitter = image_twitter.resize((550,400))
+		st.image(image_twitter)
 
-		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
-
+		image_climate = Image.open(os.path.join("resources/imgs/Clmate change.jpg"))
+		image_climate = image_climate.resize((550,400))
+		st.image(image_climate)
+		
+		#st.image(image, caption='Sunrise by the mountains')
+		#st.info("Twitter is a Social media platform where people express their opions using tweets (a message) about anything hapennig around the world. sit tight as the team take you through on how you can collect data, process it and extract meaningful information that can be used to make future predictions about curent products and services.")
+		
+	if selection == "Know your file":
+		st.subheader("Let us explore our data")
+		upload_file = model_app.upload_file()
+		if upload_file is not None:
+			raw = pd.read_csv(upload_file )
+			if st.checkbox('Display the data in your file'): # data is hidden if box is unchecked
+				st.write(raw) # will write the df to the page
+			if st.checkbox('Display the wordmap of the uploaded file'):
+				testing_wordMap = model_app.word_map(raw)
+			
 	# Building out the predication page
-	if selection == "Prediction":
-		st.info("Prediction with ML Models")
+	if selection == "Text tweet prediction":
+		st.info("Classifying tweets using models")
 		model = st.radio(
     	"Select a model to classifiy your tweet",
-    		('Random Forest Classifier', 'Logistic_regression'))
+    		('Random Forest', 'Logistic_regression','K Neighbors', 'Naive_Bayes', 'Linear_Support_Vector'))
 		# Creating a text box for user input
-		# upload a file
-		data = st.radio(
-    	"How do you want to load data",
-    		('Upload tweets samples', 'Type your tweet'))
+		tweet_text = st.text_area("Type a tweet")
+		tweet_text = model_app.cleaning_text(tweet_text)
 
-		if data == 'Upload tweets samples' :
-			upload_file = st.file_uploader("Upload file")
-		else:
-			tweet_text = st.text_area("Type a tweet")
-
-		if model == 'Random Forest Classifier' :
+		if model == 'Random Forest' :
 			if st.button("Classify"):
-				# Transforming user input with vectorizer
-				if data == 'Upload tweets samples' :
-					rfc_file = tweet_rfc.transform([upload_file]).toarray()
-				else:
-					rfc_text = tweet_rfc.transform([tweet_text]).toarray()
-				
+				# Transforming user input with vectorizer	
+				st.info(tweet_text)
+				rfc_text = tweet_vect.transform([tweet_text]).toarray()
 				# Load your randomfc_model.pkl file 
-				predictor = joblib.load(open(os.path.join("resources/randomfc_model.pkl"),"rb"))
-				if data == 'Upload tweets samples' :
-					prediction_file  = predictor.predict(rfc_file)
-				else:
-					prediction = predictor.predict(rfc_text)
+				predictor = joblib.load(open(os.path.join("resources/Random_Forest.pkl"),"rb"))
+				prediction = predictor.predict(rfc_text)
+				results = model_app.classify_desc(format(prediction))
 				# When model has successfully run, will print prediction
-				st.success("Text Categorized as: {}".format(prediction))
+				st.success("Your tweet is classified as: {} ".format(results) )
 	
-		if model == 'Logistic_regression' :
+		if model == 'Logistic_regression':
 			if st.button("Classify"):
+				
 				# Transforming user input with vectorizer
-				if data == 'Upload tweets samples' :
-					vect_file = tweet_cv.transform([upload_file]).toarray()
-				else:
-					vect_text = tweet_cv.transform([tweet_text]).toarray()
+				vect_text = tweet_vect.transform([tweet_text]).toarray()
 				# Load your Logistic_regression.pkl file 
 				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
 				prediction = predictor.predict(vect_text)
+				results = model_app.classify_desc(format(prediction))
 				# When model has successfully run, will print prediction
-				st.success("Text Categorized as: {}".format(prediction))
+				st.success("Your tweet is classified as: {} ".format(results))
+				
+		if model == 'K Neighbors' :
+			if st.button("Classify"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_vect.transform([tweet_text]).toarray()
+				# Load your Logistic_regression.pkl file 
+				predictor = joblib.load(open(os.path.join("resources/K_Neighbors.pkl"),"rb"))
+				prediction = predictor.predict(vect_text)
+				results = model_app.classify_desc(format(prediction))
+				# When model has successfully run, will print prediction
+				st.success("Your tweet is classified as: {} ".format(results))
 
-	#Building out the predication page
-	if selection == "Random Forest Classifier":
-		st.info("Just a little bit about the random classifyer model")
+		if model == 'Naive_Bayes' :
+			if st.button("Classify"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_vect.transform([tweet_text]).toarray()
+				# Load your Logistic_regression.pkl file 
+				predictor = joblib.load(open(os.path.join("resources/Naive_Bayes.pkl"),"rb"))
+				prediction = predictor.predict(vect_text)
+				results = model_app.classify_desc(format(prediction))
+				# When model has successfully run, will print prediction
+				st.success("Your tweet is classified as: {} ".format(results))
+
+		if model == 'Linear_Support_Vector' :
+			if st.button("Classify"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_vect.transform([tweet_text]).toarray()
+				# Load your Logistic_regression.pkl file 
+				predictor = joblib.load(open(os.path.join("resources/Linear_Support_Vector.pkl"),"rb"))
+				prediction = predictor.predict(vect_text)
+				results = model_app.classify_desc(format(prediction))
+				# When model has successfully run, will print prediction
+				st.success("Your tweet is classified as: {} ".format(results))
+
+				
+
+	if selection == "File tweet classification":
+		#code to call the file upload function
+		st.info("Classifying tweets using files")
+		upload_file = model_app.upload_file()
+		if upload_file is not None:
+			raw = pd.read_csv(upload_file)
+			
+			model = st.radio("Select a model to classifiy your tweet",
+    			('Random Forest', 'Logistic_regression','K Neighbors', 'Naive_Bayes', 'Linear_Support_Vector'))
+			#if model == 'Random Forest' :
+			#	if st.button("Classify"):
+					# process of cleaning the data, then 
+
+
 		
-		image = Image.open(os.path.join("resources/imgs/twitter_logo.jpg"))
-		st.image(image, caption='Sunrise by the mountains')
-		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
+		
+       
+		#st.info("Classifying tweets using models")
+		#if upload_file is None:
+		#	upload_file = st.file_uploader("Upload a .csv file that contains tweets",'csv')
+		#	if upload_file is not None:
+		#		raw = pd.read_csv(upload_file )
+		#elif upload_file is not None:
+		#	model = st.radio("Select a model to classifiy your tweet",
+    	#	('Random Forest', 'Logistic regression','K Neighbors', 'Naive_Bayes', 'Linear_Support_Vector'))
+		#	if model == "Random Forest":
+		#		data = st.radio(
+    	#		"How do you want to load data",
+    	#		('Upload tweets samples', 'Type your tweet'))
+#
+#			if data == 'Upload tweets samples' :
+#				upload_file = st.file_uploader("Upload file")
 
-		if st.button("Classify"):
-			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-			predictor = joblib.load(open(os.path.join("resources/randomfc_model.pkl"),"rb"))
-			prediction = predictor.predict(vect_text)
 
-			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
