@@ -127,7 +127,7 @@ def main():
 
 		st.markdown("Climate change refers to long-term shifts in temperatures and weather patterns. \
 					These shifts may be natural, or may be caused by human activities.")
-		st.markdown("==================================================================================")
+		#st.markdown("==================================================================================")
 		st.markdown("Many companies are built around lessening one’s environmental impact or carbon footprint.\
 					They offer products and services that are environmentally friendly and sustainable, in \
 					line with their values and ideals. They would like to determine how people perceive\
@@ -138,8 +138,18 @@ def main():
 					 to Chris Bauch, University of Waterloo. The dataset aggregates tweets pertaining to climate\
 					change collected between Apr 27, 2015 and Feb 21, 2018. In total, 43,943 tweets were collected. \
 					")
-		st.markdown("==================================================================================")
+		#st.markdown("==================================================================================")
+		st.markdown("")
 
+		st.info("The Business Value of Our Product")
+		st.markdown("The model we have deployed successfully classifies a users tweet as either Anti, Neutral, Pro or Factual. \
+					This will help you, as a business, understand what your clients and potential clients are saying about \
+					climate change, and what they believe. As a business, it is vital to understand this information, so as \
+					to *customise* the type of advertisements you could show to each group of customers. This will in turn \
+					ensure that you bring the *right product* to the *right customer*, \
+					which is vital for the **success** of a business.\
+					")
+		st.markdown("")
 
 	
 	# Building out the "About Us" page
@@ -270,19 +280,6 @@ def main():
 		st.subheader("Raw Twitter data")
 		if st.checkbox('View the raw data represented by the bar chart above'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
-		st.markdown("")
-		st.markdown("")
-		st.markdown("")
-
-		st.info("The Business Value of Our Product")
-		st.markdown("The model we have deployed successfully classifies a users tweet as either Anti, Neutral, Pro or Factual. \
-					This will help you, as a business, understand what your clients and potential clients are saying about \
-					climate change, and what they believe. As a business, it is vital to understand this information, so as \
-					to *customise* the type of advertisements you could show to each group of customers. This will in turn \
-					ensure that you bring the *right product* to the *right customer*, \
-					which is vital for the **success** of a business.\
-					")
-		st.markdown("")
 
 
     #A form for the Contact Us page
