@@ -230,7 +230,7 @@ def main():
 		st.info("A Bar Graph showing the number of tweets per sentiment")
 		# You can read a markdown file from supporting resources folder
 		#st.markdown("A Bar Graph showing the number of tweets per sentiment")
-		st.bar_chart(data=raw["sentiment"].value_counts(), x=None, y=None, width=220, height=320, use_container_width=True)
+		st.bar_chart(data=df_train["sentiment"].value_counts(), x=None, y=None, width=220, height=320, use_container_width=True)
 
 		st.info("As it is observed from the bar graph above, it is well noted that many people \
 					support the belief of man-made climate change.")
@@ -240,7 +240,7 @@ def main():
 
 		st.subheader("Raw Twitter data")
 		if st.checkbox('View the raw data represented by the bar chart above'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+			st.write(df_train[['sentiment', 'message']]) # will write the df to the page
 		st.markdown("")
 		st.markdown("")
 		st.markdown("")
