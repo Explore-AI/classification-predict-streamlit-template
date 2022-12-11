@@ -110,38 +110,43 @@ def main():
 
 		# You can read a markdown file from supporting resources folder
 		st.title("Who Are We?")
-		st.subheader("Enviro")
-		st.markdown("Meet The Team")
+		st.subheader("Enviro Co.")
+		st.subheader("Meet The Team")
 		
 		col1, col2, col3, col4, col5, col6 = st.columns(6)
 		
 		with col1:
-			st.subheader("Caron")
-			#st.markdo
+			#st.subheader("Caron")
+			st.markdown('Caron')
 			st.image("resources/imgs/Caron_Sathekge2.jpg")
 
 		with col2:
-			st.subheader("Hlengiwe")
-			st.image("resources/imgs/Hlengiwe.jpg")
+			#st.subheader("Hlengiwe")
+			st.markdown('Hlengiwe')
+			st.image("resources/imgs/Hlengiwe2.jpg")
 
 		with col3:
-			st.subheader("Jade")
-			st.image("resources/imgs/Jade.jpg")
+			#st.subheader("Jade")
+			st.markdown('Jade')
+			st.image("resources/imgs/Jade2.jpg")
 
 		with col4:
-			st.subheader("Palesa")
-			st.image("resources/imgs/Palesa.jpg")
+			#st.subheader("Palesa")
+			st.markdown('Palesa')
+			st.image("resources/imgs/Palesa2.jpg")
 
 		with col5:
-			st.subheader("Kgotlelelo")
-			st.image("resources/imgs/Kgotlelelo.jpg")
+			#st.subheader("Kgotlelelo")
+			st.markdown('Kgotlelelo')
+			st.image("resources/imgs/Kgotlelelo2.jpg")
 
 		with col6:
-			st.subheader("Nakedi")
+			#st.subheader("Nakedi")
+			st.markdown('Nakedi')
 			st.image("https://static.streamlit.io/examples/owl.jpg")
 		
 		# Using Tabs
-		tab1, tab2, tab3 = st.tabs(["Cat", "Dog", "Owl"])
+		tab1, tab2 = st.tabs(["Cat", "Dog"])
 
 		with tab1:
 			st.header("A Lion")
@@ -150,16 +155,7 @@ def main():
 
 		with tab2:
 			st.header("A dog")
-			st.image("https://static.streamlit.io/examples/dog.jpg", width=200)		
-
-		st.image("resources/imgs/LeafLogo.png")
-		st.image("resources/imgs/LeafLogo.png")
-		st.image("resources/imgs/LeafLogo.png")
-		st.image("resources/imgs/LeafLogo.png")
-		st.image("resources/imgs/LeafLogo.png")
-		st.image("resources/imgs/LeafLogo.png")
-
-
+			st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
 
 	# Building out the "Information" page
 	if selection == "Information":
