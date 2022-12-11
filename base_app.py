@@ -113,44 +113,33 @@ def main():
 		st.subheader("Enviro")
 		st.markdown("Meet The Team")
 		
-		col1, col2, col3, col4, col5, col6, col7, col8, col9, col10 = st.columns(10)
+		col1, col2, col3, col4, col5, col6 = st.columns(6)
 		
 		with col1:
-			st.header("A cat")
+			st.subheader("Caron")
+			#st.markdo
 			st.image("resources/imgs/Caron_Sathekge2.jpg")
 
 		with col2:
-			st.header("A dog")
+			st.subheader("Hlengiwe")
 			st.image("resources/imgs/Hlengiwe.jpg")
 
 		with col3:
-			st.header("An owl")
+			st.subheader("Jade")
 			st.image("resources/imgs/Jade.jpg")
 
 		with col4:
-			st.header("A cat")
+			st.subheader("Palesa")
 			st.image("resources/imgs/Palesa.jpg")
 
 		with col5:
-			st.header("A dog")
+			st.subheader("Kgotlelelo")
 			st.image("resources/imgs/Kgotlelelo.jpg")
 
 		with col6:
-			st.header("An owl")
+			st.subheader("Nakedi")
 			st.image("https://static.streamlit.io/examples/owl.jpg")
 		
-		
-		#with col7:
-		#	st.image('resources/imgs/Caron_Sathekge.jpg', width=100)
-		#with col8:
-		#	st.markdown('<h5 style="color: purple; padding:20px">CEO</h5>', unsafe_allow_html=True)
-
-		#with col9:
-		#	st.image('resources/imgs/Caron_Sathekge.jpg', width=100)
-		#with col10:
-		#	st.markdown('<h5 style="color: purple; padding:25px">CEO</h5>', unsafe_allow_html=True)
-
-
 		# Using Tabs
 		tab1, tab2, tab3 = st.tabs(["Cat", "Dog", "Owl"])
 
