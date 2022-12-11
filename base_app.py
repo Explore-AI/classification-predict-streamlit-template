@@ -111,8 +111,13 @@ def main():
 		# You can read a markdown file from supporting resources folder
 		st.title("Who Are We?")
 		st.subheader("Enviro Co.")
-		st.subheader("Meet The Team")
-		
+		st.markdown('We are aaaaa a a aaaaaaaaaaaaa a a            a aa a aamah sgsgsg dfgdg gd dgf dg dg dg dg d gd g dg dg dg d gdg \
+					fgdgdgdg g dg dg dg dg dg dg dfffffffffffffffffffffdfdfdfdfffffffff sf fs fssssssss sfffffffffff  sf sfffffff fsfs \
+					adfsfsf sfffffffffff ssf  s               sfffffffffff              sfsfsf sf sf sf s fs f fs s fs f sf sf sf s    \
+					')
+		#st.subheader("Meet The Team")
+		st.markdown('<div style="text-align: center; color:Black; font-weight: bold; font-size: 30px;">Meet The Team</br></br></div>', unsafe_allow_html=True)
+
 		col1, col2, col3, col4, col5, col6 = st.columns(6)
 		
 		with col1:
@@ -144,18 +149,7 @@ def main():
 			#st.subheader("Nakedi")
 			st.markdown('Nakedi')
 			st.image("https://static.streamlit.io/examples/owl.jpg")
-		
-		# Using Tabs
-		tab1, tab2 = st.tabs(["Cat", "Dog"])
 
-		with tab1:
-			st.header("A Lion")
-			st.image("resources/imgs/Caron_Sathekge.jpg", width=200)
-			st.markdown("cd jcad cdk cd cdkv dvk dkv dv dvk dvkd vkdv dvk ")
-
-		with tab2:
-			st.header("A dog")
-			st.image("https://static.streamlit.io/examples/dog.jpg", width=200)
 
 	# Building out the "Information" page
 	if selection == "Information":
