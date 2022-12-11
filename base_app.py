@@ -103,7 +103,7 @@ def main():
 	#st.sidebar.info("General Information")
 	with st.sidebar:
 		selection = option_menu("Main Menu", ["Home", "About Us", "Prediction", "Information", "Contact Us"], 
-        icons=['house', 'people-group','chart-line','info','address-book'], menu_icon="cast", default_index=0)
+        icons=['house', 'people','graph-up-arrow','info-circle','envelope'], menu_icon="cast", default_index=0)
 																				# default_index = 0 (Home page)
 
 	# Building out the "About Us" page
@@ -286,7 +286,7 @@ def main():
 	if selection == "Contact Us":
 		st.subheader("Contact Us")
 		with st.form(key='form1'):
-			firstname = st.text_input("Username")
+			firstname = st.text_input("Firstname")
 			lastname = st.text_input("Lastname")
 			email = st.text_input("Email")
 			message = st.text_area("Insert text here")
