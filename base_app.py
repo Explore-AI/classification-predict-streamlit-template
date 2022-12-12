@@ -211,7 +211,7 @@ def main():
 		with col4:
 			#st.subheader("Palesa")
 			st.markdown('Palesa')
-			st.image("resources/imgs/Palesa2.jpg")
+			st.image("resources/imgs/Palesa3.jpg")
 
 		with col5:
 			#st.subheader("Kgotlelelo")
@@ -273,6 +273,22 @@ def main():
 
 		st.info("As it is observed from the bar graph above, it is well noted that many people \
 					support the belief of man-made climate change.")
+		st.markdown("")
+		st.markdown("")
+		st.markdown("")
+
+		#st.info("Our Pricing")
+		st.markdown('<div style="text-align: center; color:Black; font-size: 30px;">Our Pricing</div>', unsafe_allow_html=True)
+		st.markdown("")
+		st.markdown("")
+
+		st.info("Standard - *Free*")
+		st.info("Pro - *$3 p.a*")
+		st.markdown("Sentiments get emailed to you")
+		st.info("Premium - *$7 p.a*")
+		st.markdown("Sentiments get emailed to you and your whole team")
+		st.markdown("Accompanying sentiment visuals")
+
 		st.markdown("")
 		st.markdown("")
 		st.markdown("")
