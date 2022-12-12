@@ -1,0 +1,10 @@
+#[theme]
+#backgroundColor="#215373"
+#secondaryBackgroundColor="#110525"
+#textColor="#edf4f5"
+
+[theme]
+primaryColor="#f3c9c9"
+backgroundColor="#436677"
+secondaryBackgroundColor="#467177"
+textColor="#b9c1c1"
