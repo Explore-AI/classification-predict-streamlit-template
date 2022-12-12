@@ -51,13 +51,13 @@ STOPWORDS = set(stopwords.words('english'))
 # Reads 'train.csv.csv' file
 def classify_desc (description):
 	if description == '[-1]':
-		return "the tweet does not believe in man-made climate change"
+		return "The tweet does not believe in man-made climate change (Anti)"
 	elif description == '[0]':
-		return "the tweet neither supports nor refutes the belief of man-made climate change"
+		return "The tweet neither supports nor refutes the belief of man-made climate change (Neutral)"
 	elif description == '[1]':
-		return "The tweet supports the belief of man-made climate change"
+		return "The tweet supports the belief of man-made climate change (Pro)"
 	elif description == '[2]':
-		return "the tweet links to factual news about climate change"
+		return "The tweet links to factual news about climate change (News)"
 
 def upload_file():
 	upload_file = st.file_uploader("Upload a .csv file that contains tweets",'csv')
