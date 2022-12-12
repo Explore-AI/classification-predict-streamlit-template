@@ -18,6 +18,10 @@ textColor="#fafafa"
 font="sans serif"
 
 
+[deprecation]
+showPyplotGlobalUse = false
+
+
 
 
 
