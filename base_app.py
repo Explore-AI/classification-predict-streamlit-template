@@ -284,7 +284,7 @@ def main():
 
     #A form for the Contact Us page
 	if selection == "Contact Us":
-		st.subheader("Contact")
+		st.subheader("Contact Us")
 		with st.form(key='form1'):
 			firstname = st.text_input("Username")
 			lastname = st.text_input("Lastname")
