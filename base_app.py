@@ -58,7 +58,7 @@ def main():
 		st.image(image, caption='SDG Goal 13: Climate action')
 		st.write("South Africa’s National Climate Change Response Policy (NCCRP) (DEA 2011) commits the Department of Environmental Affairs (DEA) in Section 12 to publish annual progress reports on monitoring climate change responses.The South African government has also pledged to continue contributing positively to adresssing the climate emergency and is planning on long term efforts to  change the attitude of people towards climate change. But in order to do that, there is a need to know  what people's opinion are regarding climate change")
 		st.write("In this project, various machine learning models were utilised to predict people's sentiment regarding climate change. The machines were trained using messages and known sentiments from twitter. Through that, we can predict,  what sentiment an individaul has, based on their tweet. This would enable  the govermnent ascertain people's current opionion regarding climate change and how much effort is required to positively influence that" )
-	
+
 	#Exploratory data analysis
 	if selection == "Data Insights":
 		st.title("Exploratory Data Analysis")
@@ -76,6 +76,9 @@ def main():
 		st.write('People use the hashtag symbol (#) before a relevant keyword or phrase in their Tweet to categorize those Tweets and help them show more easily in Twitter search. Clicking or tapping on a hashtagged word in any message shows you other Tweets that include that hashtag. Hashtags can be included anywhere in a Tweet. Hashtagged words that become very popular are often trending topics.')
 		image = Image.open('hashtag analysis.png')
 		st.image(image, caption='Hashtag analysis of Tweets')
+	if selection == "The team":
+		st.title("About the team")
+		st.markdown("### Our team is made up of highly qualified and reputable inviduals in the field of data science ")
 
 	if selection == "The team":
 		st.title("About Dynamic Data Developers ")
@@ -115,7 +118,7 @@ def main():
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			predictor = joblib.load(open(os.path.join("resources/lsvc.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
 
 			# When model has successfully run, will print prediction
