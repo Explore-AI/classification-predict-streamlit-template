@@ -105,7 +105,7 @@ def main():
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			predictor = joblib.load(open(os.path.join("resources/lsvc.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
 
 			# When model has successfully run, will print prediction
@@ -118,7 +118,7 @@ def main():
 			'2': 'News'
 			}
 			# more human interpretable.
-			st.success("{} Model categorised text as : {}".format(option, output_text[str(prediction[0])]))
+			st.success("Text categorised by {} model as : {}".format(option, output_text[str(prediction[0])]))
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
