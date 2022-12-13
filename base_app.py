@@ -118,7 +118,7 @@ def main():
 			'2': 'News'
 			}
 			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
+			st.success("{} Model categorised text as : {}".format(option, output_text[str(prediction[0])]))
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
