@@ -238,23 +238,36 @@ def main():
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/logistic_regression_model.pkl"),"rb"))
+			predictor = joblib.load(open(os.path.join("resources/support_vector_classifier_model.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
 
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
-			st.success("Your text was categorized as: {}".format(prediction), icon="✅")
+
+			if prediction == 0:
+				st.success("Your text was categorized as: Neutral", icon="✅")
+
+			if prediction == -1:
+				st.success("Your text was categorized as: Anti", icon="✅")
+
+			if prediction == 1:
+				st.success("Your text was categorized as: Pro", icon="✅")
+
+			if prediction == 2:
+				st.success("Your text was categorized as: News", icon="✅")
+
+			#st.success("Your text was categorized as: {}".format(prediction), icon="✅")
 			st.balloons()
 			#st.snow()
 
 		if st.checkbox('See Category Meanings'):
-			st.markdown(f"""
+			st.info(f"""
 				**THE MEANING OF THESE CATEGORIES?**
-				- Category **-1** = Anti-climate change
-				- Category **0** = Neutral
-				- Category **1** = Pro climate change
-				- Category **2** = Factual News
+				- **Anti**: The tweet does not believe in man-made climate change Variable definitions 
+				- **Neutral**: The tweet neither supports nor refutes the belief of man-made climate change 
+				- **Pro**: The tweet supports the belief of man-made climate change
+				- **News**: The tweet links to factual news about climate change
 				""")
 
 	# Building out the "Information" page
