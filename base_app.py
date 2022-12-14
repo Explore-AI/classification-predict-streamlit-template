@@ -89,10 +89,7 @@ def main():
 		st.write('People use the hashtag symbol (#) before a relevant keyword or phrase in their Tweet to categorize those Tweets and help them show more easily in Twitter search. Clicking or tapping on a hashtagged word in any message shows you other Tweets that include that hashtag. Hashtags can be included anywhere in a Tweet. Hashtagged words that become very popular are often trending topics.')
 		image = Image.open('hashtag analysis.png')
 		st.image(image, caption='Hashtag analysis of Tweets')
-	if selection == "The team":
-		st.title("About the team")
-		st.markdown(
-		    "### Our team is made up of highly qualified and reputable inviduals in the field of data science ")
+
 
 	if selection == "The team":
 		st.title("About Dynamic Data Developers ")
@@ -100,6 +97,7 @@ def main():
 		st.write("* Data Dynamic Developers is a company founded in 2020.")
 		st.write("*  Our team is made up of highly qualified and reputable individuals in the field of data science. ")
 
+		
 		st.subheader("Meet the team")
 		image = Image.open('The team.png')
 		st.image(image, caption='Data Dynamic Developers')
@@ -119,6 +117,8 @@ def main():
 	if selection == "Prediction":
 		st.title("Dynamic Data Developers Inc")
 		st.subheader("Climate change tweet classification")
+		image = Image.open('Twitter.png')
+		st.image(image)
 		st.info("Prediction with ML Models")
 		
 		
@@ -127,8 +127,8 @@ def main():
 		tweet_text = st.text_area("Enter Text","Type Here")
 		option = st.selectbox(
 		'Select a model to use',
-		['Logistic Regression'])
-		#['Linear SVC','Naive Bayes', 'Decision Tree', 'Logistic Regression', 'Random Forest'])
+		#['Logistic Regression'])
+		['Linear SVC','Naive Bayes', 'Decision Tree', 'Logistic Regression', 'Random Forest'])
 
 		if st.button("Classify"):
 
@@ -138,10 +138,8 @@ def main():
 			# 			
 			# Try loading in multiple models to give the user a choice
 			
-
-			if(option == "Logistic Regression"):
-				predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				prediction = predictor.predict(vect_text)
+			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			prediction = predictor.predict(vect_text)
 			
 			#elif(option == "Naive Bayes"):
 				#predictor = joblib.load(open(os.path.join("resources/NaiveB.pkl"),"rb"))
@@ -169,7 +167,7 @@ def main():
 			'2': 'News'
 			}
 			# more human interpretable.
-			st.success("Text categorised by {} model as : {}".format(option, output_text[str(prediction[0])]))
+			st.success("Tweet categorised by {} model as : {}".format(option, output_text[str(prediction[0])]))
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
