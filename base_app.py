@@ -40,7 +40,7 @@ raw = pd.read_csv("resources/train.csv")
 
 		
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl", "rb")
+news_vectorizer = open("resources/vectorizer.pkl", "rb")
 # loading your vectorizer from the pkl file
 tweet_cv = joblib.load(news_vectorizer)
 
@@ -138,7 +138,7 @@ def main():
 			# 			
 			# Try loading in multiple models to give the user a choice
 			
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			predictor = joblib.load(open(os.path.join("resources/model.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
 			
 			#elif(option == "Naive Bayes"):
