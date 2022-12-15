@@ -38,34 +38,6 @@ tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl f
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
 
-
-# Set the page background color to blue
-# with st.beta_container("blue"):
-#     st.write("This page has a blue background!")
-
-
-# img = Image.open("resources\imgs\Amp.png")
-# st.image(img, caption=None, width=200, use_column_width=None, clamp=False, channels="RGB", output_format="auto")
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.write(' ')
-
-with col2:
-    st.image("resources\imgs\image-removebg-preview.png", width=300)
-
-with col3:
-    st.write(' ')
-# Add a contact form to the sidebar
-# Add a sidebar on the right side of the page
-# st.sidebar.title("Contact Us")
-# name = st.sidebar.text_input("Name")
-# email = st.sidebar.text_input("Email")
-# message = st.sidebar.text_area("Message")
-# if st.sidebar.button("Submit"):
-#     # Add code here to submit the form and send the message
-#     st.sidebar.success("Thank you for your message!")
-
 selected = option_menu(
             menu_title=None,  # required
             options=["Home", "Contact"],  # required
