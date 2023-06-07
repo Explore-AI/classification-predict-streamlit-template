@@ -7,6 +7,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+Classification-Rubric-Student-Design-2965.pdf
 .Python
 build/
 develop-eggs/
