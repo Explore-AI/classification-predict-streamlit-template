@@ -28,44 +28,46 @@ import joblib,os
 # Data dependencies
 import pandas as pd
 
+# Pretty graphs
+import matplotlib.pyplot as plt
+
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
 # Load your raw data
-raw = pd.read_csv("resources/train.csv")
+df = pd.read_csv("resources/train.csv")
+
+#Separating positive and negative tweets for pie chart 
+data_disbelief = df[df['sentiment'] == -1]
+data_no_belief = df[df['sentiment'] == 0]
+data_belief = df[df['sentiment'] == 1]
+data_high_belief = df[df['sentiment'] == 2]
 
 # The main function where we will build the actual app
 def main():
 	"""Tweet Classifier App with Streamlit """
 
+
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
 	st.title("Tweet Classifer")
-	st.subheader("Climate change tweet classification")
+	st.subheader("Climate Change Tweet Sentiment Classifier")
 
+	# Adds logo to sidebar
+	st.sidebar.image('resources/TechIntelCrop.png')
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Prediction", "Information"]
-	selection = st.sidebar.selectbox("Choose Option", options)
-
-	# Building out the "Information" page
-	if selection == "Information":
-		st.info("General Information")
-		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
-
-		st.subheader("Raw Twitter data and label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+	options = ["Classifier", "How does it work?","Statistics","About TechIntel"]
+	selection = st.sidebar.selectbox("Choose Page", options)
 
 	# Building out the predication page
-	if selection == "Prediction":
+	if selection == "Classifier":
 		st.info("Prediction with ML Models")
 		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
+		tweet_text = st.text_area("Enter tweet here")
 
-		if st.button("Classify"):
+		if st.button("Click here for result"):
 			# Transforming user input with vectorizer
 			vect_text = tweet_cv.transform([tweet_text]).toarray()
 			# Load your .pkl file with the model of your choice + make predictions
@@ -76,7 +78,55 @@ def main():
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
-			st.success("Text Categorized as: {}".format(prediction))
+			if prediction == -1 or prediction == 3:
+				st.success("This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question:")	
+			elif prediction == 0:
+				st.success("This tweet suggests that this person is neutral about climate change.:neutral_face:")
+			elif prediction == 1:
+				st.success("This tweet suggests that this person believes in climate change.:earth_africa::fire:")
+			else:
+				st.success("This tweet suggests that this person believes in climate change and believes that it is an immediate threat. :earth_africa::fire::exclamation:")
+			
+	# Building out the "Information" page
+	if selection == "How does it work?":
+		st.info("Simple Explanation")
+		# You can read a markdown file from supporting resources folder
+		st.markdown("Some information here")
+
+		st.info("Complicated Explanation")
+		# You can read a markdown file from supporting resources folder
+		st.markdown("Some information here")
+
+
+
+	if selection == "Statistics":
+		# Adding wordclouds
+		st.info("A word cloud generated from the tweets of people who don't believe in climate change")
+		st.image('resources/wc_no.png')
+
+		st.info("A word cloud generated from the tweets of people who believed in climate change")
+		st.image('resources/wc.png')
+	
+
+		# Creating a pie chart
+		st.info("A pie chart showing the proportions of different sentiments")
+		mylabels = ["Neutral", "Belief", "Strong Belief", "Conspiracy"] # labels
+		mycolors = ["Aqua", "Azure", "DarkBlue", "DeepSkyBlue"] # custom colours
+		# pie chart can only have positive numbers, so changing -1 to 3
+		df["sentiment"] = df["sentiment"].replace([-1], 3)
+		# group the data
+		sentiment_counts = df.groupby(['sentiment']).size() 
+		# make the pie chart
+		fig, ax = plt.subplots()
+		ax.pie(sentiment_counts, labels = mylabels, colors = mycolors)
+		st.pyplot(fig) # show the pie chart
+
+	if selection == "About TechIntel":
+		st.info("About TechIntel")
+		# You can read a markdown file from supporting resources folder
+		st.markdown("Some information here")
+
+
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
