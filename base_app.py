@@ -102,7 +102,7 @@ def main():
 		#and contribute to the development of sustainable practices.''')
 
 		st.info("Complicated Explanation")
-		expander = st.expander("see expalnation")
+		expander = st.expander("see explanation")
 		# You can read a markdown file from supporting resources folder\
 		#st.markdown(''' The Machine Learning process starts with inputting training data into the selected algorithm. 
 #Training data being known or unknown helps to develop the final Machine Learning algorithm. 
