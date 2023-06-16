@@ -90,12 +90,56 @@ def main():
 	# Building out the "Information" page
 	if selection == "How does it work?":
 		st.info("Simple Explanation")
+		st.image('resources/sv_m.png')
 		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+		#what I wrote earlier
+		#A machine learning model is a file that has been trained to recognize certain types of patterns. \
+		#we have trained a model over a set of data, providing it an algorithm that it can use to reason over and learn from the tweets dataset. \
+		#This trained model can reason over data that it hasn't seen before and make prediction about the data and these predictions are what you see. \
+		
+		#st.write(''' Climate Change Tweet Sentiment Classifier is a powerful tool that helps organizations gain insights into public opinion about climate change.
+		#By analyzing tweets from data, it provides valuable information that can inform decision-making, shape marketing strategies,
+		#and contribute to the development of sustainable practices.''')
 
 		st.info("Complicated Explanation")
-		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+		expander = st.expander("see expalnation")
+		# You can read a markdown file from supporting resources folder\
+		#st.markdown(''' The Machine Learning process starts with inputting training data into the selected algorithm. 
+#Training data being known or unknown helps to develop the final Machine Learning algorithm. 
+#New input data is fed into the machine learning algorithm to test whether the algorithm works correctly.  
+#The prediction and results are then checked against each other. If the prediction and results don\’t match, 
+#the algorithm is re-trained multiple times until the data scientist gets the desired outcome. 
+# This enables the machine learning algorithm to continually learn on its own and produce the optimal answer, 
+#gradually increasing in accuracy over time.''')
+		expander.write('''Climate Change Tweet Sentiment Classifier, is a machine learning model designed to analyze tweets
+ and classify them based on the sentiment expressed towards climate change. 
+It is built using advanced natural language processing (NLP) techniques and supervised learning algorithms.
+
+The classifier's goal is to accurately identify whether a tweet expresses support or skepticism towards climate change. 
+To achieve this, it leverages a large labeled dataset of climate change-related tweets, where each tweet is annotated 
+with its corresponding sentiment label.
+
+The model employs various NLP techniques, such as tokenization, stemming, and stop-word removal, to preprocess the tweet
+text and convert it into a numerical representation that can be fed into the machine learning algorithms. 
+Feature engineering is also applied to extract relevant features, such as n-grams, word embeddings, 
+or syntactic patterns, which capture important aspects of the tweet's sentiment.
+Several machine learning algorithms can be used for training the classifier, including logistic regression, support vector
+machines, or even more advanced approaches like deep learning models such as recurrent neural networks (RNNs) or transformers.
+The choice of algorithm depends on the dataset size, complexity, and desired performance.
+During the training phase, the classifier learns the patterns and relationships between the tweet features and their 
+corresponding sentiment labels. This is done through an iterative process of optimizing a chosen objective function, 
+such as maximizing the F1 score.
+Once the classifier is trained, it can be used to predict the sentiment of new, unseen tweets. 
+These tweets undergo the same preprocessing steps as the training data and are then passed through the trained model, 
+which assigns them a sentiment label of either supportive or skeptical.
+For evaluation, the classifier's performance is typically assessed using standard metrics such as accuracy, precision, 
+recall, and F1 score.
+Cross-validation or holdout validation techniques are commonly employed to estimate the classifier's generalization ability and avoid overfitting.
+In summary, the Climate Change Tweet Sentiment Classifier is a sophisticated machine learning model that utilizes 
+NLP techniques and supervised learning algorithms to accurately classify tweets based on their sentiment towards climate change. 
+It offers data scientists a valuable tool for analyzing public opinion, conducting market research 
+and informing decision-making processes related to climate change awareness and mitigation strategies.''')
+		expander.image('resources/ml_train.png')
 
 
 
@@ -124,7 +168,23 @@ def main():
 	if selection == "About TechIntel":
 		st.info("About TechIntel")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+		st.markdown('''At TechIntel, we are a leading data science company that specializes in unlocking the power of data 
+to drive intelligent solutions and empower businesses. 
+With our expertise in advanced analytics, machine learning, and artificial intelligence, we help organizations harness 
+the potential of their data to make informed decisions and gain a competitive edge in the digital landscape.
+Our team of experienced data scientists is passionate about transforming raw data into actionable insights. 
+We combine cutting-edge technologies with industry best practices to deliver tailored solutions that address complex business 
+challenges across various sectors, including finance, healthcare, retail, and manufacturing.
+What sets us apart is our commitment to excellence in data-driven innovation. 
+We pride ourselves in our ability to leverage state-of-the-art algorithms, advanced statistical models 
+and scalable computing infrastructure to extract meaningful patterns and predictions from diverse data sources.
+Our solutions empower businesses to optimize operations, improve customer experience, and drive revenue growth.
+
+At TechIntel, we believe in the power of collaboration. 
+We work closely with our clients to understand their unique needs, goals, and desired outcome. 
+Through a collaborative approach, we co-create data-driven solutions that align with their strategic objectives and 
+provide measurable value. 
+We believe that the best results are achieved when data science expertise is combined with domain knowledge and a deep understanding of business context.''')
 
 
 
