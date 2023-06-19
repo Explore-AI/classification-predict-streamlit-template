@@ -30,6 +30,20 @@ import pandas as pd
 
 # Pretty graphs
 import matplotlib.pyplot as plt
+#st.set_page_config(page_title="TechIntel Tweet Classifier App")
+from PIL import Image
+# Loading Image using PIL
+pic = Image.open("resources/im.png")
+# Adding Image to web app
+st.set_page_config(page_title="TechIntel Tweet Classifier App", page_icon = pic)
+
+hide_default_format = """
+       <style>
+       #MainMenu {visibility: hidden; }
+       footer {visibility: hidden;}
+       </style>
+       """
+st.markdown(hide_default_format, unsafe_allow_html=True)
 
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
@@ -58,7 +72,7 @@ def main():
 	st.sidebar.image('resources/TechIntelCrop.png')
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Classifier", "How does it work?","Statistics","About TechIntel"]
+	options = ["Classifier", "How does it work?","Statistics","About TechIntel", "FAQs"]
 	selection = st.sidebar.selectbox("Choose Page", options)
 
 	# Building out the predication page
@@ -90,16 +104,20 @@ def main():
 	# Building out the "Information" page
 	if selection == "How does it work?":
 		st.info("Simple Explanation")
+		st.image('resources/forsvm.png')
 		# You can read a markdown file from supporting resources folder
 		#what I wrote earlier
 		#A machine learning model is a file that has been trained to recognize certain types of patterns. \
 		#we have trained a model over a set of data, providing it an algorithm that it can use to reason over and learn from the tweets dataset. \
 		#This trained model can reason over data that it hasn't seen before and make prediction about the data and these predictions are what you see. \
+		expander = st.expander("see here")
+		expander.write("Climate Change Tweet Sentiment Classifier is a powerful tool that helps organizations gain insights into public opinion about climate change. \
+		By analyzing tweets from a given data by training a model so that it is able to make adequate predictions when it is given unknown data. \
+		With this app, valuable information that can inform decision-making, shape marketing strategies, \
+		and contribute to the development of sustainable practices is made easily available.")
 
-		st.markdown("Climate Change Tweet Sentiment Classifier is a powerful tool that helps organizations gain insights into public opinion about climate change. \
-		By analyzing tweets from data, it provides valuable information that can inform decision-making, shape marketing strategies, \
-		and contribute to the development of sustainable practices.")
 		st.info("Complicated Explanation")
+		expand = st.expander("see here")
 		# You can read a markdown file from supporting resources folder\
 		#st.markdown(''' The Machine Learning process starts with inputting training data into the selected algorithm. 
 #Training data being known or unknown helps to develop the final Machine Learning algorithm. 
@@ -108,7 +126,7 @@ def main():
 #the algorithm is re-trained multiple times until the data scientist gets the desired outcome. 
 # This enables the machine learning algorithm to continually learn on its own and produce the optimal answer, 
 #gradually increasing in accuracy over time.''')
-		st.markdown('''Climate Change Tweet Sentiment Classifier, is a machine learning model designed to analyze tweets
+		expand.write('''Climate Change Tweet Sentiment Classifier, is a machine learning model designed to analyze tweets
  and classify them based on the sentiment expressed towards climate change. 
 It is built using advanced natural language processing (NLP) techniques and supervised learning algorithms.
 
@@ -136,7 +154,7 @@ In summary, the Climate Change Tweet Sentiment Classifier is a sophisticated mac
 NLP techniques and supervised learning algorithms to accurately classify tweets based on their sentiment towards climate change. 
 It offers data scientists a valuable tool for analyzing public opinion, conducting market research 
 and informing decision-making processes related to climate change awareness and mitigation strategies.''')
-		st.image('resources/ml_train.png')
+		expand.image('resources/ml_train.png')
 
 
 
@@ -163,9 +181,9 @@ and informing decision-making processes related to climate change awareness and 
 		st.pyplot(fig) # show the pie chart
 
 	if selection == "About TechIntel":
-		st.info("About TechIntel")
 		# You can read a markdown file from supporting resources folder
-		st.markdown('''At TechIntel, we are a leading data science company that specializes in unlocking the power of data 
+		expa = st.expander("about TechIntel")
+		expa.write('''At TechIntel, we are a leading data science company that specializes in unlocking the power of data 
 to drive intelligent solutions and empower businesses. 
 With our expertise in advanced analytics, machine learning, and artificial intelligence, we help organizations harness 
 the potential of their data to make informed decisions and gain a competitive edge in the digital landscape.
@@ -182,8 +200,18 @@ We work closely with our clients to understand their unique needs, goals, and de
 Through a collaborative approach, we co-create data-driven solutions that align with their strategic objectives and 
 provide measurable value. 
 We believe that the best results are achieved when data science expertise is combined with domain knowledge and a deep understanding of business context.''')
+		ex_pa = st.expander("meet the team")
+		ex_pa.image('resources/pathway.png')
 
+	if selection == "FAQs":
+		st.info("FAQs")
+		# You can read a markdown file from supporting resources folder
+		lst = ['What is TechIntel?', 'How does the app work?', 'What model was used in creating the app?']
+		s = ''
+		for i in lst:
+			s += "- " + i + "\n"
 
+		st.markdown(s)
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
