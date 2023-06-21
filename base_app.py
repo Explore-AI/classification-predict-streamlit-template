@@ -35,11 +35,22 @@ import matplotlib.pyplot as plt
 import base64
 
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl","rb")
-tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
+@st.cache_resource
+def load_model(url, name):
+	vectorizer = open(url, name) 
+	model = joblib.load(vectorizer) # load vectorizer from the pkl file
+	return model
+
+tweet_cv = load_model("resources/tfidfvect.pkl","rb")
 
 # Load your raw data
-df = pd.read_csv("resources/train.csv")
+@st.cache_data  # Add the caching decorator
+def load_data(url):
+    df = pd.read_csv(url)
+    return df
+
+df = load_data("resources/train.csv")
+
 
 #Separating positive and negative tweets for pie chart 
 data_disbelief = df[df['sentiment'] == -1]
