@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 #st.set_page_config(page_title="TechIntel Tweet Classifier App")
 from PIL import Image
 # Loading Image using PIL
-pic = Image.open("resources/im.png")
+pic = Image.open('resources/TechIntelCrop.png')
 # Adding Image to web app
 st.set_page_config(page_title="TechIntel Tweet Classifier App", page_icon = pic)
 
@@ -50,7 +50,12 @@ news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
 # Load your raw data
-df = pd.read_csv("resources/train.csv")
+@st.cache_data
+def get_train():
+	location = "resources/train.csv"
+	return pd.read_csv(location)
+
+df = get_train()
 
 #Separating positive and negative tweets for pie chart 
 data_disbelief = df[df['sentiment'] == -1]
@@ -60,19 +65,19 @@ data_high_belief = df[df['sentiment'] == 2]
 
 # The main function where we will build the actual app
 def main():
-	"""Tweet Classifier App with Streamlit """
+	"""TechIntel Tweet Classifier App with Streamlit """
 
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
+	st.title("TechIntel Tweet Classifier")
 	st.subheader("Climate Change Tweet Sentiment Classifier")
 
 	# Adds logo to sidebar
 	st.sidebar.image('resources/TechIntelCrop.png')
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
-	options = ["Classifier", "How does it work?","Statistics","About TechIntel", "FAQs"]
+	options = ["Classifier", "How does it work?", "Statistics", "About TechIntel", "FAQs", "Feedback"]
 	selection = st.sidebar.selectbox("Choose Page", options)
 
 	# Building out the predication page
@@ -93,13 +98,13 @@ def main():
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			if prediction == -1 or prediction == 3:
-				st.success("This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question:")	
+				st.success('<span style="color: red;">This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question: </span>', unsafe_allow_html=True)	
 			elif prediction == 0:
-				st.success("This tweet suggests that this person is neutral about climate change.:neutral_face:")
+				st.success('<span style="color: yellow;">This tweet suggests that this person is neutral about climate change. :neutral_face: </span>', unsafe_allow_html=True)
 			elif prediction == 1:
-				st.success("This tweet suggests that this person believes in climate change.:earth_africa::fire:")
+				st.success('<span style="color: blue;">This tweet suggests that this person believes in climate change. :earth_africa::fire: </span>', unsafe_allow_html=True)
 			else:
-				st.success("This tweet suggests that this person believes in climate change and believes that it is an immediate threat. :earth_africa::fire::exclamation:")
+				st.success('<span style="color: green;">This tweet suggests that this person believes in climate change and believes that it is an immediate threat. :earth_africa::fire::exclamation: </span>', unsafe_allow_html=True)
 			
 	# Building out the "Information" page
 	if selection == "How does it work?":
@@ -110,14 +115,14 @@ def main():
 		#A machine learning model is a file that has been trained to recognize certain types of patterns. \
 		#we have trained a model over a set of data, providing it an algorithm that it can use to reason over and learn from the tweets dataset. \
 		#This trained model can reason over data that it hasn't seen before and make prediction about the data and these predictions are what you see. \
-		expander = st.expander("see here")
-		expander.write("Climate Change Tweet Sentiment Classifier is a powerful tool that helps organizations gain insights into public opinion about climate change. \
-		By analyzing tweets from a given data by training a model so that it is able to make adequate predictions when it is given unknown data. \
+		expander = st.expander("See here for more info")
+		expander.write("TechIntel Tweet Classifier app is a powerful tool that helps organizations gain insights into public opinion about climate change. \
+		By analyzing tweets from given datasets, several models were trained and they're able to make adequate predictions when it given unknown data. \
 		With this app, valuable information that can inform decision-making, shape marketing strategies, \
 		and contribute to the development of sustainable practices is made easily available.")
 
 		st.info("Complicated Explanation")
-		expand = st.expander("see here")
+		expand = st.expander("See here for more info")
 		# You can read a markdown file from supporting resources folder\
 		#st.markdown(''' The Machine Learning process starts with inputting training data into the selected algorithm. 
 #Training data being known or unknown helps to develop the final Machine Learning algorithm. 
@@ -126,7 +131,7 @@ def main():
 #the algorithm is re-trained multiple times until the data scientist gets the desired outcome. 
 # This enables the machine learning algorithm to continually learn on its own and produce the optimal answer, 
 #gradually increasing in accuracy over time.''')
-		expand.write('''Climate Change Tweet Sentiment Classifier, is a machine learning model designed to analyze tweets
+		expand.write('''TechIntel Tweet Classifier app, is a machine learning model designed to analyze tweets
  and classify them based on the sentiment expressed towards climate change. 
 It is built using advanced natural language processing (NLP) techniques and supervised learning algorithms.
 
@@ -169,8 +174,8 @@ and informing decision-making processes related to climate change awareness and 
 
 		# Creating a pie chart
 		st.info("A pie chart showing the proportions of different sentiments")
-		mylabels = ["Neutral", "Belief", "Strong Belief", "Conspiracy"] # labels
-		mycolors = ["Aqua", "Azure", "DarkBlue", "DeepSkyBlue"] # custom colours
+		mylabels = ["No Belief", "Belief", "Strong Belief", "Disbelief"] # labels
+		mycolors = ["Yellow", "Blue", "Green", "Red"] # custom colours
 		# pie chart can only have positive numbers, so changing -1 to 3
 		df["sentiment"] = df["sentiment"].replace([-1], 3)
 		# group the data
@@ -179,10 +184,12 @@ and informing decision-making processes related to climate change awareness and 
 		fig, ax = plt.subplots()
 		ax.pie(sentiment_counts, labels = mylabels, colors = mycolors)
 		st.pyplot(fig) # show the pie chart
-
+		
+		st.info("A bar chart showing the proportions of different sentiments")
+		st.image('resources/bar_cc.png')	
 	if selection == "About TechIntel":
 		# You can read a markdown file from supporting resources folder
-		expa = st.expander("about TechIntel")
+		expa = st.expander("About TechIntel")
 		expa.write('''At TechIntel, we are a leading data science company that specializes in unlocking the power of data 
 to drive intelligent solutions and empower businesses. 
 With our expertise in advanced analytics, machine learning, and artificial intelligence, we help organizations harness 
@@ -200,18 +207,43 @@ We work closely with our clients to understand their unique needs, goals, and de
 Through a collaborative approach, we co-create data-driven solutions that align with their strategic objectives and 
 provide measurable value. 
 We believe that the best results are achieved when data science expertise is combined with domain knowledge and a deep understanding of business context.''')
-		ex_pa = st.expander("meet the team")
+		ex_pa = st.expander("Meet the Team")
 		ex_pa.image('resources/pathway.png')
+		#exp_a = st.expander("Share")
+		
+# Shareable link using Streamlit
+		shareable_link = st.markdown("[Share on Streamlit Sharing](share://app/your-app-url)")
+
+# Social sharing buttons using Streamlit's share function
+		st.markdown("---")
+		st.markdown("Share on Social Media:")
+		if st.button("Twitter"):
+			st.share.share_on_twitter("Check out this awesome app! [your-app-url]")
+		if st.button("LinkedIn"):
+			st.share.share_on_linkedin("Check out this awesome app! [your-app-url]")
+# Add more social media buttons as needed
 
 	if selection == "FAQs":
 		st.info("FAQs")
 		# You can read a markdown file from supporting resources folder
-		lst = ['What is TechIntel?', 'How does the app work?', 'What model was used in creating the app?']
+		lst = ['How does the model work?', 'What model was used in creating the app?']
 		s = ''
 		for i in lst:
 			s += "- " + i + "\n"
-
 		st.markdown(s)
+
+	if selection == "Feedback":
+# You can read a markdown file from supporting resources folder
+		st.info("We would love to hear from you!")
+# Feedback form
+		feedback_text = st.text_area("Please provide your feedback", height=150)
+		feedback_button = st.button("Submit Feedback")
+		if feedback_button:
+			if feedback_text:
+        # Save the feedback to a file, database, or process it as needed
+				st.success("Thank you for your feedback!")
+			else:
+				st.warning("Please enter your feedback before submitting.")        
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
