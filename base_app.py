@@ -120,14 +120,13 @@ def main():
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			if prediction == -1 or prediction == 3:
-
-				st.success('<span style="color: red;">This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question: </span>', unsafe_allow_html=True)	
+				st.success("This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question:")	
 			elif prediction == 0:
-				st.success('<span style="color: yellow;">This tweet suggests that this person is neutral about climate change. :neutral_face: </span>', unsafe_allow_html=True)
+				st.success("This tweet suggests that this person is neutral about climate change.:neutral_face:")
 			elif prediction == 1:
-				st.success('<span style="color: blue;">This tweet suggests that this person believes in climate change. :earth_africa::fire: </span>', unsafe_allow_html=True)
+				st.success("This tweet suggests that this person believes in climate change.:earth_africa::fire:")
 			else:
-				st.success('<span style="color: green;">This tweet suggests that this person believes in climate change and believes that it is an immediate threat. :earth_africa::fire::exclamation: </span>', unsafe_allow_html=True)
+				st.success("This tweet suggests that this person believes in climate change and believes that it is an immediate threat. :earth_africa::fire::exclamation:")
 
 			
 	# Building out the "Information" page
