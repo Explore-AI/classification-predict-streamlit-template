@@ -68,7 +68,7 @@ def add_bg_from_local(image_file):
 def main():
 	"""Tweet Classifier App with Streamlit """
 	# Add background image
-	add_bg_from_local('resources/TechIntelCrop.png')
+	add_bg_from_local('resources/TechIntelCrop_o30.png')
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
 	st.title("Tweet Classifier")
