@@ -31,12 +31,26 @@ import pandas as pd
 # Pretty graphs
 import matplotlib.pyplot as plt
 
+# For background image
+import base64
+
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl","rb")
-tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
+@st.cache_resource
+def load_model(url, name):
+	vectorizer = open(url, name) 
+	model = joblib.load(vectorizer) # load vectorizer from the pkl file
+	return model
+
+tweet_cv = load_model("resources/tfidfvect.pkl","rb")
 
 # Load your raw data
-df = pd.read_csv("resources/train.csv")
+@st.cache_data  # Add the caching decorator
+def load_data(url):
+    df = pd.read_csv(url)
+    return df
+
+df = load_data("resources/train.csv")
+
 
 #Separating positive and negative tweets for pie chart 
 data_disbelief = df[df['sentiment'] == -1]
@@ -44,14 +58,31 @@ data_no_belief = df[df['sentiment'] == 0]
 data_belief = df[df['sentiment'] == 1]
 data_high_belief = df[df['sentiment'] == 2]
 
+# Function to add background image
+def add_bg_from_local(image_file):
+    with open(image_file, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+    st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
+        background-size: cover
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
+
+
 # The main function where we will build the actual app
 def main():
 	"""Tweet Classifier App with Streamlit """
-
-
+	# Add background image
+	add_bg_from_local('resources/TechIntelCrop_o30.png')
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
+	st.title("Tweet Classifier")
 	st.subheader("Climate Change Tweet Sentiment Classifier")
 
 	# Adds logo to sidebar
@@ -191,3 +222,6 @@ We believe that the best results are achieved when data science expertise is com
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
 	main()
+
+# With thanks to 
+# https://levelup.gitconnected.com/how-to-add-a-background-image-to-your-streamlit-app-96001e0377b2
