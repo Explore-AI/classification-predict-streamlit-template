@@ -30,6 +30,10 @@ import pandas as pd
 
 # Pretty graphs
 import matplotlib.pyplot as plt
+
+# For background image
+import base64
+
 #st.set_page_config(page_title="TechIntel Tweet Classifier App")
 from PIL import Image
 # Loading Image using PIL
@@ -46,16 +50,36 @@ hide_default_format = """
 st.markdown(hide_default_format, unsafe_allow_html=True)
 
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl","rb")
-tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
+#news_vectorizer = open("resources/tfidfvect.pkl","rb")
+#tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
+
+# Vectorizer
+@st.cache_resource
+def load_model(url, name):
+	vectorizer = open(url, name) 
+	model = joblib.load(vectorizer) # load vectorizer from the pkl file
+	return model
+
+tweet_cv = load_model("resources/tfidfvect.pkl","rb")
+
 
 # Load your raw data
-@st.cache_data
-def get_train():
-	location = "resources/train.csv"
-	return pd.read_csv(location)
+#@st.cache_data
+#def get_train():
+#	location = "resources/train.csv"
+#	return pd.read_csv(location)
+#df = get_train()
 
-df = get_train()
+
+# Load your raw data
+@st.cache_data  # Add the caching decorator
+def load_data(url):
+    df = pd.read_csv(url)
+    return df
+
+df = load_data("resources/train.csv")
+
+
 
 #Separating positive and negative tweets for pie chart 
 data_disbelief = df[df['sentiment'] == -1]
@@ -63,11 +87,29 @@ data_no_belief = df[df['sentiment'] == 0]
 data_belief = df[df['sentiment'] == 1]
 data_high_belief = df[df['sentiment'] == 2]
 
+# Function to add background image
+def add_bg_from_local(image_file):
+    with open(image_file, "rb") as image_file:
+        encoded_string = base64.b64encode(image_file.read())
+    st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url(data:image/{"png"};base64,{encoded_string.decode()});
+        background-size: cover
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+    )
+
 # The main function where we will build the actual app
 def main():
 	"""TechIntel Tweet Classifier App with Streamlit """
 
-
+	# Creates a main title and subheader on your page - these are static across all pages
+	# Add background image
+	add_bg_from_local('resources/TechIntelCrop_o30.png')
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
 	st.title("TechIntel Tweet Classifier")
@@ -98,13 +140,14 @@ def main():
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			if prediction == -1 or prediction == 3:
-				st.success('<span style="color: red;">This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question: </span>', unsafe_allow_html=True)	
+							st.success("This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question:")	
 			elif prediction == 0:
-				st.success('<span style="color: yellow;">This tweet suggests that this person is neutral about climate change. :neutral_face: </span>', unsafe_allow_html=True)
+				st.success("This tweet suggests that this person is neutral about climate change.:neutral_face:")
 			elif prediction == 1:
-				st.success('<span style="color: blue;">This tweet suggests that this person believes in climate change. :earth_africa::fire: </span>', unsafe_allow_html=True)
+				st.success("This tweet suggests that this person believes in climate change.:earth_africa::fire:")
 			else:
-				st.success('<span style="color: green;">This tweet suggests that this person believes in climate change and believes that it is an immediate threat. :earth_africa::fire::exclamation: </span>', unsafe_allow_html=True)
+				st.success("This tweet suggests that this person believes in climate change and believes that it is an immediate threat. :earth_africa::fire::exclamation:")
+
 			
 	# Building out the "Information" page
 	if selection == "How does it work?":
@@ -208,7 +251,7 @@ Through a collaborative approach, we co-create data-driven solutions that align 
 provide measurable value. 
 We believe that the best results are achieved when data science expertise is combined with domain knowledge and a deep understanding of business context.''')
 		ex_pa = st.expander("Meet the Team")
-		ex_pa.image('resources/pathway.png')
+		ex_pa.image('resources/team.png')
 		#exp_a = st.expander("Share")
 		
 # Shareable link using Streamlit
@@ -224,13 +267,41 @@ We believe that the best results are achieved when data science expertise is com
 # Add more social media buttons as needed
 
 	if selection == "FAQs":
-		st.info("FAQs")
+		st.info("		Frequently Asked Questions (FAQs) for the TechIntel Tweet Classifier App")
 		# You can read a markdown file from supporting resources folder
-		lst = ['How does the model work?', 'What model was used in creating the app?']
-		s = ''
-		for i in lst:
-			s += "- " + i + "\n"
-		st.markdown(s)
+		#lst = ['How does the model work?', 'What model was used in creating the app?']
+		#s = ''
+		#for i in lst:
+		#	s += "- " + i + "\n"
+		#st.markdown(s)
+		faq_one = st.expander("What is the purpose of the TechIntel Tweet Classifier App?")
+		faq_one.write('''The purpose of this app is to classify people's sentiment on climate change based on their tweets using a machine learning model.
+It aims to provide users with a convenient and interactive tool to analyze public sentiment towards climate change.''')
+		faq_two = st.expander("How does the app classify sentiment?")
+		faq_two.write('''The app uses a machine learning model trained on a dataset of tweets related to climate change.
+The model analyzes the text of a tweet and predicts whether the sentiment is positive, negative, neutral, or mixed regarding climate change.''')
+		faq_three=st.expander("What technologies are used to build the app?") 
+		faq_three.write('''The app is built using the Streamlit framework, which is a Python library for building interactive web applications.
+It also leverages machine learning libraries such as scikit-learn for the sentiment classification model.''')
+		faq_four=st.expander("How accurate is the sentiment classification?")
+		faq_four.write('''The accuracy of the sentiment classification depends on the performance of the machine learning model.
+The model is trained on a labeled dataset, and its accuracy can be evaluated using appropriate metrics.''')
+		faq_five=st.expander("Can the app handle real-time tweets?") 
+		faq_five.write('''Yes, the app can handle real-time tweets.
+It utilizes the Streamlit framework to provide a live interface where users can input or stream tweets
+ and the sentiment classification model will process them in real-time.''')
+		faq_six=st.expander("Is the app user-friendly for non-technical users?")
+		faq_six.write('''Yes, the app is designed to be user-friendly even for non-technical users. 
+The Streamlit framework simplifies the development process and provides an intuitive interface where users can input tweets and receive sentiment classification results.''') 
+		faq_sev=st.expander("Are there any limitations to the app?")
+		faq_sev.write('''The limitations of the app depend on the performance of the underlying machine learning model. Some potential limitations could include:
+Limited accuracy as it is about 80% correct; Challenges in handling slang; and sarcasm.''')
+		faq_eight= st.expander(" Can the app be customized or extended?")
+		faq_eight.write('''Yes, the app can be customized or extended based on specific requirements.
+Additional features, visualizations, or modifications can be implemented using the flexibility provided by the Streamlit framework.''')
+		faq_nine = st.expander("What are the system requirements to run the app?")
+		faq_nine.write('''The app requires a compatible Python environment with the necessary dependencies installed. Users will need to have access to the internet to retrieve the required data and resources.''')
+
 
 	if selection == "Feedback":
 # You can read a markdown file from supporting resources folder
