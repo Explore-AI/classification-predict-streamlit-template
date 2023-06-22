@@ -114,6 +114,7 @@ def main():
 	# these are static across all pages
 	st.title("TechIntel Tweet Classifier")
 	st.subheader("Climate Change Tweet Sentiment Classifier")
+	realtime_update = st.sidebar.checkbox(label="Update in Real Time", value=True)
 
 	# Adds logo to sidebar
 	st.sidebar.image('resources/TechIntelCrop.png')
