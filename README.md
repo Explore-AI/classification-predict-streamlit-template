@@ -42,11 +42,11 @@ The project repository consists of the following folders/files:
 
 - train.csv: Contains raw tweets and sentiments used for training the model.
 - test_with_no_labels.csv: Contains raw tweets without labels, which can be used as a testing dataset.
-- clean_train_csv: Contains the clean training data. You can load this file directly to skip the cleaning process.
-- clean_test_csv: Contains the clean test data. You can load this file directly to skip the cleaning process.
+- clean_train.csv: Contains the clean training data. You can load this file directly to skip the cleaning process.
+- clean_test.csv: Contains the clean test data. You can load this file directly to skip the cleaning process.
 
 ## Development
 We also developed a web application using Streamlit for easy interaction with our model. You can navigate to our app repository by following this link: [https://github.com/TheZeitgeist-RR12/Streamlit-App.git]
 Feel free to explore, experiment, and contribute to the project.
 
-For any questions or suggestions, you can reach us at [contact information].
+
