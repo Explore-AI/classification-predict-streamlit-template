@@ -27,6 +27,7 @@ import joblib,os
 
 # Data dependencies
 import pandas as pd
+import string
 
 # Pretty graphs
 import matplotlib.pyplot as plt
@@ -44,7 +45,7 @@ def load_model(url, name):
 	model = joblib.load(vectorizer) # load vectorizer from the pkl file
 	return model
 
-tweet_cv = load_model("resources/tfidfvect.pkl","rb")
+tweet_cv = load_model("resources/vectorizer.pkl","rb")
 
 # Load your raw data
 
@@ -109,11 +110,23 @@ def main():
 		tweet_text = st.text_area("Enter tweet here")
 
 		if st.button("Click here for result"):
+			# Preprocess the data
+			# Change to lowercase
+			tweet_text = tweet_text.lower()
+			# Remove urls
+			pattern_url = r'http[s]?://(?:[A-Za-z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9A-Fa-f][0-9A-Fa-f]))+'
+			subs_url = r'url-web'
+			tweet_text = tweet_text.replace(pattern_url, subs_url)
+			# Remove punctuation
+			def remove_punctuation(post):
+				return ''.join([l for l in post if l not in string.punctuation])
+
+			tweet_text = remove_punctuation(tweet_text)
 			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
+			vect_text = tweet_cv.transform([tweet_text])
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			predictor = joblib.load(open(os.path.join("resources/SVCmodel.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
 
 			# When model has successfully run, will print prediction
