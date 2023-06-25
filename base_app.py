@@ -323,14 +323,30 @@ Additional features, visualizations, or modifications can be implemented using t
 
 	if selection == "Feedback":
 # You can read a markdown file from supporting resources folder
-		st.info("We would love to hear from you!")
-# Feedback form
-		feedback_text = st.text_area("Please provide your feedback", height=150)
+		
+
+		import streamlit_survey as ss
+		survey = ss.StreamlitSurvey()
+		import json
+		
+		# Feedback form
+		# Likert scale
+		slider = survey.select_slider(
+			"How satisfied are you with this app?", options=["Very Dissatisfied", "Somewhat Dissatisfied", "Neutral", "Somewhat Satisfied", "Very Satisfied"], id="Q1"
+		)
+		feedback_text = survey.text_area("We would love to hear your feedback and suggestions",id="Q2")
 		feedback_button = st.button("Submit Feedback")
 		if feedback_button:
-			if feedback_text:
+			if feedback_text and slider:
         # Save the feedback to a file, database, or process it as needed
 				st.success("Thank you for your feedback!")
+
+				
+				feedback = survey.to_json()
+				
+				with open("resources/feedback.txt", "a") as f:
+					f.write(feedback)
+					f.write("\n")
 			else:
 				st.warning("Please enter your feedback before submitting.")        
 
@@ -341,3 +357,4 @@ if __name__ == '__main__':
 
 # With thanks to 
 # https://levelup.gitconnected.com/how-to-add-a-background-image-to-your-streamlit-app-96001e0377b2
+# https://blog.finxter.com/how-to-append-data-to-a-json-file-in-python/
