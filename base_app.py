@@ -35,6 +35,11 @@ import matplotlib.pyplot as plt
 # For background image
 import base64
 
+
+import streamlit_survey as ss
+survey = ss.StreamlitSurvey()
+import json
+
 #st.set_page_config(page_title="TechIntel Tweet Classifier App")
 from PIL import Image
 # Loading Image using PIL
@@ -325,9 +330,6 @@ Additional features, visualizations, or modifications can be implemented using t
 # You can read a markdown file from supporting resources folder
 		
 
-		import streamlit_survey as ss
-		survey = ss.StreamlitSurvey()
-		import json
 		
 		# Feedback form
 		# Likert scale
