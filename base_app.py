@@ -27,6 +27,7 @@ import joblib,os
 
 # Data dependencies
 import pandas as pd
+import string
 
 # Pretty graphs
 import matplotlib.pyplot as plt
@@ -54,32 +55,24 @@ st.markdown(hide_default_format, unsafe_allow_html=True)
 #tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
 # Vectorizer
+
 @st.cache_resource
 def load_model(url, name):
 	vectorizer = open(url, name) 
 	model = joblib.load(vectorizer) # load vectorizer from the pkl file
 	return model
 
-tweet_cv = load_model("resources/tfidfvect.pkl","rb")
 
-
-# Load your raw data
-#@st.cache_data
-#def get_train():
-#	location = "resources/train.csv"
-#	return pd.read_csv(location)
-#df = get_train()
-
+tweet_cv = load_model("resources/vectorizer.pkl","rb")
 
 # Load your raw data
+
 @st.cache_data  # Add the caching decorator
 def load_data(url):
     df = pd.read_csv(url)
     return df
 
 df = load_data("resources/train.csv")
-
-
 
 #Separating positive and negative tweets for pie chart 
 data_disbelief = df[df['sentiment'] == -1]
@@ -113,6 +106,7 @@ def main():
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
 	st.title("TechIntel Tweet Classifier")
+
 	st.subheader("Climate Change Tweet Sentiment Classifier")
 	realtime_update = st.sidebar.checkbox(label="Update in Real Time", value=True)
 
@@ -120,7 +114,9 @@ def main():
 	st.sidebar.image('resources/TechIntelCrop.png')
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
+
 	options = ["Classifier", "How does it work?", "Statistics", "About TechIntel", "FAQs", "Feedback"]
+
 	selection = st.sidebar.selectbox("Choose Page", options)
 
 	# Building out the predication page
@@ -130,18 +126,30 @@ def main():
 		tweet_text = st.text_area("Enter tweet here")
 
 		if st.button("Click here for result"):
+			# Preprocess the data
+			# Change to lowercase
+			tweet_text = tweet_text.lower()
+			# Remove urls
+			pattern_url = r'http[s]?://(?:[A-Za-z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9A-Fa-f][0-9A-Fa-f]))+'
+			subs_url = r'url-web'
+			tweet_text = tweet_text.replace(pattern_url, subs_url)
+			# Remove punctuation
+			def remove_punctuation(post):
+				return ''.join([l for l in post if l not in string.punctuation])
+
+			tweet_text = remove_punctuation(tweet_text)
 			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
+			vect_text = tweet_cv.transform([tweet_text])
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			predictor = joblib.load(open(os.path.join("resources/SVCmodel.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
 
 			# When model has successfully run, will print prediction
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			if prediction == -1 or prediction == 3:
-							st.success("This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question:")	
+				st.success("This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question:")	
 			elif prediction == 0:
 				st.success("This tweet suggests that this person is neutral about climate change.:neutral_face:")
 			elif prediction == 1:
@@ -153,12 +161,15 @@ def main():
 	# Building out the "Information" page
 	if selection == "How does it work?":
 		st.info("Simple Explanation")
+
 		st.image('resources/forsvm.png')
+
 		# You can read a markdown file from supporting resources folder
 		#what I wrote earlier
 		#A machine learning model is a file that has been trained to recognize certain types of patterns. \
 		#we have trained a model over a set of data, providing it an algorithm that it can use to reason over and learn from the tweets dataset. \
 		#This trained model can reason over data that it hasn't seen before and make prediction about the data and these predictions are what you see. \
+
 		expander = st.expander("See here for more info")
 		expander.write("TechIntel Tweet Classifier app is a powerful tool that helps organizations gain insights into public opinion about climate change. \
 		By analyzing tweets from given datasets, several models were trained and they're able to make adequate predictions when it given unknown data. \
@@ -167,6 +178,7 @@ def main():
 
 		st.info("Complicated Explanation")
 		expand = st.expander("See here for more info")
+
 		# You can read a markdown file from supporting resources folder\
 		#st.markdown(''' The Machine Learning process starts with inputting training data into the selected algorithm. 
 #Training data being known or unknown helps to develop the final Machine Learning algorithm. 
@@ -175,7 +187,9 @@ def main():
 #the algorithm is re-trained multiple times until the data scientist gets the desired outcome. 
 # This enables the machine learning algorithm to continually learn on its own and produce the optimal answer, 
 #gradually increasing in accuracy over time.''')
+
 		expand.write('''TechIntel Tweet Classifier app, is a machine learning model designed to analyze tweets
+
  and classify them based on the sentiment expressed towards climate change. 
 It is built using advanced natural language processing (NLP) techniques and supervised learning algorithms.
 
@@ -197,15 +211,16 @@ Once the classifier is trained, it can be used to predict the sentiment of new, 
 These tweets undergo the same preprocessing steps as the training data and are then passed through the trained model, 
 which assigns them a sentiment label of either supportive or skeptical.
 For evaluation, the classifier's performance is typically assessed using standard metrics such as accuracy, precision, 
+
 recall, and F1 score. Cross-validation or holdout validation techniques are commonly employed to estimate the classifier's 
 generalization ability and avoid overfitting.
+
 In summary, the Climate Change Tweet Sentiment Classifier is a sophisticated machine learning model that utilizes 
 NLP techniques and supervised learning algorithms to accurately classify tweets based on their sentiment towards climate change. 
 It offers data scientists a valuable tool for analyzing public opinion, conducting market research 
 and informing decision-making processes related to climate change awareness and mitigation strategies.''')
+
 		expand.image('resources/ml_train.png')
-
-
 
 	if selection == "Statistics":
 		# Adding wordclouds
@@ -218,8 +233,10 @@ and informing decision-making processes related to climate change awareness and 
 
 		# Creating a pie chart
 		st.info("A pie chart showing the proportions of different sentiments")
+
 		mylabels = ["No Belief", "Belief", "Strong Belief", "Disbelief"] # labels
 		mycolors = ["Yellow", "Blue", "Green", "Red"] # custom colours
+
 		# pie chart can only have positive numbers, so changing -1 to 3
 		df["sentiment"] = df["sentiment"].replace([-1], 3)
 		# group the data
@@ -228,6 +245,7 @@ and informing decision-making processes related to climate change awareness and 
 		fig, ax = plt.subplots()
 		ax.pie(sentiment_counts, labels = mylabels, colors = mycolors)
 		st.pyplot(fig) # show the pie chart
+
 		
 		st.info("A bar chart showing the proportions of different sentiments")
 		st.image('resources/bar_cc.png')	
@@ -235,6 +253,7 @@ and informing decision-making processes related to climate change awareness and 
 		# You can read a markdown file from supporting resources folder
 		expa = st.expander("About TechIntel")
 		expa.write('''At TechIntel, we are a leading data science company that specializes in unlocking the power of data 
+
 to drive intelligent solutions and empower businesses. 
 With our expertise in advanced analytics, machine learning, and artificial intelligence, we help organizations harness 
 the potential of their data to make informed decisions and gain a competitive edge in the digital landscape.
@@ -251,6 +270,7 @@ We work closely with our clients to understand their unique needs, goals, and de
 Through a collaborative approach, we co-create data-driven solutions that align with their strategic objectives and 
 provide measurable value. 
 We believe that the best results are achieved when data science expertise is combined with domain knowledge and a deep understanding of business context.''')
+
 		ex_pa = st.expander("Meet the Team")
 		ex_pa.image('resources/team.png')
 		#exp_a = st.expander("Share")
@@ -317,6 +337,10 @@ Additional features, visualizations, or modifications can be implemented using t
 			else:
 				st.warning("Please enter your feedback before submitting.")        
 
+
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
 	main()
+
+# With thanks to 
+# https://levelup.gitconnected.com/how-to-add-a-background-image-to-your-streamlit-app-96001e0377b2
