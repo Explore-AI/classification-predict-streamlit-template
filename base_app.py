@@ -149,13 +149,13 @@ def main():
 			# You can use a dictionary or similar structure to make this output
 			# more human interpretable.
 			if prediction == -1 or prediction == 3:
-				st.success("This tweet suggests that this person believes in conspiracy theories about climate change. :question: :question: :question:")	
+				st.success("This tweet suggests that this person does not believe in climate change. :question: :question: :question:")	
 			elif prediction == 0:
-				st.success("This tweet suggests that this person is neutral about climate change.:neutral_face:")
+				st.success("This tweet suggests that this person is neutral about the belief of man-made climate change.:neutral_face:")
 			elif prediction == 1:
-				st.success("This tweet suggests that this person believes in climate change.:earth_africa::fire:")
+				st.success("This tweet suggests that this person believes in man-made climate change.:earth_africa::fire:")
 			else:
-				st.success("This tweet suggests that this person believes in climate change and believes that it is an immediate threat. :earth_africa::fire::exclamation:")
+				st.success("This tweet suggests that this person links to factual news about climate change. :earth_africa::fire::exclamation:")
 
 			
 	# Building out the "Information" page
@@ -234,8 +234,8 @@ and informing decision-making processes related to climate change awareness and 
 		# Creating a pie chart
 		st.info("A pie chart showing the proportions of different sentiments")
 
-		mylabels = ["No Belief", "Belief", "Strong Belief", "Disbelief"] # labels
-		mycolors = ["Yellow", "Blue", "Green", "Red"] # custom colours
+		mylabels = ["Neutral", "Belief", "News", "Anti"] # labels
+		mycolors = ["deepskyblue", "dodgerblue", "Blue", "darkblue"] # custom colours
 
 		# pie chart can only have positive numbers, so changing -1 to 3
 		df["sentiment"] = df["sentiment"].replace([-1], 3)
@@ -245,10 +245,7 @@ and informing decision-making processes related to climate change awareness and 
 		fig, ax = plt.subplots()
 		ax.pie(sentiment_counts, labels = mylabels, colors = mycolors)
 		st.pyplot(fig) # show the pie chart
-
-		
-		st.info("A bar chart showing the proportions of different sentiments")
-		st.image('resources/bar_cc.png')	
+	
 	if selection == "About TechIntel":
 		# You can read a markdown file from supporting resources folder
 		expa = st.expander("About TechIntel")
