@@ -23,6 +23,8 @@
 """
 # Streamlit dependencies
 # Streamlit dependencies
+# pip install spacy -q  3
+# python -m spacy download en_core_web_sm -q
 import streamlit as st
 from streamlit_option_menu import option_menu
 import joblib
@@ -77,6 +79,31 @@ def main():
         st.markdown("Consumers gravitate toward companies that are built around lessening one’s environmental impact. Elites provides an accurate and robust solution that gives companies access to a broad base of consumer sentiment, spanning multiple demographic and geographic categories, thus increasing their insights and informing future marketing strategies.")
         st.markdown("Choose Elites and walk a greener path.")
 
+     # Building out the "About Us" page
+    if selected == "About Us":
+        # Using Tabs
+        tab1, tab2, tab3 = st.tabs(["About Elites", "Our Classifier", "Meet the Team"]) 
+        with tab1:
+            
+            st.markdown("We’re proud to be an industry leader in promoting eco-friendly business practices. Striving to protect and sustain our environment is a given at every stage of our services.\n  Our green vision goes beyond helping businesses sustain their core mission as a green company. We design innovative technology to help businesses save time, reduce costs, and make better business decisions to ensure their footprint is greener.")
+            st.markdown("Elites mission is to accelerate the world’s transition to sustainable energy, Earth is still preserved for generations to come. Our data science consultants deliver incredible value by evaluating the model and proving insights.")
+            image4 = Image.open("resources/Elites.pptx-removebg-preview.png")
+            st.image(image4)
+        with tab2:
+            st.write(
+            """
+            Our Tweet Classifier app gives you a variety of Machine Learning Models to choose from. The models selected showed high performance over the others with a sentiment claassification accuracy. \n 
+            Our leading model is the Linear SVC Classifier with an impressive accuracy, ensuring our users accuracy that will inform great business decisions.
+    
+            """
+            )
+            image3 = Image.open("resources/50commonWords.png")
+            st.image(image3)
+        with tab3:
+            image5 = Image.open("resources/MeetTheTeam.png")
+            st.image(image5)
+     
+
     # Building out the raw data page
     if selected == "Raw Data":
         tab1, tab2 = st.tabs(["Data description", "Data Visualizations"])
@@ -124,6 +151,10 @@ def main():
             if st.checkbox("Show raw data word cloud"):
                 image5 = Image.open("resources/50commonWords.png")
                 st.image(image5)
+
+            if st.checkbox("Show raw data sentiments"):
+                image6 = Image.open("resources/sentiments.png")
+                st.image(image6)
                 
     # Building out the predications page
     if selected == "Predictions":
@@ -237,25 +268,18 @@ def main():
             )
             st.write("")
             
-        # Building out the contact page
-        if selected == "Contact Us":
-            with st.form("form1", clear_on_submit=True):
-                st.subheader("Get in touch with us")
-                name = st.text_input("Enter full name")
-                email = st.text_input("Enter email")
-                message = st.text_area("Message")
-                
-                submit = st.form_submit_button("Submit Form")
-                if submit:
-                    st.write("Your form has been successfully submitted and we will be in touch")
+     # Building out the contact page
+    if selected == "Contact Us":
+        with st.form("form1", clear_on_submit=True):
+            st.subheader("Get in touch with us")
+            name = st.text_input("Enter full name")
+            email = st.text_input("Enter email")
+            message = st.text_area("Message")
             
-            job_filter = st.selectbox(
-                "Select sentiment", pd.unique(raw['sentiment'])
-            )
-            # creating a single-element data frame with the selected sentiment
-            filtered_data = raw[raw["sentiment"] == job_filter]
-            # displaying the filtered data
-            st.write(filtered_data)
+            submit = st.form_submit_button("Submit Form")
+            if submit:
+                st.write("Your form has been submitted and we will be in touch 🙂")
+            
 
 # Run the application
 if __name__ == "__main__":
