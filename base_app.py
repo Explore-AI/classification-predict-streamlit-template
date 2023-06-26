@@ -79,14 +79,19 @@ def main():
 					"Model 5: Multinomial Naive Bayes"   ]
 			
 			model_selector = st.selectbox("Choose Classification Model", model_options)
+			
 			if model_selector == "Model 1: Logistic Regression":
 				model = "resources/model1.pkl"
+
 			if model_selector == "Model 1: Logistic Regression":
 				model = "resources/model2.pkl"
+
 			if model_selector == "Model 1: Logistic Regression":
 				model = "resources/model3.pkl"
+
 			if model_selector == "Model 1: Logistic Regression":
 				model = "resources/model4.pkl"
+
 			if model_selector == "Model 1: Logistic Regression":
 				model = "resources/model5.pkl"
 
