@@ -124,11 +124,11 @@ def main():
         st.subheader("How It Works")
         st.markdown("Click on a tab to choose your desired classifier then enter a tweet relating to climate change and it will be classified according to its sentiment. \n See below on how to interpret results.")
         #using tabs for different predictors
-        tab1 = st.tabs(["Predict Tweet Sentiment"])
-        with tab1:
-                        
-            st.markdown("To test classifier accuracy, copy and past one of the tweets in the list below into the classifier and check the corresponding sentiment that the model outputs.")
-                    
+        tab1, tab2 = st.tabs(["Predict Tweet Sentiment", "Test the model"])
+
+
+        with tab1:          
+            st.markdown("To test classifier accuracy, copy and past one of the tweets in the list below into the classifier and check the corresponding sentiment that the model outputs.")        
             with st.expander("🐤 Tweets", expanded=False):
                             st.write(
                             """
@@ -156,11 +156,21 @@ def main():
             # Try loading in multiple models to give the user a choice
                 predictor = joblib.load(open(os.path.join("resources/LinearSVC.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
+
+
+                #Classification dictionary:
+                label_mapping = {2: "News - the tweet links to factual news about climate change",
+                                 1: "Pro - the tweet supports the belief of man-made climate change",
+                                 0: "Neutral - the tweet neither supports nor refutes the belief of man-made climate change",
+                			     -1: "Anti - the tweet does not believe in man-made climate change"}
                 
                 # When model has successfully run, will print prediction
                 # You can use a dictionary or similar structure to make this output
                 # more human interpretable.
-                st.success("Sentiment: {}".format(prediction))
+
+                category_label = label_mapping[prediction[0]]
+                
+                st.success("Text Categorized as: {}".format(category_label))
                 
                 with st.expander("ℹ️ How to interpret the results", expanded=False):
                     st.write(
@@ -175,47 +185,45 @@ def main():
              )
                 st.write("")
             
-            with tab2:
-                
-                st.markdown("To test classifier accuracy, copy and past one of the tweets in the list below into the classifier and check the corresponding sentiment that the model outputs.")
-                
-                with st.expander("🐤 Tweets", expanded=False):
-                    st.write(
-                    """
-                    * The biggest threat to mankind is NOT global warming but liberal idiocy👊🏻🖕🏻\n
-                    Expected output = -1 \n
-                    * Polar bears for global warming. Fish for water pollution.\n
-                    Expected output = 0 \n
-                    * RT Leading the charge in the climate change fight - Portland Tribune  https://t.co/DZPzRkcVi2 \n
-                    Expected output = 1 \n
-                    * G20 to focus on climate change despite Trump’s resistance \n
-                    Expected output = 2
+        with tab2:
             
-                    """
-                )
-                st.write("")
+            st.markdown("To test classifier accuracy, copy and past one of the tweets in the list below into the classifier and check the corresponding sentiment that the model outputs.")
+            
+            with st.expander("🐤 Tweets", expanded=False):
+                st.write(
+                """
+                * The biggest threat to mankind is NOT global warming but liberal idiocy👊🏻🖕🏻\n
+                Expected output = -1 \n
+                * Polar bears for global warming. Fish for water pollution.\n
+                Expected output = 0 \n
+                * RT Leading the charge in the climate change fight - Portland Tribune  https://t.co/DZPzRkcVi2 \n
+                Expected output = 1 \n
+                * G20 to focus on climate change despite Trump’s resistance \n
+                Expected output = 2
+        
+                """
+            )
+            st.write("")
+            
+        # Building out the contact page
+        if selected == "Contact Us":
+            with st.form("form1", clear_on_submit=True):
+                st.subheader("Get in touch with us")
+                name = st.text_input("Enter full name")
+                email = st.text_input("Enter email")
+                message = st.text_area("Message")
                 
-            # Building out the contact page
-            if selected == "Contact Us":
-                with st.form("form1", clear_on_submit=True):
-                    st.subheader("Get in touch with us")
-                    name = st.text_input("Enter full name")
-                    email = st.text_input("Enter email")
-                    message = st.text_area("Message")
-                    
-                    submit = st.form_submit_button("Submit Form")
-                    if submit:
-                        st.write("Your form has been successfully submitted and we will be in touch")
-                
-                job_filter = st.selectbox(
-                    "Select sentiment", pd.unique(raw['sentiment'])
-                )
-
-                # creating a single-element data frame with the selected sentiment
-                filtered_data = raw[raw["sentiment"] == job_filter]
-
-                # displaying the filtered data
-                st.write(filtered_data)
+                submit = st.form_submit_button("Submit Form")
+                if submit:
+                    st.write("Your form has been successfully submitted and we will be in touch")
+            
+            job_filter = st.selectbox(
+                "Select sentiment", pd.unique(raw['sentiment'])
+            )
+            # creating a single-element data frame with the selected sentiment
+            filtered_data = raw[raw["sentiment"] == job_filter]
+            # displaying the filtered data
+            st.write(filtered_data)
 
 # Run the application
 if __name__ == "__main__":
