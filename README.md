@@ -15,7 +15,7 @@ pip install ipython
 ```
 
 ### Step 2: Download Necessary Corpora and Model
-To aid with stopword removal and tokenization, you need to download the required corpora and model. 
+You need to download the required corpora and model to aid with stopword removal and tokenization. 
 Open a Python environment and execute the following commands:
 
 ```python
@@ -49,4 +49,6 @@ The project repository consists of the following folders/files:
 We also developed a web application using Streamlit for easy interaction with our model. You can navigate to our app repository by following this link: [https://github.com/TheZeitgeist-RR12/Streamlit-App.git]
 Feel free to explore, experiment, and contribute to the project.
 
+## Conclusion
+By developing this machine learning model, we provide companies in the environmentally friendly and sustainable sector with valuable insights into consumer sentiment. This, in turn, can inform their marketing strategies, help them better understand their target market, and help them improve their products.
 
