@@ -72,10 +72,11 @@ def main():
 			model = None
 			st.info("Prediction with ML Models")
 			model_options = [
-					"Model 1: Logistic Regression", 
-		    		"Model 2: Random Forest",
-					"Model 3: Support Vectors",
-					"Model 4: Naive Bayes"  ]
+					"Model 1: Ridge Classifier", 
+		    		"Model 2: Logostic Regression",
+					"Model 3: Random Forest",
+					"Model 4: Support Vector Classifier",
+					"Model 5: Multinomial Naive Bayes"   ]
 			
 			model_selector = st.selectbox("Choose Classification Model", model_options)
 			if model_selector == "Model 1: Logistic Regression":
@@ -105,29 +106,45 @@ def main():
 				st.header("Visuals")
 
 				with st.container():
-					st.write('The Big Kat')
+					st.header('Class Distribution Diagram')
+					st.image('resources/imgs/visuals/class_dist_bar.png')
 				
 				with st.container():
 
-					col1, col2, col3 = st.columns(3)
+					col1, col2 = st.columns(2)
 				
 				with col1:
-					st.header("A cat")
-					st.image("https://static.streamlit.io/examples/cat.jpg")
+					st.header('Box Plot of Tweet Lengths Per Category')
+					st.image('resources/imgs/visuals/len_box_cat.png')
 					
-					with col2:
-						st.header("A dog")
-						st.image("https://static.streamlit.io/examples/dog.jpg")
-						
-					with col3:
-						st.header("An owl")
-						st.image("https://static.streamlit.io/examples/owl.jpg")
+				with col2:
+						st.header('Distribution of Tweet Lengths')
+						st.image('resources/imgs/visuals/len_dist.png')
 
 				with st.container():
-					st.write('I\'m EXHAUSTED!')
-			
+
+					st.header('Pie Charts of Tweets Starting With "RT" vs Tweets Without "RT"')
+					st.image('resources/imgs/visuals/rt_pie.png')
+
+				with st.container():
+					st.header('Wordclouds')
+					col1, col2 = st.columns(2)
+				
+				with col1:
+					st.header('Terms Before Data Cleaning')
+					st.image('resources/imgs/visuals/wordcloud.png')
+					
+				with col2:
+						st.header('Terms After Data Cleaning')
+						st.image('resources/imgs/visuals/wordcloud_clean.png')
+
+				with st.container():
+					st.header('Top 30 Most Prevalent Words')
+					st.image('resources/imgs/visuals/top_30_words.png')
+
+
 			with tab3:
-				st.header("Cool Stuff")
+				st.header("Data From Our Machine Learning Experiments")
 				
 
 # Required to let Streamlit instantiate our web app.  
