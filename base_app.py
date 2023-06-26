@@ -34,14 +34,14 @@ import pandas as pd
 import time
 
 # Vectorizer
-news_vectorizer = open("resources/tfidfvect.pkl", "rb")
+news_vectorizer = open("resources/Linear_SVC_vect.pkl", "rb")
 tweet_cv = joblib.load(news_vectorizer)  # loading your vectorizer from the pkl file
-news_vectorizer_1 = open("resources/tfidfvectorizer.pkl", "rb")
+news_vectorizer_1 = open("resources/Linear_SVC_vect.pkl", "rb")
 tweet_cv_1 = joblib.load(news_vectorizer_1)
 
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
-raw2 = pd.read_csv("resources/train.csv")
+raw2 = pd.read_csv("resources/training_data.csv")
 
 # The main function where we will build the actual app
 def main():
@@ -123,7 +123,7 @@ def main():
     if selected == "Predictions":
         st.subheader("How It Works")
         st.markdown("Click on a tab to choose your desired classifier then enter a tweet relating to climate change and it will be classified according to its sentiment. \n See below on how to interpret results.")
-       #using tabs for different predictors
+        #using tabs for different predictors
         tab1 = st.tabs(["Linear SVC"])
         with tab1:
                         
@@ -148,13 +148,13 @@ def main():
             # Creating a text box for user input
             tweet_text = st.text_area("Enter Text Below")            
                         
-            if st.button("SVC Classify"):
+            if st.button("Predict Tweet Sentiment"):
             # Transforming user input with vectorizer     
                 vect_text = tweet_cv.transform([tweet_text]).toarray()
 
             # Load your .pkl file with the model of your choice + make predictions
             # Try loading in multiple models to give the user a choice
-                predictor = joblib.load(open(os.path.join("resources/RandomForestClassifier(n_jobs=-1,random_state=42.pkl"),"rb"))
+                predictor = joblib.load(open(os.path.join("resources/LinearSVC.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 
                 # When model has successfully run, will print prediction
