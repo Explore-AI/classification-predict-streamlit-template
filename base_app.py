@@ -29,7 +29,7 @@ import joblib,os
 import pandas as pd
 
 # Vectorizer
-news_vectorizer = open("resources/tfidv.pkl","rb")
+news_vectorizer = open("resources/vect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
 # Load your raw data
@@ -64,37 +64,72 @@ def main():
 
 	# Building out the predication page
 	if selection == "Prediction":
-		model = None
-		st.info("Prediction with ML Models")
-		model_options = [
-				"Model 1:  	Logistic Regression", 
-		    	"Model 2:  	Random Forest",
-				"Model 3:  	Support Vectors",
-				"Model 4: 	Naive Bayes"  
-				]
-		model_selector = st.selectbox("Choose Classification Model", model_options)
-		if model_selector == "Model 1: Logistic Regression":
-			model = "resources/lr_model.pkl"
-		# Creating a text box for user input
-		tweet_text = st.text_area("Enter Text","Type Here")
+		tab1, tab2, tab3 = st.tabs(["Home", "Visuals", "Cool Stuff"])
+		
+		with tab1:
+			st.header("Home")
+			
+			
+			model = None
+			st.info("Prediction with ML Models")
+			model_options = [
+					"Model 1: Logistic Regression", 
+		    		"Model 2: Random Forest",
+					"Model 3: Support Vectors",
+					"Model 4: Naive Bayes"  ]
+			
+			model_selector = st.selectbox("Choose Classification Model", model_options)
+			if model_selector == "Model 1: Logistic Regression":
+				model = "resources/lr_model.pkl"
+			# Creating a text box for user input
+			tweet_text = st.text_area("Enter Text","Type Here")
 		
 
-		if st.button("Classify"):
-			# Transforming user input with vectorizer
-			vect_text = tweet_cv.transform([tweet_text]).toarray()
-			# Load your .pkl file with the model of your choice + make predictions
-			# Try loading in multiple models to give the user a choice
+			if st.button("Classify"):
+				# Transforming user input with vectorizer
+				vect_text = tweet_cv.transform([tweet_text]).toarray()
+				# Load your .pkl file with the model of your choice + make predictions
+				# Try loading in multiple models to give the user a choice
 			
-			predictor = joblib.load(open(os.path.join(model),"rb"))
-			prediction = predictor.predict(vect_text)
+				predictor = joblib.load(open(os.path.join(model),"rb"))
+				prediction = predictor.predict(vect_text)
 
-			label_dict = {2: "News", 1: "Pro", 0: "Neutral", -1:"Anti" }
-			output = label_dict[prediction[0]]
+				label_dict = {2: "News", 1: "Pro", 0: "Neutral", -1:"Anti" }
+				output = label_dict[prediction[0]]
 
-			# When model has successfully run, will print prediction
-			# You can use a dictionary or similar structure to make this output
-			# more human interpretable.
-			st.success("Text Categorized as: {}".format(output))
+				# When model has successfully run, will print prediction
+				# You can use a dictionary or similar structure to make this output
+				
+				# more human interpretable.
+				st.success("Text Categorized as: {}".format(output))
+			with tab2:
+				st.header("Visuals")
+
+				with st.container():
+					st.write('The Big Kat')
+				
+				with st.container():
+
+					col1, col2, col3 = st.columns(3)
+				
+				with col1:
+					st.header("A cat")
+					st.image("https://static.streamlit.io/examples/cat.jpg")
+					
+					with col2:
+						st.header("A dog")
+						st.image("https://static.streamlit.io/examples/dog.jpg")
+						
+					with col3:
+						st.header("An owl")
+						st.image("https://static.streamlit.io/examples/owl.jpg")
+
+				with st.container():
+					st.write('I\'m EXHAUSTED!')
+			
+			with tab3:
+				st.header("Cool Stuff")
+				
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
