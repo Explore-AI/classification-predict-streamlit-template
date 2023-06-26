@@ -69,7 +69,6 @@ def main():
 		with tab1:
 			st.header("Home")
 			
-			
 			model = None
 			st.info("Prediction with ML Models")
 			model_options = [
