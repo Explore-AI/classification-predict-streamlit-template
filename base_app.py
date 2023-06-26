@@ -82,7 +82,7 @@ def main():
      # Building out the "About Us" page
     if selected == "About Us":
         # Using Tabs
-        tab1, tab2, tab3 = st.tabs(["About Elites", "Our Classifier", "Meet the Team"]) 
+        tab1, tab2, tab3, tab4 = st.tabs(["About Elites", "Our Classifier", "Meet the Team", "Contact Details"]) 
         with tab1:
             
             st.markdown("We’re proud to be an industry leader in promoting eco-friendly business practices. Striving to protect and sustain our environment is a given at every stage of our services.\n  Our green vision goes beyond helping businesses sustain their core mission as a green company. We design innovative technology to help businesses save time, reduce costs, and make better business decisions to ensure their footprint is greener.")
@@ -103,6 +103,10 @@ def main():
             image5 = Image.open("resources/MeetTheTeam.png")
             st.image(image5)
      
+        with tab4:
+            st.markdown("Email Address: admin@elites.com")
+            st.markdown("Website: www.elites.co.za")
+            st.markdown("Telephone: 012 455 7762")
 
     # Building out the raw data page
     if selected == "Raw Data":
@@ -280,6 +284,7 @@ def main():
             if submit:
                 st.write("Your form has been submitted and we will be in touch 🙂")
             
+    
 
 # Run the application
 if __name__ == "__main__":
