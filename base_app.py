@@ -131,11 +131,11 @@ def main():
 					col1, col2 = st.columns(2)
 				
 				with col1:
-					st.header('Terms Before Data Cleaning')
+					st.header('Before Data Cleaning')
 					st.image('resources/imgs/visuals/wordcloud.png')
 					
 				with col2:
-						st.header('Terms After Data Cleaning')
+						st.header('After Data Cleaning')
 						st.image('resources/imgs/visuals/wordcloud_clean.png')
 
 				with st.container():
