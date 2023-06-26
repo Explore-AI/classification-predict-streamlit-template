@@ -40,7 +40,7 @@ news_vectorizer_1 = open("resources/Linear_SVC_vect.pkl", "rb")
 tweet_cv_1 = joblib.load(news_vectorizer_1)
 
 # Load your raw data
-raw = pd.read_csv("resources/training_data.csv")
+raw = pd.read_csv("resources/train.csv")
 raw2 = pd.read_csv("resources/training_data.csv")
 
 # The main function where we will build the actual app
@@ -130,18 +130,18 @@ def main():
             st.markdown("To test classifier accuracy, copy and past one of the tweets in the list below into the classifier and check the corresponding sentiment that the model outputs.")
                     
             with st.expander("🐤 Tweets", expanded=False):
-                        st.write(
-                        """
-                        * The biggest threat to mankind is NOT global warming but liberal idiocy👊🏻🖕🏻\n
-                        Expected output = -1 \n
-                        * Polar bears for global warming. Fish for water pollution.\n
-                        Expected output = 0 \n
-                        * RT Leading the charge in the climate change fight - Portland Tribune  https://t.co/DZPzRkcVi2 \n
-                        Expected output = 1 \n
-                        * G20 to focus on climate change despite Trump’s resistance \n
-                        Expected output = 2
-                
-                        """
+                            st.write(
+                            """
+                            * The biggest threat to mankind is NOT global warming but liberal idiocy👊🏻🖕🏻\n
+                            Expected output = -1 \n
+                            * Polar bears for global warming. Fish for water pollution.\n
+                            Expected output = 0 \n
+                            * RT Leading the charge in the climate change fight - Portland Tribune  https://t.co/DZPzRkcVi2 \n
+                            Expected output = 1 \n
+                            * G20 to focus on climate change despite Trump’s resistance \n
+                            Expected output = 2
+                    
+                            """
                         )
             st.write("")
                         
@@ -152,7 +152,8 @@ def main():
             # Transforming user input with vectorizer     
                 vect_text = tweet_cv.transform([tweet_text]).toarray()
 
-            # Load your .pkl file and make predictions
+            # Load your .pkl file with the model of your choice + make predictions
+            # Try loading in multiple models to give the user a choice
                 predictor = joblib.load(open(os.path.join("resources/LinearSVC.pkl"),"rb"))
                 prediction = predictor.predict(vect_text)
                 
