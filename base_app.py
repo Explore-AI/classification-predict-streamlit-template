@@ -29,7 +29,7 @@ import joblib,os
 import pandas as pd
 
 # Vectorizer
-news_vectorizer = open("resources/vect.pkl","rb")
+news_vectorizer = open("resources/scale_vect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
 # Load your raw data
@@ -80,7 +80,16 @@ def main():
 			
 			model_selector = st.selectbox("Choose Classification Model", model_options)
 			if model_selector == "Model 1: Logistic Regression":
-				model = "resources/lr_model.pkl"
+				model = "resources/model1.pkl"
+			if model_selector == "Model 1: Logistic Regression":
+				model = "resources/model2.pkl"
+			if model_selector == "Model 1: Logistic Regression":
+				model = "resources/model3.pkl"
+			if model_selector == "Model 1: Logistic Regression":
+				model = "resources/model4.pkl"
+			if model_selector == "Model 1: Logistic Regression":
+				model = "resources/model5.pkl"
+
 			# Creating a text box for user input
 			tweet_text = st.text_area("Enter Text","Type Here")
 		
