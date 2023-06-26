@@ -32,6 +32,10 @@ from PIL import Image
 # Data dependencies
 import pandas as pd
 import time
+import unicodedata
+from num2words import num2words
+import spacy
+import re
 
 # Vectorizer
 news_vectorizer = open("resources/Linear_SVC_vect.pkl", "rb")
@@ -49,7 +53,7 @@ def main():
 
     # Creates a main title and subheader on your page -
     # these are static across all pages
-    st.title("Elites  \n _____________________________________________________")
+    st.title("Elites Data Science  \n _____________________________________________________")
     st.subheader("Climate change tweet classification")
 
     # Creating sidebar using streamlit-option-menu
@@ -65,7 +69,9 @@ def main():
     # Building out the "Home" page
     if selected == "Home":
         image = Image.open("resources/imgs/KB.png")
+
         st.image(image)
+        st.sidebar.image(image, use_column_width=True)
 
         st.subheader("Tweet Classifier")
         st.markdown("Consumers gravitate toward companies that are built around lessening one’s environmental impact. Elites provides an accurate and robust solution that gives companies access to a broad base of consumer sentiment, spanning multiple demographic and geographic categories, thus increasing their insights and informing future marketing strategies.")
@@ -149,8 +155,32 @@ def main():
             tweet_text = st.text_area("Enter Text Below")            
                         
             if st.button("Predict Tweet Sentiment"):
+            
+            # Define function to remove symbols, punctuation, and emojis
+                def remove_symbols(text):
+                    text = re.sub(r'[^\w\s.,!?]', '', text)
+                    text = ''.join(c for c in unicodedata.normalize('NFKD', text) if unicodedata.category(c) != 'Mn')
+                    text = re.sub(r'https\S+|www\S+', '', text)
+                    text = re.sub(r'\s+', ' ', text)
+                    text = re.sub(r'\b(\d+)\b', lambda match: num2words(int(match.group(0))), text)
+                    return text    
+
+                # Define nlp for use in Spacy
+                nlp = spacy.load('en_core_web_sm')
+
+                # Define spacy tokenizer
+                def tokenize_text_spacy(text):
+                    doc = nlp(text)
+                    tokens = [token.text for token in doc]
+                    return ' '.join(tokens)
+                
+                #Apply data cleaning and feature engineering and also transform to lowercase
+                processed_text = remove_symbols(tweet_text.lower())
+                processed_text = tokenize_text_spacy(processed_text)
+           
+
             # Transforming user input with vectorizer     
-                vect_text = tweet_cv.transform([tweet_text]).toarray()
+                vect_text = tweet_cv.transform([processed_text]).toarray()
 
             # Load your .pkl file with the model of your choice + make predictions
             # Try loading in multiple models to give the user a choice
@@ -168,8 +198,10 @@ def main():
                 # You can use a dictionary or similar structure to make this output
                 # more human interpretable.
 
+
+                #Map categories to labels
                 category_label = label_mapping[prediction[0]]
-                
+
                 st.success("Text Categorized as: {}".format(category_label))
                 
                 with st.expander("ℹ️ How to interpret the results", expanded=False):
@@ -193,13 +225,13 @@ def main():
                 st.write(
                 """
                 * The biggest threat to mankind is NOT global warming but liberal idiocy👊🏻🖕🏻\n
-                Expected output = -1 \n
+                Expected output = Anti \n
                 * Polar bears for global warming. Fish for water pollution.\n
-                Expected output = 0 \n
+                Expected output = Neutral \n
                 * RT Leading the charge in the climate change fight - Portland Tribune  https://t.co/DZPzRkcVi2 \n
-                Expected output = 1 \n
+                Expected output = Pro \n
                 * G20 to focus on climate change despite Trump’s resistance \n
-                Expected output = 2
+                Expected output = News
         
                 """
             )
