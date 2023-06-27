@@ -54,10 +54,12 @@ tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl f
 
 #with open('resources/TFIDF_Vec.pkl', 'rb') as file:
         #tf_vect = pickle.load(file)	
-	
+#with open('resources/TFIDF_Vec.pkl', 'rb') as file:
+        #tf_vect = pickle.load(file)
+		# 		
 #new vectorizer
-#new_vector = open("resources/TFIDF_Vec.pkl","rb")
-#tdf = joblib.load(new_vector) # loading your vectorizer from the pkl file
+#new_count_vec = open("resources/Count_vec.pkl","rb")
+#count_vec = joblib.load(new_count_vec) # loading your vectorizer from the pkl file
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
 
@@ -590,7 +592,7 @@ def main():
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
 
-	image = Image.open('logo.jpg')
+	image = Image.open('resources/imgs/logo.jpg')
 
 	col1, col2 = st.columns([3, 3])
 	with col1:
