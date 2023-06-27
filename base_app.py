@@ -46,7 +46,7 @@ import regex  # Regex is used for regular expression matching and manipulation.
 import string  # Provides constants and classes for string manipulation.
 import unicodedata  # Provides access to the Unicode Character Database for processing Unicode characters.
 from sklearn.feature_extraction.text import TfidfVectorizer
-from scipy.sparse import hstack  # Used for stacking sparse matrices horizontally.
+from scipy.sparse import hstack(format="csr")  # Used for stacking sparse matrices horizontally.
 
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
