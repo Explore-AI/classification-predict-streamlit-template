@@ -39,6 +39,30 @@ from num2words import num2words
 import spacy
 import re
 
+# Change Streamlit interface colors
+primary_color = "#A4A69C"
+text_color = "#0C0C0C"
+background_color = "#FFFFFF"
+secondary_background_color = "#3A9664"
+# Custom CSS style
+custom_css = f"""
+<style>
+body {{
+    color: {text_color};
+    background-color: {background_color};
+}}
+.sidebar .sidebar-content {{
+    background-color: {secondary_background_color};
+}}
+.primary-button {{
+    background-color: {primary_color} !important;
+}}
+</style>
+"""
+
+# Inject custom CSS
+st.markdown(custom_css, unsafe_allow_html=True)
+
 # Vectorizer
 news_vectorizer = open("resources/Linear_SVC_vect.pkl", "rb")
 tweet_cv = joblib.load(news_vectorizer)  # loading your vectorizer from the pkl file
