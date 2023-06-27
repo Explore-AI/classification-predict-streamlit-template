@@ -80,8 +80,9 @@ def main():
 			st.markdown("Thato Matlou @ReinaThato")
 			st.markdown("Khuthadzo Mamushiana @khuthy14")
 			st.markdown("Matlala Nyama @MatlalaNyama")
-			st.markdown("Njabulo Nxumalo ")
-			st.markdown("Seeama Masekwameng")
+			st.markdown("Seeama Masekwameng @masekwamengss")
+			st.markdown("Njabulo Nxumalo")
+			st.markdown("Florinah Ntoene")
 
 
 
