@@ -52,12 +52,12 @@ from scipy.sparse import hstack  # Used for stacking sparse matrices horizontall
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
-#with open('resources/TFIDF_Vec.pkl', 'rb') as file:
-        #tf_vect = pickle.load(file)	
+with open('resources/TFIDF_Vec.pkl', 'rb') as file:
+        tf_vect = pickle.load(file)	
 	
 #new vectorizer
-new_vector = open("resources/TFIDF_Vec.pkl","rb")
-tdf = joblib.load(new_vector) # loading your vectorizer from the pkl file
+#new_vector = open("resources/TFIDF_Vec.pkl","rb")
+#tdf = joblib.load(new_vector) # loading your vectorizer from the pkl file
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
 
@@ -800,7 +800,7 @@ def main():
 				
 				# Transforming user input with vectorizer
 				X_pred = processed_tweet['message']
-				vect_text = tdf.transform(X_pred)
+				vect_text = tf_vect.transform(X_pred)
 				
 				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = tf_vect.get_feature_names_out())
 				df_vectorized_combined = pd.concat([processed_tweet.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
@@ -846,7 +846,7 @@ def main():
 
 				#predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
 
-				vect_text = tdf.transform(X_pred)
+				vect_text = tf_vect.transform(X_pred)
 				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = tf_vect.get_feature_names_out())
 				df_vectorized_combined = pd.concat([processed_df.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
 				df_vectorized_combined = df_vectorized_combined.drop(["tweetid","message"], axis='columns')
