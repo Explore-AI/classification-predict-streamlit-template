@@ -73,7 +73,6 @@ def main():
         image = Image.open("resources/imgs/KB.png")
 
         st.image(image)
-        st.sidebar.image(image, use_column_width=True)
 
         st.subheader("Tweet Classifier")
         st.markdown("Consumers gravitate toward companies that are built around lessening one’s environmental impact. Elites provides an accurate and robust solution that gives companies access to a broad base of consumer sentiment, spanning multiple demographic and geographic categories, thus increasing their insights and informing future marketing strategies.")
