@@ -46,7 +46,7 @@ import regex  # Regex is used for regular expression matching and manipulation.
 import string  # Provides constants and classes for string manipulation.
 import unicodedata  # Provides access to the Unicode Character Database for processing Unicode characters.
 from sklearn.feature_extraction.text import TfidfVectorizer
-from scipy.sparse import hstack(format="csr")  # Used for stacking sparse matrices horizontally.
+from scipy.sparse import hstack  # Used for stacking sparse matrices horizontally.
 
 # Vectorizer
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
@@ -799,7 +799,7 @@ def main():
 				
 				# Transforming user input with vectorizer
 				X_pred = processed_tweet['message']
-				vect_text = tf_vect.transform(X_pred)
+				vect_text = tweet_cv.transform(X_pred)
 				
 				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = tf_vect.get_feature_names_out())
 				df_vectorized_combined = pd.concat([processed_tweet.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
@@ -845,7 +845,7 @@ def main():
 
 				#predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
 				#processed_df = preprocess_csv(df_uploaded)
-				vect_text = tf_vect.transform(X_pred)
+				vect_text = tweet_cv.transform(X_pred)
 				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = tf_vect.get_feature_names_out())
 				df_vectorized_combined = pd.concat([processed_df.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
 				df_vectorized_combined = df_vectorized_combined.drop(["tweetid","message"], axis='columns')
