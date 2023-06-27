@@ -350,7 +350,6 @@ def preprocess_csv(tweets):
 	# function to count the number of hashtags within the tweet
 	def count_hashtag(tweet):
 		count = 0
-
 		word_list = tweet.split()
 		for word in word_list:
 			if word[0] == "#":
@@ -713,17 +712,17 @@ def main():
 			st.markdown("The collection of this data was funded by a Canada Foundation for Innovation JELF Grant to Chris Bauch, University of Waterloo. The dataset aggregates tweets pertaining to climate change collected between Apr 27, 2015 and Feb 21, 2018. In total, 43,943 tweets were collected. Each tweet is labelled as one of 4 classes.")
 		if selection == 'Distribution of data per sentiment class':
 			st.subheader('Distribution of data per sentiment class')
-			st.image('resources/imgs/distribution%20of%20data%20in%20each%20class.png')
+			st.image('https://github.com/Kabous0017/classification-predict-streamlit-Team-GM3/blob/master/resources/imgs/distribution_of_data_in_each_class.png')
 			st.markdown('From the figures above, we see that the dataset we are working with is very unbalanced. More than half of our dataset is people having pro-climate change sentiments, while only  8% of our data represents people with anti-climate change opinions. This might lead our models to become far better at identifying pro-climate change sentiment than anti-climate change sentiment, and we might need to consider balancing the data by resampling it.')
 
 		if selection == 'Proportion of retweets':
 			st.subheader('Proportion of retweets')
-			st.image('https://github.com/Kabous0017/classification-predict-streamlit-Team-GM3/blob/master/resources/imgs/proportion%20of%20retweets%2C%20hashtags%20and%20originak%20mentions.png')
+			st.image('https://github.com/Kabous0017/classification-predict-streamlit-Team-GM3/blob/master/resources/imgs/proportion_of_retweets_hashtags_and_original_mentions.png')
 			st.markdown('We see that a staggering  60% of all our data is not original tweets, but retweets! This indicates that extracting more information from the retweets could prove integral to optimizing our model\'s predictive capabilities.')
 
 		if selection == 'Popular retweet handles per sentiment group in a word cloud':
 			st.subheader('Popular retweet handles per sentiment group in a word cloud')
-			st.image('https://github.com/Kabous0017/classification-predict-streamlit-Team-GM3/blob/master/resources/imgs/wordcloud%20of%20popular%20retweet%20handles%20per%20sentiment%20group.png')
+			st.image('https://github.com/Kabous0017/classification-predict-streamlit-Team-GM3/blob/master/resources/imgs/wordcloud_of_popular_retweet_handles_per_sentiment_group.png')
 			st.markdown('From the above, we see a clear difference between every sentiment with regards to who they are retweeting. This is great news, since it will provide an excellent feature within our model. Little overlap between categories is visible, which points to the fact that this feature could be a very strong predictor.')
 			st.markdown('We see that people with anti-climate change sentiments retweets from users like @realDonaldTrump and @SteveSGoddard the most. Overall retweets associated with anti-climate science opinions are frequently sourced from prominent Republican figures such as Donald Trump, along with individuals who identify as climate change deniers, like Steve Goddard.')
 			st.markdown('In contrast to this, people with pro-climate change views often retweet Democratic political figures such as @SenSanders and @KamalaHarris. Along with this, we see a trend to retweet comedians like @SethMacFarlane. The most retweeted individual for this category, is @StephenSchlegel.')
@@ -732,14 +731,14 @@ def main():
 
 		if selection == 'Popular hashtags in per sentiments group':
 			st.subheader('Popular hashtags in per sentiments group')
-			st.image('https://github.com/Kabous0017/classification-predict-streamlit-Team-GM3/blob/master/resources/imgs/popular%20hashtags%20per%20sentiment%20group_wordcloud.png')
+			st.image('https://github.com/Kabous0017/classification-predict-streamlit-Team-GM3/blob/master/resources/imgs/popular_hashtags_per_sentiment_group_wordcloud.png')
 			st.markdown('From the visual above, we notice a few things:')
 			st.markdown('We see that a lot of hashtags are common in every sentiment category. Hashtags like #climatechange, #cllimate and #Trump is abundant regardless of which category is considered, and can therefore be removed from the list of hashtags since they won\'t contribute any meaningful insight to our models.')
 			st.markdown('Finally there is some hashtags that are more prominent within certain sentiment groups. Take #MAGA and #fakenews in the anti-climate change category, or #ImVotingBecause in the pro-climate change category. This indicates that some useful information can be extracted from this feature, and should remain within the model.')
 
 		if selection == 'Popular mentions per sentiment group':
 			st.subheader('Popular mentions per sentiment group')
-			st.image('https://github.com/Kabous0017/classification-predict-streamlit-Team-GM3/blob/master/resources/imgs/popular%20mentions%20%20per%20sentiment%20group_wordcloud.png')
+			st.image('https://github.com/Kabous0017/classification-predict-streamlit-Team-GM3/blob/master/resources/imgs/popular_mentions%20_per_sentiment_group_wordcloud.png')
 			st.markdown('As was the case when we considered hashtags, we see that some handles get mentioned regardless of sentiment class. An example of this is @realDonaldTrump, which is prominent in every sentiment category, and as such should be removed before training our models, since it adds no value towards our data.')
 			st.markdown('Furthermore, there is some mentions that are more prominent in certain classes than others. Take @LeoDiCaprio for example, which features heavily in both pro-climate change as well as neutral towards climate change sentiment, but is not represented in the other two categories. This indicates that this feature could be beneficial for categorizing our data, and should remain within the dataset')
 
@@ -841,12 +840,12 @@ def main():
 					#lr = pickle.load(open('/resources/LogisticRegression.pkl','rb'))
 					predictor = joblib.load(open(os.path.join("resources/LogisticRegression.pkl"),"rb"))
 				elif selection == "Linear Support Vector Classifier":
-					lsvc = pickle.load(open('/resources/LinearSVC.pkl','rb'))
+					lsvc = pickle.load(open('resources/LinearSVC.pkl','rb'))
 					predictor = lsvc
 
 				#predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-
-				vect_text = tf_vect.fit_transform(X_pred)
+				#processed_df = preprocess_csv(df_uploaded)
+				vect_text = tf_vect.transform(X_pred)
 				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = tf_vect.get_feature_names_out())
 				df_vectorized_combined = pd.concat([processed_df.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
 				df_vectorized_combined = df_vectorized_combined.drop(["tweetid","message"], axis='columns')
