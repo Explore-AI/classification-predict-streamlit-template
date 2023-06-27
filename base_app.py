@@ -197,33 +197,26 @@ def main():
 
 				with st.container():
 					st.header("Model 1: Ridge Classifier")
-					col1, col2 = st.columns([3, 1])
-					with col1:
-						st.image('resources/imgs/visuals/top_30_words.png')
+					st.image('resources/imgs/cm/model1.png')
 
 				with st.container():
 					st.header("Model 2: Logistic Regression")
-					col1, col2 = st.columns([3, 1])
-					with col1:
-						st.image('resources/imgs/visuals/top_30_words.png')
+					st.image('resources/imgs/cm/model2.png')
 
 				with st.container():
 					st.header("Model 3: Random Forest")
-					col1, col2 = st.columns([3, 1])
-					with col1:
-						st.image('resources/imgs/visuals/top_30_words.png')
+					st.image('resources/imgs/cm/model3.png')
 
 				with st.container():
 					st.header("Model 4: Linear Support Vector Classifier")
-					col1, col2 = st.columns([3, 1])
-					with col1:
-						st.image('resources/imgs/visuals/top_30_words.png')
+					st.image('resources/imgs/cm/model4.png')
+				
 
 				with st.container():
 					st.header("Model 5: Bernoulli Naive Bayes")
-					col1, col2 = st.columns([3, 1])
-					with col1:
-						st.image('resources/imgs/visuals/top_30_words.png')
+					st.image('resources/imgs/cm/model5.png')
+					
+						
 					  
 				
 
