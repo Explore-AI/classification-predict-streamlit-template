@@ -67,32 +67,40 @@ def main():
 		tab1, tab2, tab3 = st.tabs(["Home", "Visuals", "Cool Stuff"])
 		
 		with tab1:
+
 			st.header("Home")
-			
-			model = None
+
 			st.info("Prediction with ML Models")
+
+			model = None
+
 			model_options = [
 					"Model 1: Ridge Classifier", 
-		    		"Model 2: Logostic Regression",
+		    		"Model 2: Logistic Regression",
 					"Model 3: Random Forest",
 					"Model 4: Support Vector Classifier",
 					"Model 5: Multinomial Naive Bayes"   ]
 			
 			model_selector = st.selectbox("Choose Classification Model", model_options)
-			
-			if model_selector == "Model 1: Logistic Regression":
+
+			if model_selector == "Model 1: Ridge Classifier":
+				model = None
 				model = "resources/model1.pkl"
 
-			if model_selector == "Model 1: Logistic Regression":
+			if model_selector == "Model 2: Logistic Regression":
+				model = None
 				model = "resources/model2.pkl"
 
-			if model_selector == "Model 1: Logistic Regression":
+			if model_selector == "Model 3: Random Forest":
+				model = None
 				model = "resources/model3.pkl"
 
-			if model_selector == "Model 1: Logistic Regression":
+			if model_selector == "Model 4: Support Vector Classifier":
+				model = None
 				model = "resources/model4.pkl"
 
-			if model_selector == "Model 1: Logistic Regression":
+			if model_selector == "Model 5: Multinomial Naive Bayes":
+				model = None
 				model = "resources/model5.pkl"
 
 			# Creating a text box for user input
