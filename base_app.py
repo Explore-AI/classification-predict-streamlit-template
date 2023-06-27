@@ -49,20 +49,21 @@ tweet_cv_1 = joblib.load(news_vectorizer_1)
 raw = pd.read_csv("resources/train.csv")
 raw2 = pd.read_csv("resources/training_data.csv")
 
+
+
 # The main function where we will build the actual app
 def main():
     """Tweet Classifier App with Streamlit"""
 
     # Creates a main title and subheader on your page -
     # these are static across all pages
-    st.title("Elites Data Science  \n _____________________________________________________")
-    st.subheader("Climate change tweet classification")
+    
 
     # Creating sidebar using streamlit-option-menu
     with st.sidebar:
         selected = option_menu(
             "Menu",
-            ["Home", "Raw Data", "Predictions", "About Us", "Contact Us"],
+            ["Home", "Predictions", "Raw Data", "How it Works", "About Us", "Contact Us"],
             icons=["house", "table", "graph-up-arrow", "info-circle", "telephone"],
             menu_icon="menu-button",
             default_index=0,
@@ -70,7 +71,11 @@ def main():
 
     # Building out the "Home" page
     if selected == "Home":
-        image = Image.open("resources/imgs/KB.png")
+        image = Image.open("resources/Elites.pptx (3).png")
+
+        st.title("Elites Data Science")
+
+        st.subheader("Climate change tweet classification")
 
         st.image(image)
 
@@ -80,7 +85,10 @@ def main():
 
      # Building out the "About Us" page
     if selected == "About Us":
-        # Using Tabs
+        # Using Tabs   
+
+        st.title("About Us")   
+
         tab1, tab2, tab3, tab4 = st.tabs(["About Elites", "Our Classifier", "Meet the Team", "Contact Details"]) 
         with tab1:
             
@@ -107,84 +115,23 @@ def main():
             st.markdown("Website: www.elites.co.za")
             st.markdown("Telephone: 012 455 7762")
 
-    # Building out the raw data page
-    if selected == "Raw Data":
-        tab1, tab2 = st.tabs(["Data description", "Data Visualizations"])
-        with tab1:
-            st.markdown(
-                "The collection of the raw data was funded by a Canada Foundation for Innovation JELF Grant to Chris Bauch, University of Waterloo."
-            )
-            st.write(
-                """
-                This dataset aggregates tweets pertaining to climate change collected between Apr 27, 2015 and Feb 21, 2018. In total, 43943 tweets were annotated. Each tweet is labelled independently by 3 reviewers. This dataset only contains tweets that all 3 reviewers agreed on (the rest were discarded). \n
-                Each tweet is labelled as one of the following classes: \n
-                * 2(News): the tweet links to factual news about climate change \n
-                * 1(Pro): the tweet supports the belief of man-made climate change \n
-                * 0(Neutral): the tweet neither supports nor refutes the belief of man-made climate change \n
-                * -1(Anti): the tweet does not believe in man-made climate change
-                """
-            )
-            st.write("")
-
-        with tab2:
-            if st.checkbox("Show sentiment value count"):
-                st.bar_chart(data=raw2["sentiment"].value_counts(), x=None, y=None, width=220, height=320, use_container_width=True)
-            
-            if st.checkbox("Show raw data"):
-                job_filter = st.selectbox("Select sentiment", pd.unique(raw['sentiment']))
-           
-           
-                # creating a single-element container.
-                placeholder = st.empty()
-           
-                # dataframe filter 
-           
-                df = raw[raw['sentiment']==job_filter]
-            
-                for seconds in range(100):
-                #while True: 
-                                   
-                   with placeholder.container():       
-            
-                  
-                       st.markdown("### Raw data")
-                       st.dataframe(df)
-                       time.sleep(1)
-
-            if st.checkbox("Show raw data word cloud"):
-                image5 = Image.open("resources/50commonWords.png")
-                st.image(image5)
-
-            if st.checkbox("Show raw data sentiments"):
-                image6 = Image.open("resources/sentiments.png")
-                st.image(image6)
-                
-    # Building out the predications page
+    
     if selected == "Predictions":
-        st.subheader("How It Works")
-        st.markdown("Click on a tab to choose your desired classifier then enter a tweet relating to climate change and it will be classified according to its sentiment. \n See below on how to interpret results.")
+        
+        st.title("Classify tweets")   
+
+        #Adding sidebar image
+        image = Image.open("resources/Elites.pptx (3).png")
+        st.sidebar.image(image, use_column_width=True)  
+
+
+        st.markdown("Enter your Tweet relating to climate change below and our model will classify it based on its percieved sentiment. \n See below on how to interpret results.")
         #using tabs for different predictors
         tab1, tab2 = st.tabs(["Predict Tweet Sentiment", "Test the model"])
 
 
         with tab1:          
-            st.markdown("To test classifier accuracy, copy and past one of the tweets in the list below into the classifier and check the corresponding sentiment that the model outputs.")        
-            with st.expander("🐤 Tweets", expanded=False):
-                            st.write(
-                            """
-                            * The biggest threat to mankind is NOT global warming but liberal idiocy👊🏻🖕🏻\n
-                            Expected output = -1 \n
-                            * Polar bears for global warming. Fish for water pollution.\n
-                            Expected output = 0 \n
-                            * RT Leading the charge in the climate change fight - Portland Tribune  https://t.co/DZPzRkcVi2 \n
-                            Expected output = 1 \n
-                            * G20 to focus on climate change despite Trump’s resistance \n
-                            Expected output = 2
-                    
-                            """
-                        )
-            st.write("")
-                        
+                                   
             # Creating a text box for user input
             tweet_text = st.text_area("Enter Text Below")            
                         
@@ -242,10 +189,10 @@ def main():
                     st.write(
                  """
                  Sentiment is categorized into 4 classes:\n
-                 [-1] = **Anti**: the tweet does not believe in man-made climate change \n
-                 [0] = **Neutral**: the tweet neither supports nor refutes the belief of man-made climate change \n
-                 [1] = **Pro**: the tweet supports the belief of man-made climate change \n
-                 [2] = **News**: the tweet links to factual news about climate change \n
+                 **Anti**: the tweet does not believe in man-made climate change \n
+                 **Neutral**: the tweet neither supports nor refutes the belief of man-made climate change \n
+                 **Pro**: the tweet supports the belief of man-made climate change \n
+                 **News**: the tweet links to factual news about climate change \n
          
                  """
              )
@@ -270,9 +217,98 @@ def main():
                 """
             )
             st.write("")
+
+    # Building out the raw data page
+    if selected == "Raw Data":
+
+        st.title("Raw Data")  
+
+        #Adding sidebar image
+        image = Image.open("resources/Elites.pptx (3).png")
+        st.sidebar.image(image, use_column_width=True)     
+    
+        tab1, tab2 = st.tabs(["Data description", "Data Visualizations"])
+        with tab1:
+            st.markdown(
+                "The collection of the raw data was funded by a Canada Foundation for Innovation JELF Grant to Chris Bauch, University of Waterloo."
+            )
+            st.write(
+                """
+                This dataset aggregates tweets pertaining to climate change collected between Apr 27, 2015 and Feb 21, 2018. In total, 43943 tweets were annotated. Each tweet is labelled independently by 3 reviewers. This dataset only contains tweets that all 3 reviewers agreed on (the rest were discarded). \n
+                Each tweet is labelled as one of the following classes: \n
+                * 2(News): the tweet links to factual news about climate change \n
+                * 1(Pro): the tweet supports the belief of man-made climate change \n
+                * 0(Neutral): the tweet neither supports nor refutes the belief of man-made climate change \n
+                * -1(Anti): the tweet does not believe in man-made climate change
+                """
+            )
+            st.write("")
+
+        with tab2:
+            if st.checkbox("Show sentiment value count"):
+                st.bar_chart(data=raw2["sentiment"].value_counts(), x=None, y=None, width=220, height=320, use_container_width=True)
             
-     # Building out the contact page
+            if st.checkbox("Show raw data"):
+                job_filter = st.selectbox("Select sentiment", pd.unique(raw['sentiment']))
+           
+           
+                # creating a single-element container.
+                placeholder = st.empty()
+           
+                # dataframe filter 
+           
+                df = raw[raw['sentiment']==job_filter]
+            
+                for seconds in range(100):
+                #while True: 
+                                   
+                   with placeholder.container():       
+            
+                  
+                       st.markdown("### Raw data")
+                       st.dataframe(df)
+                       time.sleep(1)
+
+            if st.checkbox("Show raw data word cloud"):
+                image5 = Image.open("resources/50commonWords.png")
+                st.image(image5)
+
+            if st.checkbox("Show raw data sentiments"):
+                image6 = Image.open("resources/sentiments.png")
+                st.image(image6)
+    
+    #Inserting technical page
+    if selected == "How it Works":
+
+        st.title("How it Works")  
+
+        image = Image.open("resources/Elites.pptx (3).png")
+        st.sidebar.image(image, use_column_width=True)  
+
+        #Describe intro
+        st.subheader("Overview")
+        st.markdown("This app aims to classify Tweets according to their sentiment towards Climate change, furthermore whether the Tweet indicates the Tweeter's stance towards man made Climate change. The below attempts to provide a simplified description of how our model works. Other inputs can also be used in the form of sentences or paragraphs.")
+
+        #Describe data processing
+        st.subheader("1) Data cleaning and feature engineering")
+        st.markdown("Firstly we have to 'clean' our data, this is where we remove non-English characters, emoji's and other uninteligible words which would not be usefull. Essentially we are attempting to classify the tweets based on the occurence of certain words or groups of words and we only want to include words which convey meaning.")
+        
+        #Describe Model
+        st.subheader("2) Modelling")
+        st.markdown("We then tested various Machine Learning models and optimised the best performing model, the model was tested based on its ability to accurately classify tweets based on a existing dataset.")
+
+        #Describe prediction
+        st.subheader("3) Tweet sentiment prediction")
+        st.markdown("Finally we use our model to predict the sentiment of the given tweet based on its contents.")
+
+            
+    # Building out the contact page
     if selected == "Contact Us":
+
+        #Adding sidebar image
+        image = Image.open("resources/Elites.pptx (3).png")
+        st.sidebar.image(image, use_column_width=True)  
+
         with st.form("form1", clear_on_submit=True):
             st.subheader("Get in touch with us")
             name = st.text_input("Enter full name")
