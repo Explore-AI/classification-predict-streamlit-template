@@ -49,6 +49,17 @@ tweet_cv_1 = joblib.load(news_vectorizer_1)
 raw = pd.read_csv("resources/train.csv")
 raw2 = pd.read_csv("resources/training_data.csv")
 
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: yellow;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # The main function where we will build the actual app
 def main():
     """Tweet Classifier App with Streamlit"""
@@ -70,9 +81,10 @@ def main():
 
     # Building out the "Home" page
     if selected == "Home":
-        image = Image.open("resources/imgs/KB.png")
+        image = Image.open("resources/Elites.pptx (3).png")
 
         st.image(image)
+        st.sidebar.image(image, use_column_width=True)
 
         st.subheader("Tweet Classifier")
         st.markdown("Consumers gravitate toward companies that are built around lessening one’s environmental impact. Elites provides an accurate and robust solution that gives companies access to a broad base of consumer sentiment, spanning multiple demographic and geographic categories, thus increasing their insights and informing future marketing strategies.")
@@ -242,10 +254,10 @@ def main():
                     st.write(
                  """
                  Sentiment is categorized into 4 classes:\n
-                 [-1] = **Anti**: the tweet does not believe in man-made climate change \n
-                 [0] = **Neutral**: the tweet neither supports nor refutes the belief of man-made climate change \n
-                 [1] = **Pro**: the tweet supports the belief of man-made climate change \n
-                 [2] = **News**: the tweet links to factual news about climate change \n
+                 **Anti**: the tweet does not believe in man-made climate change \n
+                 **Neutral**: the tweet neither supports nor refutes the belief of man-made climate change \n
+                 **Pro**: the tweet supports the belief of man-made climate change \n
+                 **News**: the tweet links to factual news about climate change \n
          
                  """
              )
