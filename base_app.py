@@ -619,43 +619,43 @@ def main():
 		#director 
 		col1, col2 = st.columns([1, 6])
 		with col1:
-			image_k = Image.open('Kobus.png')
+			image_k = Image.open('resources/imgs/Kobus.png')
 			st.image(image_k, use_column_width=True,caption = 'Director: Kobus Le Roux')
 
 		# assistant director
 		col1, col2 = st.columns([1, 6])
 		with col1:
-			image_m = Image.open('Mkhanyisi.png')
+			image_m = Image.open('resources/imgs/Mkhanyisi.png')
 			st.image(image_m, use_column_width=True, caption = 'Assistant Director: Mkhanyisi Mlombile')
 
 		# data scientist 1
 		col1, col2 = st.columns([1, 6])
 		with col1:
-			image_h = Image.open('Hilda.png')
+			image_h = Image.open('resources/imgs/Hilda.png')
 			st.image(image_h, use_column_width=True, caption = 'Data Scientist: Hilda Sinclair')
 		
 		# data scientist 2
 		col1, col2 = st.columns([1, 6])
 		with col1:
-			image_t = Image.open('Temishka.png')
+			image_t = Image.open('resources/imgs/temishka.png')
 			st.image(image_t, use_column_width=True, caption = 'Data Scientist: Temishka Robyn Pillay')
 
 		# data scientist 3
 		col1, col2 = st.columns([1, 6])
 		with col1:
-			image_kg = Image.open('Kgomotso.png')
+			image_kg = Image.open('resources/imgs/Kgomotso.png')
 			st.image(image_kg, use_column_width=True, caption = 'Data Scientist: Kgomotso Modihlaba')
 
 		# data scientist 4
 		col1, col2 = st.columns([1, 6])
 		with col1:
-			image_i = Image.open('Isaac.png')
+			image_i = Image.open('resources/imgs/Isaac.png')
 			st.image(image_i, use_column_width=True, caption = 'Data Scientist: Isaac Sihlangu')
 
 		# data scientist 5
 		col1, col2 = st.columns([1, 6])
 		with col1:
-			image_b= Image.open('Bongokuhle.png')
+			image_b= Image.open('resources/imgs/Bongokuhle.png')
 			st.image(image_b, use_column_width=True, caption = 'Data Scientist: Bongokuhle Dladla')
 
 	# Building out the "Model Explaination" page
@@ -850,6 +850,7 @@ def main():
 				vect_text = count_vec.transform(X_pred)
 				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = count_vec.get_feature_names_out())
 				df_vectorized_combined = pd.concat([processed_df.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
+
 				df_vectorized_combined = df_vectorized_combined.drop(["tweetid","message"], axis='columns')
 
 
