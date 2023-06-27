@@ -52,8 +52,8 @@ from scipy.sparse import hstack  # Used for stacking sparse matrices horizontall
 news_vectorizer = open("resources/tfidfvect.pkl","rb")
 tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl file
 
-with open('resources/TFIDF_Vec.pkl', 'rb') as file:
-        tf_vect = pickle.load(file)	
+#with open('resources/TFIDF_Vec.pkl', 'rb') as file:
+        #tf_vect = pickle.load(file)	
 	
 #new vectorizer
 #new_vector = open("resources/TFIDF_Vec.pkl","rb")
