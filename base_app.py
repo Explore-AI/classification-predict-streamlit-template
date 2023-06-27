@@ -49,16 +49,7 @@ tweet_cv_1 = joblib.load(news_vectorizer_1)
 raw = pd.read_csv("resources/train.csv")
 raw2 = pd.read_csv("resources/training_data.csv")
 
-st.markdown(
-    """
-    <style>
-    body {
-        background-color: yellow;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+
 
 # The main function where we will build the actual app
 def main():
