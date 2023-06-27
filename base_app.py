@@ -56,9 +56,15 @@ def main():
 	if selection == "Information":
 		st.info("General Information")
 		# You can read a markdown file from supporting resources folder
-		st.markdown("Some information here")
+		st.markdown("The dataset at hand comprises novel tweet data. It serves as a valuable resource in our machine learning experiments. The data set is specifically designed to categorize tweets into distinct labels.")
+		st.markdown("The catgories are:")
+		st.markdown("-1: Anti")
+		st.markdown(" 0: Neutral")
+		st.markdown(" 1: Pro")
+		st.markdown(" 2: News")
+		st.markdown("These labels enable the classification and analysis of the tweets based on their sentiment. These labels enable the classification and analysis of the tweets based on their sentiment. Such an extensive and well-labeled dataset significantly contributes to the advancement of sentiment analysis, opinion mining, and other natural language processing tasks.")
 
-		st.subheader("Raw Twitter data and label")
+		st.subheader("Raw Twitter Data and Label")
 		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
 			st.write(raw[['sentiment', 'message']]) # will write the df to the page
 
@@ -78,8 +84,8 @@ def main():
 					"Model 1: Ridge Classifier", 
 		    		"Model 2: Logistic Regression",
 					"Model 3: Random Forest",
-					"Model 4: Support Vector Classifier",
-					"Model 5: Multinomial Naive Bayes"   ]
+					"Model 4: Linear Support Vector Classifier",
+					"Model 5: Bernoulli Naive Bayes"   ]
 			
 			model_selector = st.selectbox("Choose Classification Model", model_options)
 
@@ -95,11 +101,11 @@ def main():
 				model = None
 				model = "resources/model3.pkl"
 
-			if model_selector == "Model 4: Support Vector Classifier":
+			if model_selector == "Model 4: Linear Support Vector Classifier":
 				model = None
 				model = "resources/model4.pkl"
 
-			if model_selector == "Model 5: Multinomial Naive Bayes":
+			if model_selector == "Model 5: Bernoulli Naive Bayes":
 				model = None
 				model = "resources/model5.pkl"
 
@@ -126,6 +132,8 @@ def main():
 				st.success("Text Categorized as: {}".format(output))
 			with tab2:
 				st.header("Visuals")
+
+				st.info("Graphs generated from our data analysis.")
 
 				with st.container():
 					st.header('Class Distribution Diagram')
@@ -167,6 +175,8 @@ def main():
 
 			with tab3:
 				st.header("Data From Our Machine Learning Experiments")
+
+				st.info("Some metadata from our Comet experiments")
 				
 
 # Required to let Streamlit instantiate our web app.  
