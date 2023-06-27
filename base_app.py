@@ -846,7 +846,7 @@ def main():
 
 				#predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
 
-				vect_text = tf_vect.transform(X_pred)
+				vect_text = tf_vect.fit_transform(X_pred)
 				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = tf_vect.get_feature_names_out())
 				df_vectorized_combined = pd.concat([processed_df.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
 				df_vectorized_combined = df_vectorized_combined.drop(["tweetid","message"], axis='columns')
