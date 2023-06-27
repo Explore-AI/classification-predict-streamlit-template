@@ -198,23 +198,36 @@ def main():
 				with st.container():
 					st.header("Model 1: Ridge Classifier")
 					st.image('resources/imgs/cm/model1.png')
+					model1_report = pd.read_csv('resources/RidgeClassifier classification_report.csv')
+					st.dataframe(model1_report)
+					
 
 				with st.container():
 					st.header("Model 2: Logistic Regression")
 					st.image('resources/imgs/cm/model2.png')
+					model2_report =pd.read_csv('resources/LogisticRegression classification_report.csv')
+					st.dataframe(model2_report)
 
 				with st.container():
 					st.header("Model 3: Random Forest")
 					st.image('resources/imgs/cm/model3.png')
+					model3_report = pd.read_csv('resources/RandomForestClassifier classification_report.csv')
+					st.dataframe(model3_report)
+
 
 				with st.container():
 					st.header("Model 4: Linear Support Vector Classifier")
 					st.image('resources/imgs/cm/model4.png')
+					model4_report = pd.read_csv('resources/LinearSVC classification_report.csv')
+					st.dataframe(model4_report)
+
 				
 
 				with st.container():
 					st.header("Model 5: Bernoulli Naive Bayes")
 					st.image('resources/imgs/cm/model5.png')
+					model5_report = pd.read_csv('resources/BernoulliNB classification_report.csv')
+					st.dataframe(model5_report)
 					
 						
 					  
