@@ -55,18 +55,35 @@ def main():
 	# Building out the "Information" page
 	if selection == "Information":
 		st.info("General Information")
-		# You can read a markdown file from supporting resources folder
-		st.markdown("The dataset at hand comprises novel tweet data. It serves as a valuable resource in our machine learning experiments. The data set is specifically designed to categorize tweets into distinct labels.")
-		st.markdown("The catgories are:")
-		st.markdown("-1: Anti")
-		st.markdown(" 0: Neutral")
-		st.markdown(" 1: Pro")
-		st.markdown(" 2: News")
-		st.markdown("These labels enable the classification and analysis of the tweets based on their sentiment. These labels enable the classification and analysis of the tweets based on their sentiment. Such an extensive and well-labeled dataset significantly contributes to the advancement of sentiment analysis, opinion mining, and other natural language processing tasks.")
 
-		st.subheader("Raw Twitter Data and Label")
-		if st.checkbox('Show raw data'): # data is hidden if box is unchecked
-			st.write(raw[['sentiment', 'message']]) # will write the df to the page
+		tab1, tab2 = st.tabs(["Train Data", "About Us"])
+
+		with tab1:
+		# You can read a markdown file from supporting resources folder
+			st.markdown("The dataset at hand comprises novel tweet data. It serves as a valuable resource in our machine learning experiments. The data set is specifically designed to categorize tweets into distinct labels.")
+			st.markdown("The catgories are:")
+			st.markdown("-1: Anti")
+			st.markdown(" 0: Neutral")
+			st.markdown(" 1: Pro")
+			st.markdown(" 2: News")
+			st.markdown("These labels enable the classification and analysis of the tweets based on their sentiment. These labels enable the classification and analysis of the tweets based on their sentiment. Such an extensive and well-labeled dataset significantly contributes to the advancement of sentiment analysis, opinion mining, and other natural language processing tasks.")
+
+			st.subheader("Raw Twitter Data and Label")
+			if st.checkbox('Show raw data'): # data is hidden if box is unchecked
+				st.write(raw[['sentiment', 'message']]) # will write the df to the page
+		
+		with tab2:
+			st.subheader("Learning is where we are at!")
+			st.markdown("Super Classy is a group of Student Data Scientist from Explore AI Academy.")
+			st.markdown("Meet The Team")
+			st.markdown("Katlego Thobye @xumonomi")
+			st.markdown("Thato Matlou @ReinaThato")
+			st.markdown("Khuthadzo Mamushiana @khuthy14")
+			st.markdown("Matlala Nyama @MatlalaNyama")
+			st.markdown("Njabulo Nxumalo ")
+			st.markdown("Seeama Masekwameng")
+
+
 
 	# Building out the predication page
 	if selection == "Prediction":
@@ -143,11 +160,11 @@ def main():
 
 					col1, col2 = st.columns(2)
 				
-				with col1:
-					st.header('Box Plot of Tweet Lengths Per Category')
-					st.image('resources/imgs/visuals/len_box_cat.png')
+					with col1:
+						st.header('Box Plot of Tweet Lengths Per Category')
+						st.image('resources/imgs/visuals/len_box_cat.png')
 					
-				with col2:
+					with col2:
 						st.header('Distribution of Tweet Lengths')
 						st.image('resources/imgs/visuals/len_dist.png')
 
@@ -160,11 +177,11 @@ def main():
 					st.header('Wordclouds')
 					col1, col2 = st.columns(2)
 				
-				with col1:
-					st.header('Before Data Cleaning')
-					st.image('resources/imgs/visuals/wordcloud.png')
+					with col1:
+						st.header('Before Data Cleaning')
+						st.image('resources/imgs/visuals/wordcloud.png')
 					
-				with col2:
+					with col2:
 						st.header('After Data Cleaning')
 						st.image('resources/imgs/visuals/wordcloud_clean.png')
 
@@ -175,8 +192,38 @@ def main():
 
 			with tab3:
 				st.header("Data From Our Machine Learning Experiments")
-
 				st.info("Some metadata from our Comet experiments")
+
+				with st.container():
+					st.header("Model 1: Ridge Classifier")
+					col1, col2 = st.columns([3, 1])
+					with col1:
+						st.image('resources/imgs/visuals/top_30_words.png')
+
+				with st.container():
+					st.header("Model 2: Logistic Regression")
+					col1, col2 = st.columns([3, 1])
+					with col1:
+						st.image('resources/imgs/visuals/top_30_words.png')
+
+				with st.container():
+					st.header("Model 3: Random Forest")
+					col1, col2 = st.columns([3, 1])
+					with col1:
+						st.image('resources/imgs/visuals/top_30_words.png')
+
+				with st.container():
+					st.header("Model 4: Linear Support Vector Classifier")
+					col1, col2 = st.columns([3, 1])
+					with col1:
+						st.image('resources/imgs/visuals/top_30_words.png')
+
+				with st.container():
+					st.header("Model 5: Bernoulli Naive Bayes")
+					col1, col2 = st.columns([3, 1])
+					with col1:
+						st.image('resources/imgs/visuals/top_30_words.png')
+					  
 				
 
 # Required to let Streamlit instantiate our web app.  
