@@ -803,7 +803,7 @@ def main():
 				X_pred = processed_tweet['message']
 				vect_text = count_vec.transform(X_pred)
 				
-				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = tf_vect.get_feature_names_out())
+				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = count_vec.get_feature_names_out())
 				df_vectorized_combined = pd.concat([processed_tweet.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
 				df_vectorized_combined = df_vectorized_combined.drop("message", axis='columns')
 
