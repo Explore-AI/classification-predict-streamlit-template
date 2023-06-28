@@ -756,7 +756,7 @@ def main():
 			# Creating a text box for user input
 			tweet_text = st.text_area("Enter tweet here","Type Here")
 
-			options = ["Logistic Regression Classifier", "Linear Support Vector Classifier", "Gaussian Naives Bayes Classifier", " Multinomial Naive Bayes Classifier"] #"XGBoost Classifier", "CatBoost Classfier"
+			options = ["Logistic Regression Classifier", "Linear Support Vector Classifier", "Gaussian Naives Bayes Classifier"] #"XGBoost Classifier", "CatBoost Classfier",  " Multinomial Naive Bayes Classifier"
 			selection = st.selectbox("Choose Your Model", options)
 
 			if st.button("Classify Tweet"):
@@ -778,8 +778,8 @@ def main():
 				# Try loading in multiple models to give the user a choice
 				predictor = None
 				X_pred = None
-				if selection == "Multinomial Naive Bayes Classifier":
-					predictor = joblib.load(open(os.path.join("resources/MultinomialNaiveBeyes.pkl"),"rb"))
+				# if selection == "Multinomial Naive Bayes Classifier":
+				# 	predictor = joblib.load(open(os.path.join("resources/MultinomialNaiveBeyes.pkl"),"rb"))
 					#mnb = pickle.load(open('/resources/MultinomialNaiveBeyes.pkl','rb'))
 					#predictor = mnb	
 				elif selection == "Logistic Regression Classifier":
