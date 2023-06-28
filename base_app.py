@@ -482,4 +482,4 @@ with col4:
     st.markdown('<button class="silver-button" style="color: purple;">@weatherhub</button>', unsafe_allow_html=True)
 
 # Add copyright information and links
-st.write("© 2023 Weather H
+st.write("© 2023 Weather Hub Inc. All rights reserved.")
