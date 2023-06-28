@@ -818,54 +818,55 @@ def main():
 				st.success("Text Categorized as: {}".format(dictionary_tweets[prediction_str]))
 
 		if pred_type == "Multiple Tweets":
-			tweets_csv = st.file_uploader('Upload a CSV file here', type='csv', accept_multiple_files=False, key=None, help='Only CSV files are accepted', on_change=None, args=None, kwargs=None)
-			df_uploaded = None
-			X_pred = None
-			if tweets_csv is not None:
-				df_uploaded = pd.read_csv(tweets_csv)
-				processed_df = preprocess_csv(df_uploaded)
-				X_pred = processed_df['message']
+			st.markdown('This section coming soon! Watch this space!')
+			# tweets_csv = st.file_uploader('Upload a CSV file here', type='csv', accept_multiple_files=False, key=None, help='Only CSV files are accepted', on_change=None, args=None, kwargs=None)
+			# df_uploaded = None
+			# X_pred = None
+			# if tweets_csv is not None:
+			# 	df_uploaded = pd.read_csv(tweets_csv)
+			# 	processed_df = preprocess_csv(df_uploaded)
+			# 	X_pred = processed_df['message']
 			
-			options = [" Multinomial Naive Bayes Classifier","Logistic Regression Classifier", "Linear Support Vector Classifier"]
-			selection = st.selectbox("Choose Your Model", options)
+			# options = [" Multinomial Naive Bayes Classifier","Logistic Regression Classifier", "Linear Support Vector Classifier"]
+			# selection = st.selectbox("Choose Your Model", options)
 
-			if st.button("Classify CSV"):
-				# Transforming user input with vectorizer
-				#vect_text = tweet_cv.transform([tweet_text]).toarray()
-				# Load your .pkl file with the model of your choice + make predictions
-				# Try loading in multiple models to give the user a choice
-				predictor = None
-				if selection == "Multinomial Naive Bayes Classifier":
-					mnb = pickle.load(open('/resources/MultinomialNaiveBeyes.pkl','rb'))
-					predictor = mnb	
-				elif selection == "Logistic Regression Classifier":
-					#lr = pickle.load(open('/resources/LogisticRegression.pkl','rb'))
-					predictor = joblib.load(open(os.path.join("resources/LogisticRegression.pkl"),"rb"))
-				elif selection == "Linear Support Vector Classifier":
-					lsvc = pickle.load(open('resources/LinearSVC.pkl','rb'))
-					predictor = lsvc
+			# if st.button("Classify CSV"):
+			# 	# Transforming user input with vectorizer
+			# 	#vect_text = tweet_cv.transform([tweet_text]).toarray()
+			# 	# Load your .pkl file with the model of your choice + make predictions
+			# 	# Try loading in multiple models to give the user a choice
+			# 	predictor = None
+			# 	if selection == "Multinomial Naive Bayes Classifier":
+			# 		mnb = pickle.load(open('/resources/MultinomialNaiveBeyes.pkl','rb'))
+			# 		predictor = mnb	
+			# 	elif selection == "Logistic Regression Classifier":
+			# 		#lr = pickle.load(open('/resources/LogisticRegression.pkl','rb'))
+			# 		predictor = joblib.load(open(os.path.join("resources/LogisticRegression.pkl"),"rb"))
+			# 	elif selection == "Linear Support Vector Classifier":
+			# 		lsvc = pickle.load(open('resources/LinearSVC.pkl','rb'))
+			# 		predictor = lsvc
 
-				#predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
-				#processed_df = preprocess_csv(df_uploaded)
-				vect_text = count_vec.transform(X_pred)
-				sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = count_vec.get_feature_names_out())
-				df_vectorized_combined = pd.concat([processed_df.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
+			# 	#predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
+			# 	#processed_df = preprocess_csv(df_uploaded)
+			# 	vect_text = count_vec.transform(X_pred)
+			# 	sparse_vec_msg_df = pd.DataFrame.sparse.from_spmatrix(vect_text, columns = count_vec.get_feature_names_out())
+			# 	df_vectorized_combined = pd.concat([processed_df.reset_index(drop=True), sparse_vec_msg_df.reset_index(drop=True)], axis=1)
 
-				df_vectorized_combined = df_vectorized_combined.drop(["tweetid","message"], axis='columns')
+			# 	df_vectorized_combined = df_vectorized_combined.drop(["tweetid","message"], axis='columns')
 
 
-				prediction = predictor.predict(df_vectorized_combined)
-				df_download = df_uploaded.copy()
-				df_download['sentiment'] = prediction
+			# 	prediction = predictor.predict(df_vectorized_combined)
+			# 	df_download = df_uploaded.copy()
+			# 	df_download['sentiment'] = prediction
 
-				# When model has successfully run, will print prediction
-				# You can use a dictionary or similar structure to make this output
-				# more human interpretable.
+			# 	# When model has successfully run, will print prediction
+			# 	# You can use a dictionary or similar structure to make this output
+			# 	# more human interpretable.
 
-				#st.success("Text Categorized as: {}".format(prediction))
-				st.success("Tweets succesfully classified")
-				st.dataframe(data=df_download, width=None, height=None)
-				st.download_button(label='Download CSV with sentiment predictions', data=df_download.to_csv(),file_name='sentiment_predictions.csv',mime='text/csv')
+			# 	#st.success("Text Categorized as: {}".format(prediction))
+			# 	st.success("Tweets succesfully classified")
+			# 	st.dataframe(data=df_download, width=None, height=None)
+			# 	st.download_button(label='Download CSV with sentiment predictions', data=df_download.to_csv(),file_name='sentiment_predictions.csv',mime='text/csv')
 
 # Required to let Streamlit instantiate our web app.  
 if __name__ == '__main__':
