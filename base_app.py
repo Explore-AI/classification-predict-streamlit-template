@@ -68,7 +68,7 @@ def load_model(url, name):
 	return model
 
 
-tweet_cv = load_model("resources/vectorizer.pkl","rb")
+tweet_cv = load_model("resources/Vector.pkl","rb")
 
 # Load your raw data
 
@@ -147,7 +147,7 @@ def main():
 			vect_text = tweet_cv.transform([tweet_text])
 			# Load your .pkl file with the model of your choice + make predictions
 			# Try loading in multiple models to give the user a choice
-			predictor = joblib.load(open(os.path.join("resources/SVCmodel.pkl"),"rb"))
+			predictor = joblib.load(open(os.path.join("resources/SVC.pkl"),"rb"))
 			prediction = predictor.predict(vect_text)
 
 			# When model has successfully run, will print prediction
