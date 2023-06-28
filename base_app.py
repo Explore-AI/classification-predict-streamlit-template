@@ -756,7 +756,7 @@ def main():
 			# Creating a text box for user input
 			tweet_text = st.text_area("Enter tweet here","Type Here")
 
-			options = [" Multinomial Naive Bayes Classifier","Logistic Regression Classifier", "Linear Support Vector Classifier", "Gaussian Naives Bayes Classifier"] "XGBoost Classifier", "CatBoost Classfier"
+			options = [" Multinomial Naive Bayes Classifier","Logistic Regression Classifier", "Linear Support Vector Classifier", "Gaussian Naives Bayes Classifier"] #"XGBoost Classifier", "CatBoost Classfier"
 			selection = st.selectbox("Choose Your Model", options)
 
 			if st.button("Classify Tweet"):
