@@ -756,7 +756,7 @@ def main():
 			# Creating a text box for user input
 			tweet_text = st.text_area("Enter tweet here","Type Here")
 
-			options = [" Multinomial Naive Bayes Classifier","Logistic Regression Classifier", "Linear Support Vector Classifier","XGBoost Classifier", "Gaussian Naives Bayes Classifier","CatBoost Classfier"]
+			options = [" Multinomial Naive Bayes Classifier","Logistic Regression Classifier", "Linear Support Vector Classifier", "Gaussian Naives Bayes Classifier"] "XGBoost Classifier", "CatBoost Classfier"
 			selection = st.selectbox("Choose Your Model", options)
 
 			if st.button("Classify Tweet"):
@@ -789,12 +789,12 @@ def main():
 					#lsvc = pickle.load(open('/resources/LinearSVC.pkl','rb'))
 					predictor = joblib.load(open(os.path.join("resources/LinearSVC.pkl"),"rb"))
 					#predictor = lsvc
-				elif selection == "XGBoost Classifier":
-					predictor = joblib.load(open(os.path.join("resources/XGBoost.pkl"),"rb"))
+				# elif selection == "XGBoost Classifier":
+				# 	predictor = joblib.load(open(os.path.join("resources/XGBoost.pkl"),"rb"))
 				elif selection == "Gaussian Naives Bayes Classifier":
 					predictor = joblib.load(open(os.path.join("resources/GaussianNaiveBeyes.pkl"),"rb"))
-				elif selection == "CatBoost Classfier":
-					predictor = joblib.load(open(os.path.join("resources/CatBoost.pkl"),"rb"))
+				# elif selection == "CatBoost Classfier":
+				# 	predictor = joblib.load(open(os.path.join("resources/CatBoost.pkl"),"rb"))
 
 				#predictor = joblib.load(open(os.path.join("resources/Logistic_regression.pkl"),"rb"))
 
