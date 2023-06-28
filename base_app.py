@@ -782,7 +782,7 @@ def main():
 				# 	predictor = joblib.load(open(os.path.join("resources/MultinomialNaiveBeyes.pkl"),"rb"))
 					#mnb = pickle.load(open('/resources/MultinomialNaiveBeyes.pkl','rb'))
 					#predictor = mnb	
-				elif selection == "Logistic Regression Classifier":
+				if selection == "Logistic Regression Classifier":
 					#lr = pickle.load(open('\resources\LogisticRegression.pkl','rb'))
 					predictor = joblib.load(open(os.path.join("resources/LogisticRegression.pkl"),"rb"))
 				elif selection == "Linear Support Vector Classifier":
