@@ -1,0 +1,4 @@
+{"Q1": {"label": "How satisfied are you with this app?", "value": "Very Satisfied"}, "Q2": {"label": "We would love to hear your feedback and suggestions", "value": "My mother doesn't believe in climate change, so sad!"}}
+{"Q1": {"label": "How satisfied are you with this app?", "value": "Very Satisfied"}, "Q2": {"label": "We would love to hear your feedback and suggestions", "value": "I love this app"}}
+{"Q1": {"label": "How satisfied are you with this app?", "value": "Neutral"}, "Q2": {"label": "We would love to hear your feedback and suggestions", "value": "Needs more colour"}}
+{"Q1": {"label": "How satisfied are you with this app?", "value": "Neutral"}, "Q2": {"label": "We would love to hear your feedback and suggestions", "value": "Needs more colour"}}
