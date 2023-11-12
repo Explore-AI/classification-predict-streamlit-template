@@ -23,7 +23,10 @@
 """
 # Streamlit dependencies
 import streamlit as st
+from streamlit_option_menu import option_menu
 import joblib,os
+import scipy
+from PIL import Image
 
 # Data dependencies
 import pandas as pd
@@ -35,14 +38,33 @@ tweet_cv = joblib.load(news_vectorizer) # loading your vectorizer from the pkl f
 # Load your raw data
 raw = pd.read_csv("resources/train.csv")
 
+selected = option_menu(
+            menu_title=None,  # required
+            options=["Home", "Contact"],  # required
+            icons=["house", "book", "envelope"],  # optional
+            menu_icon="cast",  # optional
+            default_index=0,  # optional
+            orientation="horizontal",
+        )
+if selected == "Home":
+    st.title(f"Amped Solutions Tweet Classifer")
+if selected == "Contact":
+	st.title("Contact Us")
+	name = st.text_input("Name")
+	email = st.text_input("Email")
+	message = st.text_area("Message")
+if st.button("Submit"):
+    # Add code here to submit the form and send the message
+    st.success("Thank you for your message!")
+
 # The main function where we will build the actual app
 def main():
 	"""Tweet Classifier App with Streamlit """
 
 	# Creates a main title and subheader on your page -
 	# these are static across all pages
-	st.title("Tweet Classifer")
-	st.subheader("Climate change tweet classification")
+	# st.title("Amped Solutions Tweet Classifer")
+	# st.subheader("Climate change tweet classification")
 
 	# Creating sidebar with selection box -
 	# you can create multiple pages this way
